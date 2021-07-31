@@ -1,12 +1,15 @@
 <template>
-<div>
-  图书ID：{{$route.params.id}}
+  <div>
+    <el-main>
+      主页内容<br>
+
+    </el-main>
   </div>
 </template>
 
 <script>
 export default {
-  name: "book"
+  name: "elmain"
 }
 </script>
 

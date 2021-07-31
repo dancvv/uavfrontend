@@ -1,18 +1,23 @@
 <template>
   <div>
-<!--    <h1>动态路由练习</h1>-->
-<!--    <router-link to="/book/1">图书1</router-link>-->
-<!--    <router-link to="/book/2">图书2</router-link>-->
-    <router-view></router-view>
-
+    <elhead></elhead>
+    <el-container>
+      <elaside></elaside>
+      <elmain></elmain>
+    </el-container>
   </div>
 </template>
 
 <script>
 
 
+
+import Elaside from "./components/elaside";
+import Elhead from "./components/elhead";
+import Elmain from "./components/elmain";
 export default {
   name: 'App',
+  components: {Elmain, Elhead, Elaside},
 }
 </script>
 
