@@ -1,6 +1,9 @@
 <template>
 <div>
-  我是第一页
+  <h1>我是主页</h1>
+<router-link to="/books">图书</router-link>
+  <a href="/">空白</a>
+  <router-view></router-view>
 </div>
 </template>
 
