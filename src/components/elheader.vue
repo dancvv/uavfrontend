@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <el-container>
     <el-header><h1>无人机管理系统</h1></el-header>
-  </div>
+  </el-container>
 </template>
 
 <script>
@@ -15,6 +15,7 @@ export default {
   background-color: #B3C0D1;
   color: #333;
   text-align: center;
-  line-height: 60px;
+  line-height: 30px;
+  height: 100%;
 }
 </style>

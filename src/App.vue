@@ -1,11 +1,11 @@
 <template>
-<div>
+<el-container direction="vertical">
   <elheader></elheader>
   <el-container>
     <elaside></elaside>
     <elmain></elmain>
   </el-container>
-</div>
+</el-container>
 </template>
 
 <script>
@@ -19,5 +19,7 @@ export default {
 </script>
 
 <style scoped>
-
+.el-container{
+  height: 100%;
+}
 </style>
