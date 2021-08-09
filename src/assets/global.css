@@ -1,0 +1,9 @@
+
+
+/*全局样式表*/
+/*取消全局的边距，使得页面也可铺满*/
+html,body{
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+}
