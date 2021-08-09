@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-container>
   <el-aside width="200px">
     <el-menu :default-openeds="[]">
       <el-menu-item>
@@ -45,7 +45,7 @@
       </el-submenu>
     </el-menu>
   </el-aside>
-  </div>
+  </el-container>
 </template>
 
 <script>
