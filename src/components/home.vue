@@ -19,14 +19,18 @@
 <!--          折叠图标-->
           <i class="el-icon-s-fold" v-if="!isCollapse"></i>
         </div>
-        <el-menu text-color="#fff" active-text-color="#ffd04b" background-color="#304156"
+        <el-menu text-color="#fff" active-text-color="#ffd04b" background-color="#304156" :router="true"
                  unique-opened :collapse="isCollapse" default-active="1" :collapse-transition="false">
-          <el-menu-item :index="item.id" v-for="item in asideMenu" :key="item.id">
+          <el-submenu :index="item.path" v-for="item in asideMenu" :key="item.id">
             <template slot="title">
               <i :class="item.icon"></i>
               <span slot="title">{{item.name}}</span>
             </template>
-          </el-menu-item>
+<!--            二级菜单-->
+            <el-menu-item :index="subItem.path" v-for="subItem in item.children" :key="subItem.id">
+              <span slot="title">{{subItem.name}}</span>
+            </el-menu-item>
+          </el-submenu>
 
         </el-menu>
 
