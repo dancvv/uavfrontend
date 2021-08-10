@@ -58,8 +58,6 @@ export default {
       position3: [121.822,39.0847],
       position4: [121.818,39.083],
       uav: {
-
-
         icon: {
           image: uavIcon,
           imageSize: [50, 60],

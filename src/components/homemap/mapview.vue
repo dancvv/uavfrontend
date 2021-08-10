@@ -1,15 +1,36 @@
 <template>
-<div>
-  <amap :zoom="16"
+<div id="mapview">
+  <amap :zoom="16" :center="position1" >
+    <el-row >
+      <el-button >按键测试</el-button>
+    </el-row>
+    <amap-tool-bar />
+    <amap-marker :position="position1" :icon="uav.icon" draggable="true"/>
+  </amap>
 </div>
 </template>
 
 <script>
+import uavIcon from "/public/uav.png"
 export default {
-  name: "mapview"
+  name: "mapview",
+  data(){
+    return{
+      position1: [121.81206,39.084716],
+      uav:{
+        icon:{
+        image:uavIcon,
+        imageSize:[50,60],
+        },
+      }
+    }
+  }
 }
 </script>
 
 <style scoped>
-
+#mapview{
+  height: 100%;
+  background-color: rebeccapurple;
+}
 </style>
