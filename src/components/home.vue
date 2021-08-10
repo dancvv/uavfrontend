@@ -5,7 +5,7 @@
     <div>
       <img src="../assets/iconsys.png" alt="empty" width="50px">
     </div>
-    <span id="header">
+    <span id="header-title" @click="backTo">
       <h2>无人机管理系统</h2>
     </span>
 
@@ -21,6 +21,10 @@
         </div>
         <el-menu text-color="#fff" active-text-color="#ffd04b" background-color="#304156" :router="true"
                  unique-opened :collapse="isCollapse" default-active="1" :collapse-transition="false">
+          <el-menu-item index="mapview">
+            <i class="el-icon-user"></i>
+            <span slot="title">首页</span>
+          </el-menu-item>
           <el-submenu :index="item.path" v-for="item in asideMenu" :key="item.id">
             <template slot="title">
               <i :class="item.icon"></i>
@@ -77,7 +81,12 @@
 
       </el-aside>
 <!--      主内容区域-->
-      <el-main>主页</el-main>
+      <el-main>
+<!--        <span style="text-align: center">-->
+<!--          <h1>欢迎进入系统</h1>-->
+<!--        </span>-->
+        <router-view></router-view>
+      </el-main>
     </el-container>
 </el-container>
 </template>
@@ -101,7 +110,7 @@ export default {
       },
     //菜单数据
       asideMenu:[
-          {id:'100',path:'/',name:'首页',order:1,icon:'el-icon-user'},
+          // {id:'100',path:'/',name:'首页',order:1,icon:'el-icon-user'},
           {id:'200',path:'/manage',name:'飞行器管理',order:1,icon:'el-icon-s-cooperation',
           children:[
               {id:'201',path:'/monitor',name:'飞行监控',order:2},
@@ -127,6 +136,9 @@ export default {
   methods:{
     toggleCollapse(){
       this.isCollapse=!this.isCollapse
+    },
+    backTo(){
+      this.$router.push('/home')
     }
   }
 }
@@ -141,7 +153,7 @@ export default {
   font-size: 20px;
   justify-content: flex-start;
 }
-#header{
+#header-title{
   padding: 10px;
   display: inline;
   text-align: center;
