@@ -3,7 +3,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import router from './router'
 //导入全局样式表
-import './assets/global.css'
+import './assets/style/global.css'
 
 import AmapVue from '@amap/amap-vue'
 import App from "@/App";
