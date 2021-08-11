@@ -4,28 +4,27 @@
     <el-row >
       <el-button >按键测试</el-button>
     </el-row>
-    <amap-tool-bar />
-    <amap-marker :position="position1" :icon="uav.icon" draggable="true"/>
+    <amap-marker :position="position1"  :label="{direction:'bottom',content:'empty'}"/>
   </amap>
 </div>
 </template>
 
 <script>
+// import {Amap.Icon} from '@amap/amap-vue'
 import uavIcon from "/public/uav.png"
 export default {
   name: "mapview",
-  data(){
-    return{
-      position1: [121.81206,39.084716],
-      uav:{
-        icon:{
-        image:uavIcon,
-        imageSize:[50,60],
+  data: function () {
+    return {
+      position1: [121.81206, 39.084716],
+      uav: {
+        icon: {
+          image: uavIcon,
+          imageSize: [50, 60],
         },
       }
     }
-  }
-}
+  },}
 </script>
 
 <style scoped>
