@@ -23,6 +23,13 @@ VueAMap.initAMapApiLoader({
   v: '1.4.4'
 });
 
+import BaiduMap from 'vue-baidu-map'
+
+Vue.use(BaiduMap, {
+  /* Visit http://lbsyun.baidu.com/apiconsole/key for details about app key. */
+  ak: '3LDoMsLxgOE30E57ebARtiIGylD2iYyi'
+})
+
 
 //地图配置
 AmapVue.config.version='2.0';
