@@ -86,9 +86,6 @@
       </el-aside>
 <!--      主内容区域-->
       <el-main>
-<!--        <span style="text-align: center">-->
-<!--          <h1>欢迎进入系统</h1>-->
-<!--        </span>-->
         <router-view></router-view>
       </el-main>
     </el-container>
