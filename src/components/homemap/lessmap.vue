@@ -1,12 +1,7 @@
 <template>
 <div id="demo">
 
-  <el-amap class="amap-box" :vid="'amap-vue'" :center="[121.81206,39.084716]" :zoom="16">
-
-    <el-col>
-      <el-button type="primary" @click="pop">按键测试</el-button>
-    </el-col>
-
+  <el-amap class="amap-box" :vid="'amap-vue'" :center="pos" :zoom="15">
     <el-amap-marker :position="pos" :icon="require('/public/无人机.svg')"></el-amap-marker>
   </el-amap>
 </div>
@@ -24,8 +19,15 @@ export default {
   methods:{
     pop(){
       console.log("dianji")
-      alert(this.refs.$$getPosition())
-    }
+    },
+    clickChange(){
+      for(let i=0; i<20; i++){
+        setTimeout(()=>{
+          this.pos.lng=this.pos.lng+0.0001
+          this.pos.lat=this.pos.lat+0.0001
+        },1000)
+      }
+    },
   }
 }
 </script>
