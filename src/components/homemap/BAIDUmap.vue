@@ -7,7 +7,7 @@
         <bm-control>
           <el-row type="flex" class="row-bg">
             <el-col>
-              <el-radio-group v-model="mapType" @change="mapTypeChange">
+              <el-radio-group v-model="mapType">
                 <el-radio-button label="BMAP_NORMAL_MAP" size="medium">2D地图</el-radio-button>
                 <el-radio-button label="BMAP_SATELLITE_MAP" size="medium">卫星地图</el-radio-button>
 <!--                <el-radio-button label="3D地图" size="medium"></el-radio-button>-->
@@ -15,23 +15,25 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-button type="success" @click="clickChange">改变icon</el-button>
+            <el-button type="success" @click="removeLine">清除路线</el-button>
             <el-card v-show="cardVisible">
-
               <h3>参数设置</h3>
               无人机编号：<el-input v-model="uavConfig.serialNum"></el-input><br>
               经度：<el-input v-model="uavConfig.lng">{{uavConfig.lng}}</el-input><br>
               纬度：<el-input v-model="uavConfig.lat">{{uavConfig.lat}}</el-input><br>
               <el-button @click="cardVisible = false">取 消</el-button>
-              <el-button type="primary" @click="onHand">确 定</el-button>
+              <el-button type="primary" @click="editConfirm">确 定</el-button>
             </el-card>
           </el-row>
         </bm-control>
-
 <!--        定位  -->
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
 <!--        图标区-->
-        <bm-marker :position="pos" @click="onHand" :dragging="onHand"></bm-marker>
-        <bm-marker v-for="(item,index) in pos1" :key="index" :position="item" :dragging="true" :icon="UavIcon" @click="onHand"></bm-marker>
+        <bm-marker :position="pos" :icon="UavIcon" @click="onHand"></bm-marker>
+<!--        <bm-marker v-for="(item,index) in pos1" :key="index" :position="item" :dragging="true" :icon="UavIcon" @click="onHand"></bm-marker>-->
+<!--        绘制路线-->
+        <bm-polyline :path="pos1" stroke-color="#28F" :stroke-opacity="0.5" :stroke-weight="6" :editing="editing" ref="polyRouteline"></bm-polyline>
 
       </baidu-map>
 
@@ -46,7 +48,12 @@ export default {
   name: "BAIDUmap",
   data(){
     return{
-      style:mapstyle,
+      //百度地图样式
+      editing:true,
+      baiduMapstyle:{
+        featrues:Array,
+        style:mapstyle,
+      },
       zoomLevel:16,
       centerPos:{},
       //无人机参数设置
@@ -73,6 +80,9 @@ export default {
       cardVisible:false,
     }
   },
+  created() {
+
+  },
   methods:{
     //获取无人机的位置
     onHand(e){
@@ -82,8 +92,23 @@ export default {
       this.uavConfig.lat=lat
       this.$message.success("成功推送")
     },
-    mapTypeChange(){
+    editConfirm(){
+      this.pos.lng=this.uavConfig.lng
+      this.pos.lat=this.uavConfig.lat
+      this.cardVisible=false
+    },
+    clickChange(){
+      for(let i=0; i<20; i++){
 
+        setTimeout(()=>{
+          this.pos.lng=this.pos.lng+0.0001
+          this.pos.lat=this.pos.lat+0.0001
+        },1000)
+      }
+    },
+    removeLine(){
+
+      console.log("remove")
     }
   }
 }

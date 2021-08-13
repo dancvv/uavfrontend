@@ -98,7 +98,7 @@ export default {
   data(){
     return{
       //判断是否合并
-      isCollapse:false,
+      isCollapse:true,
     //  默认激活路径
       activePath:'',
     //  icon图标数据
