@@ -3,7 +3,9 @@
 
 
 <!--地图类型选项存在导入位图  :map-style="style"-->
-      <baidu-map class="map" :center="center" :zoom="zoomLevel" :scroll-wheel-zoom="true" :map-type="mapType">
+      <baidu-map class="map" :center="center" :zoom="zoomLevel" :scroll-wheel-zoom="true" :map-type="mapType"  @mousemove="syncPolyline"
+                 @click="paintPolyline"
+                 @rightclick="newPolyline">
         <bm-control>
           <el-row type="flex" class="row-bg">
             <el-col>
@@ -16,8 +18,9 @@
           </el-row>
           <el-row>
             <el-button type="success" @click="clickChange">改变icon</el-button>
-            <el-button type="success" @click="clickDraw($event)">开始绘制</el-button>
+            <el-button type="success" @click="clickDraw">开始绘制</el-button>
             <el-button type="success" @click="handler">清除路线</el-button>
+            <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
             <el-card v-show="cardVisible">
               <h3>参数设置</h3>
               无人机编号：<el-input v-model="uavConfig.serialNum"></el-input><br>
@@ -31,10 +34,10 @@
 <!--        定位  -->
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
 <!--        图标区-->
-        <bm-marker :position="pos" :icon="UavIcon" @click="onHand" dragging v-if="showMarker"></bm-marker>
-        <bm-marker v-for="(item,index) in pos1" :key="index" :position="item" :dragging="true" :icon="UavIcon" @click="onHand"></bm-marker>
+        <bm-marker :position="pos" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="showMarker"></bm-marker>
+        <bm-marker v-for="(item,index) in pos1" :key="index" :position="item" :dragging="dragMarker" :icon="UavIcon" @click="onHand"></bm-marker>
 <!--        绘制路线-->
-        <bm-polyline :path="pos1" stroke-color="#28F" :stroke-opacity="0.5" :stroke-weight="6" :editing="editing" ref="polyRouteline"></bm-polyline>
+        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5" :stroke-weight="6" :path="path" v-for="(path,index) of polyline.paths" :key="index" :editing="polyline.editing"></bm-polyline>
 
       </baidu-map>
 
@@ -51,13 +54,13 @@ export default {
     return{
       //百度地图样式
       editing:true,
+      //是否展示marker
       showMarker:true,
       baiduMapstyle:{
         featrues:Array,
         style:mapstyle,
       },
       zoomLevel:16,
-      centerPos:{},
       //无人机参数设置
       uavConfig:{
         serialNum:'',
@@ -65,6 +68,7 @@ export default {
         lat:''
       },
       pos:{lng: 121.83206, lat: 39.084716},
+      //地图中心点
       center:{lng: 121.83206, lat: 39.084716},
       //绘制无人机路线
       polyline:{
@@ -77,7 +81,6 @@ export default {
         {lng: 121.85406, lat: 39.084516},
         {lng: 121.81506, lat: 39.084416},
       ],
-      // pos1:{lng: 116.657, lat: 39.915},
       UavIcon:{
         url:require('/public/uav48.svg'),
         size: {width: 48, height: 48}
@@ -86,6 +89,8 @@ export default {
       mapType:"BMAP_NORMAL_MAP",
     //  卡片窗口设置
       cardVisible:false,
+    //  图标拖拽
+      dragMarker:false,
     }
   },
   created() {
@@ -95,6 +100,7 @@ export default {
     //获取无人机的位置
     onHand(e){
       this.cardVisible=true
+      this.dragMarker=true
       const{lng,lat}=e.target.point
       this.uavConfig.lng=lng
       this.uavConfig.lat=lat
@@ -103,6 +109,7 @@ export default {
     editConfirm(){
       this.pos.lng=this.uavConfig.lng
       this.pos.lat=this.uavConfig.lat
+      this.dragMarker=false
       this.cardVisible=false
     },
     clickChange(){
@@ -113,9 +120,6 @@ export default {
           this.pos.lat=this.pos.lat+0.0001
         },1000)
       }
-    },
-    removeLine(){
-      console.log("remove")
     },
     handler(){
       // let point = new BMap.Point(121.81606, 39.08516);
@@ -131,7 +135,55 @@ export default {
     clickDraw(){
       this.pos1.pop()
       this.showMarker=true
-      this.pos={lng: 121.81206, lat: 39.084716}
+    },
+  //  toggle button 按钮事件
+    toggle(name){
+      this[name].editing=!this[name].editing
+    },
+    syncPolyline (e) {
+      if (!this.polyline.editing) {
+        return
+      }
+      // console.log(e)
+      const {paths} = this.polyline
+      // console.log(paths.length)
+      if (!paths.length) {
+        return
+      }
+      const path = paths[paths.length - 1]
+      if (!path.length) {
+        return
+      }
+      if (path.length === 1) {
+        path.push(e.point)
+      }
+      this.$set(path, path.length - 1, e.point)
+    },
+    newPolyline () {
+      if (!this.polyline.editing) {
+        return
+      }
+      // const {paths} = this.polyline
+      // if(!paths.length) {
+      //   paths.push([])
+      // }
+      // const path = paths[paths.length - 1]
+      // path.pop()
+      // if (path.length) {
+      //   paths.push([])
+      // }
+    },
+    paintPolyline (e) {
+      if (!this.polyline.editing) {
+        return
+      }
+      //解构赋值
+      const {paths} = this.polyline
+      console.log(paths.length)
+      //判断该点
+      !paths.length && paths.push([])
+      //推入点
+      paths[paths.length - 1].push(e.point)
     }
   }
 }
