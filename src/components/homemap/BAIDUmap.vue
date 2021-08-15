@@ -17,10 +17,10 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-button type="success" @click="clickChange">改变icon</el-button>
-            <el-button type="success" @click="clickDraw">开始绘制</el-button>
+
             <el-button type="success" @click="handler">清除路线</el-button>
             <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
+            <el-button type="success" @click="clickDraw">无人机任务匹配</el-button>
             <el-card v-show="cardVisible">
               <h3>参数设置</h3>
               无人机编号：<el-input v-model="uavConfig.serialNum"></el-input><br>
@@ -35,9 +35,11 @@
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
 <!--        图标区-->
         <bm-marker :position="pos" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="showMarker"></bm-marker>
-        <bm-marker v-for="(item,index) in pos1" :key="index" :position="item" :dragging="dragMarker" :icon="UavIcon" @click="onHand"></bm-marker>
+        <bm-marker v-for="(item ) in pos" :key="item.id" :position="item" :dragging="dragMarker" :icon="UavIcon" @click="onHand"></bm-marker>
 <!--        绘制路线-->
-        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5" :stroke-weight="6" :path="path" v-for="(path,index) of polyline.paths" :key="index" :editing="polyline.editing"></bm-polyline>
+        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
+                     :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"
+                     :key="polyindex" :editing="polyline.editing"></bm-polyline>
 
       </baidu-map>
 
@@ -55,7 +57,7 @@ export default {
       //百度地图样式
       editing:true,
       //是否展示marker
-      showMarker:true,
+      showMarker:false,
       baiduMapstyle:{
         featrues:Array,
         style:mapstyle,
@@ -67,7 +69,7 @@ export default {
         lng:'',
         lat:''
       },
-      pos:{lng: 121.83206, lat: 39.084716},
+      pos:{},
       //地图中心点
       center:{lng: 121.83206, lat: 39.084716},
       //绘制无人机路线
@@ -112,15 +114,6 @@ export default {
       this.dragMarker=false
       this.cardVisible=false
     },
-    clickChange(){
-      for(let i=0; i<20; i++){
-
-        setTimeout(()=>{
-          this.pos.lng=this.pos.lng+0.0001
-          this.pos.lat=this.pos.lat+0.0001
-        },1000)
-      }
-    },
     handler(){
       // let point = new BMap.Point(121.81606, 39.08516);
       // var marker=new BMap.marker(point)
@@ -128,12 +121,17 @@ export default {
       console.log("清除成功")
       this.pos={}
       this.pos1=[]
+      this.polyline.paths=[]
       this.showMarker=false
       console.log(this.pos)
       console.log(this.showMarker)
     },
     clickDraw(){
-      this.pos1.pop()
+      if (!this.polyline.paths.length){
+        return
+      }
+      this.pos=this.polyline.paths[0]
+      console.log(this.pos)
       this.showMarker=true
     },
   //  toggle button 按钮事件
@@ -163,15 +161,15 @@ export default {
       if (!this.polyline.editing) {
         return
       }
-      // const {paths} = this.polyline
-      // if(!paths.length) {
-      //   paths.push([])
-      // }
-      // const path = paths[paths.length - 1]
-      // path.pop()
-      // if (path.length) {
-      //   paths.push([])
-      // }
+      const {paths} = this.polyline
+      if(!paths.length) {
+        paths.push([])
+      }
+      const path = paths[paths.length - 1]
+      path.pop()
+      if (path.length) {
+        paths.push([])
+      }
     },
     paintPolyline (e) {
       if (!this.polyline.editing) {
@@ -179,12 +177,12 @@ export default {
       }
       //解构赋值
       const {paths} = this.polyline
-      console.log(paths.length)
+      console.log(paths)
       //判断该点
       !paths.length && paths.push([])
       //推入点
       paths[paths.length - 1].push(e.point)
-    }
+    },
   }
 }
 </script>
