@@ -17,10 +17,36 @@
             </el-col>
           </el-row>
           <el-row>
-
-            <el-button type="success" @click="handler">清除路线</el-button>
-            <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
-            <el-button type="success" @click="clickDraw">无人机任务匹配</el-button>
+            <el-col>
+              <el-button type="success" @click="handler">清除路线</el-button>
+              <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
+              <el-button type="success" @click="uavmission">无人机任务匹配</el-button>
+              <el-button type="success" @click="uavfly">起飞</el-button>
+            </el-col>
+            <el-card>
+              <h3>参数设置</h3>
+              <el-table
+                  :data="UavPos.localPos"
+                  style="width: 100%">
+                <el-table-column
+                    type="index"
+                    label=""
+                    width="50">
+                </el-table-column>
+                <el-table-column
+                    prop="lng"
+                    label="经度"
+                    width="100">
+                </el-table-column>
+                <el-table-column
+                    prop="lat"
+                    label="纬度"
+                    width="100">
+                </el-table-column>
+              </el-table>
+              <el-button @click="cardVisible = false">取 消</el-button>
+              <el-button type="primary" @click="editConfirm">确 定</el-button>
+            </el-card>
             <el-card v-show="cardVisible">
               <h3>参数设置</h3>
               无人机编号：<el-input v-model="uavConfig.serialNum"></el-input><br>
@@ -34,12 +60,15 @@
 <!--        定位  -->
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
 <!--        图标区-->
-        <bm-marker :position="pos" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="showMarker"></bm-marker>
-        <bm-marker v-for="(item ) in pos" :key="item.id" :position="item" :dragging="dragMarker" :icon="UavIcon" @click="onHand"></bm-marker>
+        <bm-marker :position="UavPos.tempPos" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="showMarker"></bm-marker>
+<!--        <bm-marker v-for="item in UavPos.localPos" :key="item.id" :position="item" :dragging="dragMarker" :icon="UavIcon" @click="onHand"></bm-marker>-->
 <!--        绘制路线-->
         <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
                      :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"
                      :key="polyindex" :editing="polyline.editing"></bm-polyline>
+        <bm-polyline stroke-color=" #AF5" :stroke-opacity="0.5"
+                     :stroke-weight="6" :path="path" v-for="path of passRoutes"
+                     :key="path.id"></bm-polyline>
 
       </baidu-map>
 
@@ -62,14 +91,20 @@ export default {
         featrues:Array,
         style:mapstyle,
       },
-      zoomLevel:16,
+      zoomLevel:18,
       //无人机参数设置
       uavConfig:{
         serialNum:'',
         lng:'',
         lat:''
       },
-      pos:{},
+      //无人机位置
+      UavPos:{
+        localPos:[],
+        tempPos:{}
+      },
+      // 飞过去的路线
+      passRoutes:[],
       //地图中心点
       center:{lng: 121.83206, lat: 39.084716},
       //绘制无人机路线
@@ -77,12 +112,6 @@ export default {
         editing:false,
         paths:[]
       },
-      pos1:[
-        {lng: 121.81206, lat: 39.084716},
-        {lng: 121.83065, lat: 39.084616},
-        {lng: 121.85406, lat: 39.084516},
-        {lng: 121.81506, lat: 39.084416},
-      ],
       UavIcon:{
         url:require('/public/uav48.svg'),
         size: {width: 48, height: 48}
@@ -120,42 +149,45 @@ export default {
       // map.addOverlay(marker)
       console.log("清除成功")
       this.pos={}
-      this.pos1=[]
       this.polyline.paths=[]
       this.showMarker=false
       console.log(this.pos)
       console.log(this.showMarker)
     },
-    clickDraw(){
+    //无人机任务
+    uavmission(){
       if (!this.polyline.paths.length){
         return
       }
-      this.pos=this.polyline.paths[0]
-      console.log(this.pos)
+      this.UavPos.localPos=this.polyline.paths[0]
+      this.UavPos.tempPos=this.UavPos.localPos[0]
       this.showMarker=true
     },
   //  toggle button 按钮事件
     toggle(name){
       this[name].editing=!this[name].editing
     },
-    syncPolyline (e) {
-      if (!this.polyline.editing) {
-        return
-      }
-      // console.log(e)
-      const {paths} = this.polyline
-      // console.log(paths.length)
-      if (!paths.length) {
-        return
-      }
-      const path = paths[paths.length - 1]
-      if (!path.length) {
-        return
-      }
-      if (path.length === 1) {
-        path.push(e.point)
-      }
-      this.$set(path, path.length - 1, e.point)
+    syncPolyline () {
+      /*
+      实现动态跟移动画
+       */
+      // if (!this.polyline.editing) {
+      //   return
+      // }
+      // // console.log(e)
+      // const {paths} = this.polyline
+      // // console.log(paths.length)
+      // if (!paths.length) {
+      //   return
+      // }
+      // const path = paths[paths.length - 1]
+      // if (!path.length) {
+      //   return
+      // }
+      // if (path.length === 1) {
+      //   path.push(e.point)
+      // }
+      // this.$set(path, path.length - 1, e.point)
     },
     newPolyline () {
       if (!this.polyline.editing) {
@@ -177,12 +209,22 @@ export default {
       }
       //解构赋值
       const {paths} = this.polyline
-      console.log(paths)
+      console.log(paths.length)
+      console.log(e)
       //判断该点
       !paths.length && paths.push([])
       //推入点
       paths[paths.length - 1].push(e.point)
     },
+    uavfly(){
+      console.log(this.UavPos.localPos)
+      for(let i=0; i<this.UavPos.localPos.length; i++){
+        setTimeout(()=>{
+          this.UavPos.tempPos=this.polyline.paths[i]
+        },1000)
+        console.log(this.UavPos.localPos)
+      }
+    }
   }
 }
 </script>
@@ -199,5 +241,9 @@ export default {
 .el-row{
   margin-top: 10px;
   padding: 20px;
+}
+.el-card{
+  margin-top: 10px;
+
 }
 </style>
