@@ -30,6 +30,15 @@ Vue.use(BaiduMap, {
   ak: '3LDoMsLxgOE30E57ebARtiIGylD2iYyi'
 })
 
+//gitee 百度地图配置
+import VueBMap from 'vue-bmap-gl';
+
+Vue.use(VueBMap);
+VueBMap.initBMapApiLoader({
+  ak: '3LDoMsLxgOE30E57ebARtiIGylD2iYyi',
+  v: '1.0'
+});
+
 
 //地图配置
 AmapVue.config.version='2.0';

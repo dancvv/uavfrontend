@@ -21,32 +21,8 @@
               <el-button type="success" @click="handler">清除路线</el-button>
               <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
               <el-button type="success" @click="uavmission">无人机任务匹配</el-button>
-              <el-button type="success" @click="uavfly">起飞</el-button>
+              <el-button type="success"  >起飞</el-button>
             </el-col>
-            <el-card>
-              <h3>参数设置</h3>
-              <el-table
-                  :data="UavPos.localPos"
-                  style="width: 100%">
-                <el-table-column
-                    type="index"
-                    label=""
-                    width="50">
-                </el-table-column>
-                <el-table-column
-                    prop="lng"
-                    label="经度"
-                    width="100">
-                </el-table-column>
-                <el-table-column
-                    prop="lat"
-                    label="纬度"
-                    width="100">
-                </el-table-column>
-              </el-table>
-              <el-button @click="cardVisible = false">取 消</el-button>
-              <el-button type="primary" @click="editConfirm">确 定</el-button>
-            </el-card>
             <el-card v-show="cardVisible">
               <h3>参数设置</h3>
               无人机编号：<el-input v-model="uavConfig.serialNum"></el-input><br>
@@ -55,6 +31,10 @@
               <el-button @click="cardVisible = false">取 消</el-button>
               <el-button type="primary" @click="editConfirm">确 定</el-button>
             </el-card>
+          </el-row>
+          <el-row>
+            <el-button type="primary" @click="show">add route</el-button>
+            <el-input v-model="i">{{i}}</el-input>
           </el-row>
         </bm-control>
 <!--        定位  -->
@@ -67,9 +47,8 @@
                      :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"
                      :key="polyindex" :editing="polyline.editing"></bm-polyline>
         <bm-polyline stroke-color=" #AF5" :stroke-opacity="0.5"
-                     :stroke-weight="6" :path="path" v-for="path of passRoutes"
-                     :key="path.id"></bm-polyline>
-
+                     :stroke-weight="6" :path="passRoutes"
+                     ></bm-polyline>
       </baidu-map>
 
 </div>
@@ -104,7 +83,9 @@ export default {
         tempPos:{}
       },
       // 飞过去的路线
-      passRoutes:[],
+      passRoutes:[
+
+      ],
       //地图中心点
       center:{lng: 121.83206, lat: 39.084716},
       //绘制无人机路线
@@ -122,6 +103,8 @@ export default {
       cardVisible:false,
     //  图标拖拽
       dragMarker:false,
+
+      i:0,
     }
   },
   created() {
@@ -209,21 +192,25 @@ export default {
       }
       //解构赋值
       const {paths} = this.polyline
-      console.log(paths.length)
-      console.log(e)
+      // console.log(paths.length)
+      // console.log(e)
       //判断该点
       !paths.length && paths.push([])
       //推入点
       paths[paths.length - 1].push(e.point)
     },
-    uavfly(){
+    show(){
+      // for(let i=0; i<this.UavPos.localPos.length-1; i++){
+      //   setTimeout(()=>{
+      //     this.passRoutes.push(this.UavPos.localPos[i])
+      //   },1000)
+      // }
+
+
+      this.passRoutes[this.i]=this.UavPos.localPos[this.i]
+      console.log(this.passRoutes)
       console.log(this.UavPos.localPos)
-      for(let i=0; i<this.UavPos.localPos.length; i++){
-        setTimeout(()=>{
-          this.UavPos.tempPos=this.polyline.paths[i]
-        },1000)
-        console.log(this.UavPos.localPos)
-      }
+      this.i=this.i+1
     }
   }
 }
@@ -239,11 +226,11 @@ export default {
   height: 100%;
 }
 .el-row{
-  margin-top: 10px;
-  padding: 20px;
+  padding: 10px;
 }
 .el-card{
+  width: 300px;
   margin-top: 10px;
-
 }
+
 </style>
