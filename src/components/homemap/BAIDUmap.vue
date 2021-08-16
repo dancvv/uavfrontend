@@ -20,7 +20,7 @@
               <el-button type="success" @click="handler">清除路线</el-button>
               <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
               <el-button type="success" @click="uavmission">无人机任务匹配</el-button>
-              <el-button type="success"  >起飞</el-button>
+              <el-button type="success" @click="startMove">起飞</el-button>
             </el-col>
             <el-card v-show="cardVisible">
               <h3>参数设置</h3>
@@ -46,7 +46,7 @@
                      :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"
                      :key="polyindex" :editing="polyline.editing"></bm-polyline>
         <bm-polyline stroke-color=" #AF5" :stroke-opacity="0.5"
-                     :stroke-weight="6" :path="passRoutes"
+                     :stroke-weight="6" :path="pathline" v-for="pathline of passRoutes" :key="pathline.id"
                      ></bm-polyline>
       </baidu-map>
 
@@ -102,8 +102,8 @@ export default {
       cardVisible:false,
     //  图标拖拽
       dragMarker:false,
-
       i:0,
+      showline:true,
     }
   },
   created() {
@@ -204,12 +204,13 @@ export default {
       //     this.passRoutes.push(this.UavPos.localPos[i])
       //   },1000)
       // }
-
-
       this.passRoutes[this.i]=this.UavPos.localPos[this.i]
       console.log(this.passRoutes)
       console.log(this.UavPos.localPos)
       this.i=this.i+1
+    },
+    startMove(){
+      this.polyline.paths=[]
     }
   }
 }
