@@ -12,7 +12,6 @@
               <el-radio-group v-model="mapType">
                 <el-radio-button label="BMAP_NORMAL_MAP" size="medium">2D地图</el-radio-button>
                 <el-radio-button label="BMAP_SATELLITE_MAP" size="medium">卫星地图</el-radio-button>
-<!--                <el-radio-button label="3D地图" size="medium"></el-radio-button>-->
               </el-radio-group>
             </el-col>
           </el-row>

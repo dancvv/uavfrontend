@@ -165,7 +165,7 @@ export default {
 }
 .el-main{
   background-color: #F0F2F5;
-
+  padding: 0px;
 }
 .home-container{
   height: 100%;
@@ -179,4 +179,5 @@ export default {
   letter-spacing: 0.2em;
   cursor: pointer;
 }
+
 </style>

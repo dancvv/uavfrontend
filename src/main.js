@@ -13,7 +13,7 @@ import AMapLoader from '@amap/amap-jsapi-loader';
 
 Vue.use(AMapLoader)
 import VueAMap from 'vue-amap';
-
+import 'vue-bmap-gl/dist/style.css'
 
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
