@@ -2,6 +2,8 @@ import Vue from 'vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import router from './router'
+//导出数据文件
+
 //导入全局样式表
 import './assets/style/global.css'
 

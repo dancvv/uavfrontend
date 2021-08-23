@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import FileSaver from 'file-saver'
 import mapstyle from "/src/assets/style/custom_map_config.json"
 export default {
   name: "BAIDUmap",
@@ -204,10 +205,15 @@ export default {
       //     this.passRoutes.push(this.UavPos.localPos[i])
       //   },1000)
       // }
-      this.passRoutes[this.i]=this.UavPos.localPos[this.i]
-      console.log(this.passRoutes)
-      console.log(this.UavPos.localPos)
-      this.i=this.i+1
+      // this.passRoutes[this.i]=this.UavPos.localPos[this.i]
+      // console.log(this.passRoutes)
+      // console.log(this.UavPos.localPos)
+      // this.i=this.i+1
+      // 将json转换成字符串
+      const data = JSON.stringify(this.polyline.paths)
+      const blob = new Blob([data], {type: ''})
+      FileSaver.saveAs(blob,'ok.json')
+      console.log(this.polyline.paths)
     },
     startMove(){
       this.polyline.paths=[]
