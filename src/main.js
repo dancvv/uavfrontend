@@ -4,16 +4,22 @@ import 'element-ui/lib/theme-chalk/index.css';
 import router from './router'
 //导入全局样式表
 import './assets/style/global.css'
-
-import AmapVue from '@amap/amap-vue'
 import App from "@/App";
 
-//原生高德地图
-import AMapLoader from '@amap/amap-jsapi-loader';
+//使用leaflet
+import { LMap, LTileLayer, LMarker ,LControlLayers,LControlZoom} from 'vue2-leaflet';
+import 'leaflet/dist/leaflet.css';
 
-Vue.use(AMapLoader)
+Vue.component('l-map', LMap);
+Vue.component('l-tile-layer', LTileLayer);
+Vue.component('l-marker', LMarker);
+Vue.component('LControlLayers',LControlLayers)
+Vue.component('LControlZoom',LControlZoom)
+
+
+
 import VueAMap from 'vue-amap';
-import 'vue-bmap-gl/dist/style.css'
+
 
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
@@ -30,20 +36,10 @@ Vue.use(BaiduMap, {
   ak: '3LDoMsLxgOE30E57ebARtiIGylD2iYyi'
 })
 
-//gitee 百度地图配置
-import VueBMap from 'vue-bmap-gl';
-
-Vue.use(VueBMap);
-VueBMap.initBMapApiLoader({
-  ak: '3LDoMsLxgOE30E57ebARtiIGylD2iYyi',
-  v: '1.0'
-});
 
 
 //地图配置
-AmapVue.config.version='2.0';
-AmapVue.config.key = "ddd292c88aa1bad9c04891a47724f40a";
-Vue.use(AmapVue);
+
 Vue.use(ElementUI);
 //注册router
 

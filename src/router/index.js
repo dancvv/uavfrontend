@@ -4,8 +4,8 @@ import home from "../components/home";
 
 import BAIDUmap from "@/components/homemap/BAIDUmap";
 import homepage from "@/components/homepage"
-import demo from "../components/homemap/demo";
-import GLmapview from "../components/homemap/GLmapview";
+import leafmap from "@/components/homemap/leafmap";
+import amapv from "@/components/homemap/amapv";
 Vue.use(router)
 
 
@@ -14,12 +14,12 @@ export default new router({
         {path:'/home',component:home,
         children:[
             // {path:'/home',redirect:'/homepage'},
-            {path:'/mapview',component:GLmapview},
-            {path:'/mapview2',component:BAIDUmap}
+            {path:'/mapview',component:BAIDUmap},
+            {path:'/leafmap',component:leafmap},
         ]},
         //重定向home页
         {path:'/',redirect:'/home'},
         {path:'/homepage',component:homepage},
-        {path:'/demo',component:demo}
+        {path:'/map',component:amapv},
     ]
 })
