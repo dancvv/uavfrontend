@@ -25,7 +25,7 @@
             <i class="el-icon-user"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-          <el-menu-item index="leafmap">
+          <el-menu-item index="map">
             <i class="el-icon-user"></i>
             <span slot="title">leafMAP</span>
           </el-menu-item>
@@ -39,7 +39,6 @@
               <span slot="title">{{subItem.name}}</span>
             </el-menu-item>
           </el-submenu>
-
         </el-menu>
 
         <!--        <el-menu class="menu-opt" text-color="#fff" active-text-color="#ffd04b" background-color="#304156"-->

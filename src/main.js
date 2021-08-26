@@ -7,14 +7,7 @@ import './assets/style/global.css'
 import App from "@/App";
 
 //使用leaflet
-import { LMap, LTileLayer, LMarker ,LControlLayers,LControlZoom} from 'vue2-leaflet';
-import 'leaflet/dist/leaflet.css';
 
-Vue.component('l-map', LMap);
-Vue.component('l-tile-layer', LTileLayer);
-Vue.component('l-marker', LMarker);
-Vue.component('LControlLayers',LControlLayers)
-Vue.component('LControlZoom',LControlZoom)
 
 
 
@@ -24,7 +17,7 @@ import VueAMap from 'vue-amap';
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: 'ddd292c88aa1bad9c04891a47724f40a',
-  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Marker'],
   // 默认高德 sdk 版本为 1.4.4
   v: '1.4.4'
 });

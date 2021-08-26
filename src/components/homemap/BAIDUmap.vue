@@ -150,26 +150,6 @@ export default {
       this[name].editing=!this[name].editing
     },
     syncPolyline () {
-      /*
-      实现动态跟移动画
-       */
-      // if (!this.polyline.editing) {
-      //   return
-      // }
-      // // console.log(e)
-      // const {paths} = this.polyline
-      // // console.log(paths.length)
-      // if (!paths.length) {
-      //   return
-      // }
-      // const path = paths[paths.length - 1]
-      // if (!path.length) {
-      //   return
-      // }
-      // if (path.length === 1) {
-      //   path.push(e.point)
-      // }
-      // this.$set(path, path.length - 1, e.point)
     },
     newPolyline () {
       if (!this.polyline.editing) {
@@ -186,24 +166,19 @@ export default {
       }
     },
     paintPolyline (e) {
+      console.log(e)
+      this.UavPos.tempPos=e.point
       if (!this.polyline.editing) {
         return
       }
       //解构赋值
       const {paths} = this.polyline
-      // console.log(paths.length)
-      // console.log(e)
       //判断该点
       !paths.length && paths.push([])
       //推入点
       paths[paths.length - 1].push(e.point)
     },
     show(){
-      // for(let i=0; i<this.UavPos.localPos.length-1; i++){
-      //   setTimeout(()=>{
-      //     this.passRoutes.push(this.UavPos.localPos[i])
-      //   },1000)
-      // }
       this.passRoutes[this.i]=this.UavPos.localPos[this.i]
       console.log(this.passRoutes)
       console.log(this.UavPos.localPos)
