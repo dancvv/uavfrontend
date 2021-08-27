@@ -6,11 +6,11 @@ export default {
         this.ws=newWs
     },
     //重置延迟
-    setDelay:(newDelay)=>{
+    setDelay:function(newDelay){
         this.delay=newDelay
     },
     //重置信息
-    sendMsg:(message)=>{
+    sendMsg:function (message){
         this.ws.send(JSON.stringify(message))
     }
 }

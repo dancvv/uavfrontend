@@ -46,7 +46,16 @@ export default {
     },
   //  心跳机制，防止后端无法检测无故中段
     keepAlive(){
-      let that=this
+      let that=this;
+      setTimeout(()=>{
+        if (that.global.ws.readyState==1){
+          console.log('发送keeplive')
+          that.global.sendMsg({
+            "type":"keeplive"
+          })
+          that.keepAlive()
+        }
+      })
     }
   }
 }
