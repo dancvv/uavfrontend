@@ -5,6 +5,9 @@ import router from './router'
 //导入全局样式表
 import './assets/style/global.css'
 import App from "@/App";
+//引入websocket全局配置
+import global from "../public/globalWebSocket";
+Vue.prototype.global=global
 
 
 
