@@ -127,7 +127,8 @@ export default {
           children: [
             {id:401,path:'/device',name:'设备管理',order:2}
           ]},
-          {id:'500',path:'/setting',name:'设置',order:1,icon:'el-icon-s-data'},
+          {id:'500',path:'/setting',name:'设置',order:1,icon:'el-icon-s-data',
+            children: [{id:'501',path:'/webSocket',name:'webSocket'}]},
       ]
     }
   },

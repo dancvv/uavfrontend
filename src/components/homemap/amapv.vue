@@ -3,7 +3,7 @@
 
     <el-amap id="amap-el" vid="amapDemo" :center="center" :zoom="zoom" @click="getPoint">
       <el-amap-circle :center="center" :radius="1"></el-amap-circle>
-      <el-amap-marker></el-amap-marker>
+      <el-amap-marker @click="clickoutside"></el-amap-marker>
     </el-amap>
   </div>
 
@@ -21,6 +21,12 @@ export default {
   methods:{
     getPoint(e){
       console.log(e)
+      alert("output")
+      console.log(e.point)
+    },
+    clickoutside(e){
+      alert("output")
+      console.log(e.point)
     }
   }
 }

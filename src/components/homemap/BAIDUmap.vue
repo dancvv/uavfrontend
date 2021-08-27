@@ -16,6 +16,7 @@
             </el-col>
           </el-row>
           <el-row>
+
             <el-col>
               <el-button type="success" @click="handler">清除路线</el-button>
               <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
@@ -119,12 +120,14 @@ export default {
       this.uavConfig.lat=lat
       this.$message.success("成功推送")
     },
+    //确定更改无人机位置
     editConfirm(){
       this.pos.lng=this.uavConfig.lng
       this.pos.lat=this.uavConfig.lat
       this.dragMarker=false
       this.cardVisible=false
     },
+    //清除路线
     handler(){
       // let point = new BMap.Point(121.81606, 39.08516);
       // var marker=new BMap.marker(point)
@@ -145,12 +148,13 @@ export default {
       this.UavPos.tempPos=this.UavPos.localPos[0]
       this.showMarker=true
     },
-  //  toggle button 按钮事件
+  //  toggle button 按钮事件，是否开始绘制路线
     toggle(name){
       this[name].editing=!this[name].editing
     },
     syncPolyline () {
     },
+    //右键，新建一条新的路线
     newPolyline () {
       if (!this.polyline.editing) {
         return
@@ -165,6 +169,7 @@ export default {
         paths.push([])
       }
     },
+    //绘制新的路线
     paintPolyline (e) {
       console.log(e)
       this.UavPos.tempPos=e.point
