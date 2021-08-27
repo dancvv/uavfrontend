@@ -6,52 +6,44 @@ import router from './router'
 
 //导入全局样式表
 import './assets/style/global.css'
-
-import AmapVue from '@amap/amap-vue'
 import App from "@/App";
+//引入websocket全局配置
+import global from "../public/globalWebSocket";
+Vue.prototype.global=global
 
-//原生高德地图
-import AMapLoader from '@amap/amap-jsapi-loader';
 
-Vue.use(AMapLoader)
+
+//高德地图
 import VueAMap from 'vue-amap';
-import 'vue-bmap-gl/dist/style.css'
-
+//高德地图配置
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: 'ddd292c88aa1bad9c04891a47724f40a',
-  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Marker'],
   // 默认高德 sdk 版本为 1.4.4
   v: '1.4.4'
 });
-
+//百度地图配置
 import BaiduMap from 'vue-baidu-map'
-
 Vue.use(BaiduMap, {
   /* Visit http://lbsyun.baidu.com/apiconsole/key for details about app key. */
   ak: '3LDoMsLxgOE30E57ebARtiIGylD2iYyi'
 })
-
-//gitee 百度地图配置
-import VueBMap from 'vue-bmap-gl';
-
-Vue.use(VueBMap);
-VueBMap.initBMapApiLoader({
-  ak: '3LDoMsLxgOE30E57ebARtiIGylD2iYyi',
-  v: '1.0'
-});
+//axios安装
+import axios from 'vue-axios'
+Vue.use(axios)
+//axios挂载
+Vue.prototype.$http=axios;
 
 
-//地图配置
-AmapVue.config.version='2.0';
-AmapVue.config.key = "ddd292c88aa1bad9c04891a47724f40a";
-Vue.use(AmapVue);
+
+
 Vue.use(ElementUI);
-//注册router
 
 Vue.config.productionTip = false
 
 new Vue({
+  //注册router文件
   router,
   render: h => h(App),
 }).$mount('#app')

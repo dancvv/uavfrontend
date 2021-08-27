@@ -16,6 +16,7 @@
             </el-col>
           </el-row>
           <el-row>
+
             <el-col>
               <el-button type="success" @click="handler">清除路线</el-button>
               <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
@@ -56,7 +57,6 @@
 </template>
 
 <script>
-import FileSaver from 'file-saver'
 import mapstyle from "/src/assets/style/custom_map_config.json"
 export default {
   name: "BAIDUmap",
@@ -120,12 +120,14 @@ export default {
       this.uavConfig.lat=lat
       this.$message.success("成功推送")
     },
+    //确定更改无人机位置
     editConfirm(){
       this.pos.lng=this.uavConfig.lng
       this.pos.lat=this.uavConfig.lat
       this.dragMarker=false
       this.cardVisible=false
     },
+    //清除路线
     handler(){
       // let point = new BMap.Point(121.81606, 39.08516);
       // var marker=new BMap.marker(point)
@@ -146,32 +148,13 @@ export default {
       this.UavPos.tempPos=this.UavPos.localPos[0]
       this.showMarker=true
     },
-  //  toggle button 按钮事件
+  //  toggle button 按钮事件，是否开始绘制路线
     toggle(name){
       this[name].editing=!this[name].editing
     },
     syncPolyline () {
-      /*
-      实现动态跟移动画
-       */
-      // if (!this.polyline.editing) {
-      //   return
-      // }
-      // // console.log(e)
-      // const {paths} = this.polyline
-      // // console.log(paths.length)
-      // if (!paths.length) {
-      //   return
-      // }
-      // const path = paths[paths.length - 1]
-      // if (!path.length) {
-      //   return
-      // }
-      // if (path.length === 1) {
-      //   path.push(e.point)
-      // }
-      // this.$set(path, path.length - 1, e.point)
     },
+    //右键，新建一条新的路线
     newPolyline () {
       if (!this.polyline.editing) {
         return
@@ -186,34 +169,25 @@ export default {
         paths.push([])
       }
     },
+    //绘制新的路线
     paintPolyline (e) {
+      console.log(e)
+      this.UavPos.tempPos=e.point
       if (!this.polyline.editing) {
         return
       }
       //解构赋值
       const {paths} = this.polyline
-      // console.log(paths.length)
-      // console.log(e)
       //判断该点
       !paths.length && paths.push([])
       //推入点
       paths[paths.length - 1].push(e.point)
     },
     show(){
-      // for(let i=0; i<this.UavPos.localPos.length-1; i++){
-      //   setTimeout(()=>{
-      //     this.passRoutes.push(this.UavPos.localPos[i])
-      //   },1000)
-      // }
-      // this.passRoutes[this.i]=this.UavPos.localPos[this.i]
-      // console.log(this.passRoutes)
-      // console.log(this.UavPos.localPos)
-      // this.i=this.i+1
-      // 将json转换成字符串
-      const data = JSON.stringify(this.polyline.paths)
-      const blob = new Blob([data], {type: ''})
-      FileSaver.saveAs(blob,'ok.json')
-      console.log(this.polyline.paths)
+      this.passRoutes[this.i]=this.UavPos.localPos[this.i]
+      console.log(this.passRoutes)
+      console.log(this.UavPos.localPos)
+      this.i=this.i+1
     },
     startMove(){
       this.polyline.paths=[]

@@ -25,9 +25,9 @@
             <i class="el-icon-user"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-          <el-menu-item index="mapview2">
+          <el-menu-item index="map">
             <i class="el-icon-user"></i>
-            <span slot="title">首页2</span>
+            <span slot="title">leafMAP</span>
           </el-menu-item>
           <el-submenu :index="item.path" v-for="item in asideMenu" :key="item.id">
             <template slot="title">
@@ -39,7 +39,6 @@
               <span slot="title">{{subItem.name}}</span>
             </el-menu-item>
           </el-submenu>
-
         </el-menu>
 
         <!--        <el-menu class="menu-opt" text-color="#fff" active-text-color="#ffd04b" background-color="#304156"-->
@@ -128,7 +127,8 @@ export default {
           children: [
             {id:401,path:'/device',name:'设备管理',order:2}
           ]},
-          {id:'500',path:'/setting',name:'设置',order:1,icon:'el-icon-s-data'},
+          {id:'500',path:'/setting',name:'设置',order:1,icon:'el-icon-s-data',
+            children: [{id:'501',path:'/webSocket',name:'webSocket'}]},
       ]
     }
   },

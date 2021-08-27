@@ -15,8 +15,8 @@
     "file-saver": "^2.0.5",
     "vue": "^2.6.11",
     "vue-amap": "^0.5.10",
+    "vue-axios": "^3.2.5",
     "vue-baidu-map": "^0.21.22",
-    "vue-bmap-gl": "0.0.28",
     "vue-router": "^3.5.2"
   },
   "devDependencies": {
