@@ -1,8 +1,11 @@
 <template>
   <div class="mapbox">
+    <el-container>
+      <h1>测试内容</h1>
+    </el-container>
 
-    <el-amap id="amap-el" vid="amapDemo" :center="center" :zoom="zoom" @click="getPoint">
-      <el-amap-circle :center="center" :radius="1"></el-amap-circle>
+    <el-amap  id="amap-el" vid="amapDemo" :amap-manager="amapManager" :center="center" :zoom="zoom" @click="getPoint">
+
       <el-amap-marker @click="clickoutside"></el-amap-marker>
     </el-amap>
   </div>
@@ -10,12 +13,16 @@
 </template>
 
 <script>
+import VueAMap from "vue-amap/src/lib";
+
+let amapManager = new VueAMap.AMapManager();
 export default {
   name: "amap",
   data(){
     return{
       center: [  121.83206, 39.084716],
-      zoom:15
+      zoom:15,
+      amapManager,
     }
   },
   methods:{
@@ -37,6 +44,12 @@ export default {
   height: 100%;
   width: 100%;
   background-color: tomato;
+}
+#amap-el{
+  height: 80%;
+}
+.el-container{
+  height: 20%;
 }
 
 </style>

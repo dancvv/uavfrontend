@@ -6,6 +6,7 @@
       <baidu-map class="map" :center="center" :zoom="zoomLevel" :scroll-wheel-zoom="true" :map-type="mapType"  @mousemove="syncPolyline"
                  @click="paintPolyline"
                  @rightclick="newPolyline">
+<!--        视图组件-->
         <bm-control>
           <el-row type="flex" class="row-bg">
             <el-col>
@@ -40,7 +41,10 @@
 <!--        定位  -->
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
 <!--        图标区-->
-        <bm-marker :position="UavPos.tempPos" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="showMarker"></bm-marker>
+        <bm-marker :position="polyline.paths" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="true"></bm-marker>
+        <bm-marker v-for="path in polyline.paths" :key="path.index" :position="path" :icon="depotIcon" @click="onHand">
+          <bm-label :content="'站点'+polyline.paths.length" :offset="{width:8,height:48}"></bm-label>
+        </bm-marker>
 <!--        <bm-marker v-for="item in UavPos.localPos" :key="item.id" :position="item" :dragging="dragMarker" :icon="UavIcon" @click="onHand"></bm-marker>-->
 <!--        绘制路线-->
         <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
@@ -65,7 +69,7 @@ export default {
       //百度地图样式
       editing:true,
       //是否展示marker
-      showMarker:false,
+      showMarker:true,
       baiduMapstyle:{
         featrues:Array,
         style:mapstyle,
@@ -93,9 +97,16 @@ export default {
         editing:false,
         paths:[]
       },
+      //无人机图标
       UavIcon:{
         url:require('/public/uav48.svg'),
-        size: {width: 48, height: 48}
+        size: {width: 48, height: 48},
+        label:"wwww",
+      },
+    //  站点图标
+      depotIcon:{
+        url: require('/public/depot.svg'),
+        size: {width:48,height:48}
       },
     //  地图类型选项
       mapType:"BMAP_NORMAL_MAP",
@@ -171,7 +182,7 @@ export default {
     },
     //绘制新的路线
     paintPolyline (e) {
-      console.log(e)
+
       this.UavPos.tempPos=e.point
       if (!this.polyline.editing) {
         return
@@ -190,7 +201,7 @@ export default {
       this.i=this.i+1
     },
     startMove(){
-      this.polyline.paths=[]
+
     }
   }
 }
