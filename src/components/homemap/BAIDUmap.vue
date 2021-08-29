@@ -18,10 +18,10 @@
           <el-row>
 
             <el-col>
-              <el-button type="success" @click="handler">清除路线</el-button>
+              <el-button type="success" @click="handler">清除所有规划</el-button>
               <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
               <el-button type="success" @click="uavmission">无人机任务匹配</el-button>
-              <el-button type="success" @click="startMove">起飞</el-button>
+              <el-button type="success" @click="uploadData">上传数据</el-button>
             </el-col>
             <el-card v-show="cardVisible">
               <h3>参数设置</h3>
@@ -33,22 +33,24 @@
             </el-card>
           </el-row>
           <el-row>
-            <el-button type="primary" @click="show">add route</el-button>
-            <el-input v-model="i">{{i}}</el-input>
+            <el-button type="primary" @click="getDepot">获取服务站点</el-button>
+            <el-input placeholder="in" ></el-input>
           </el-row>
         </bm-control>
 <!--        定位  -->
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
 <!--        图标区-->
         <bm-marker :position="UavPos.tempPos" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="showMarker"></bm-marker>
-<!--        <bm-marker v-for="item in UavPos.localPos" :key="item.id" :position="item" :dragging="dragMarker" :icon="UavIcon" @click="onHand"></bm-marker>-->
+<!--        服务点位置-->
+        <bm-marker v-for="position in depot.positions" :position="position" :key="position.id" :icon="depot" @click="onHand"></bm-marker>
+<!--        <bm-marker v-for="point in polyline.paths" :position="point" :key="point.id" :icon="depot" @click="onHand"></bm-marker>-->
 <!--        绘制路线-->
         <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
                      :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"
                      :key="polyindex" :editing="polyline.editing"></bm-polyline>
-        <bm-polyline stroke-color=" #AF5" :stroke-opacity="0.5"
-                     :stroke-weight="6" :path="pathline" v-for="pathline of passRoutes" :key="pathline.id"
-                     ></bm-polyline>
+<!--        <bm-polyline stroke-color=" #AF5" :stroke-opacity="0.5"-->
+<!--                     :stroke-weight="6" :path="pathline" v-for="pathline of passRoutes" :key="pathline.id"-->
+<!--                     ></bm-polyline>-->
       </baidu-map>
 
 </div>
@@ -93,9 +95,15 @@ export default {
         editing:false,
         paths:[]
       },
+      //图标区
       UavIcon:{
         url:require('/public/uav48.svg'),
         size: {width: 48, height: 48}
+      },
+      depot:{
+        url:require('/public/depot.svg'),
+        size: {width: 48,height: 48},
+        positions:[]
       },
     //  地图类型选项
       mapType:"BMAP_NORMAL_MAP",
@@ -103,8 +111,8 @@ export default {
       cardVisible:false,
     //  图标拖拽
       dragMarker:false,
-      i:0,
-      showline:true,
+      //站点位置
+      depotPosition:[],
     }
   },
   created() {
@@ -135,7 +143,7 @@ export default {
       console.log("清除成功")
       this.pos={}
       this.polyline.paths=[]
-      this.showMarker=false
+      this.depot.positions=[]
       console.log(this.pos)
       console.log(this.showMarker)
     },
@@ -159,37 +167,41 @@ export default {
       if (!this.polyline.editing) {
         return
       }
+
       const {paths} = this.polyline
       if(!paths.length) {
         paths.push([])
       }
       const path = paths[paths.length - 1]
-      path.pop()
+      // path.pop()
       if (path.length) {
         paths.push([])
       }
     },
     //绘制新的路线
     paintPolyline (e) {
-      this.UavPos.tempPos=e.point
       if (!this.polyline.editing) {
         return
       }
+
+      this.depot.positions.push(e.point)
       //解构赋值
       const {paths} = this.polyline
       //判断该点
       !paths.length && paths.push([])
       //推入点
       paths[paths.length - 1 ].push(e.point)
+
     },
-    show(){
-      this.passRoutes[this.i]=this.UavPos.localPos[this.i]
-      console.log(this.passRoutes)
-      console.log(this.UavPos.localPos)
-      this.i=this.i+1
+    async getDepot() {
+      this.showMarker=!this.showMarker
+      const {data: res} = await this.$http.get('compute/list')
+      this.depot.positions = res
+
     },
-    async startMove() {
-      const {data: res} = await this.$http.post('compute/depotData', this.polyline.paths[0])
+    //上传数据到数据库
+    async uploadData() {
+      const {data: res} = await this.$http.post('compute/depotData', this.depot.positions)
       console.log(res)
       if (res.status === 200) {
         alert("上传数据库成功")
