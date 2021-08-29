@@ -6,7 +6,6 @@
       <baidu-map class="map" :center="center" :zoom="zoomLevel" :scroll-wheel-zoom="true" :map-type="mapType"  @mousemove="syncPolyline"
                  @click="paintPolyline"
                  @rightclick="newPolyline">
-<!--        视图组件-->
         <bm-control>
           <el-row type="flex" class="row-bg">
             <el-col>
@@ -41,10 +40,7 @@
 <!--        定位  -->
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
 <!--        图标区-->
-        <bm-marker :position="polyline.paths" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="true"></bm-marker>
-        <bm-marker v-for="path in polyline.paths" :key="path.index" :position="path" :icon="depotIcon" @click="onHand">
-          <bm-label :content="'站点'+polyline.paths.length" :offset="{width:8,height:48}"></bm-label>
-        </bm-marker>
+        <bm-marker :position="UavPos.tempPos" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="showMarker"></bm-marker>
 <!--        <bm-marker v-for="item in UavPos.localPos" :key="item.id" :position="item" :dragging="dragMarker" :icon="UavIcon" @click="onHand"></bm-marker>-->
 <!--        绘制路线-->
         <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
@@ -69,7 +65,7 @@ export default {
       //百度地图样式
       editing:true,
       //是否展示marker
-      showMarker:true,
+      showMarker:false,
       baiduMapstyle:{
         featrues:Array,
         style:mapstyle,
@@ -97,16 +93,9 @@ export default {
         editing:false,
         paths:[]
       },
-      //无人机图标
       UavIcon:{
         url:require('/public/uav48.svg'),
-        size: {width: 48, height: 48},
-        label:"wwww",
-      },
-    //  站点图标
-      depotIcon:{
-        url: require('/public/depot.svg'),
-        size: {width:48,height:48}
+        size: {width: 48, height: 48}
       },
     //  地图类型选项
       mapType:"BMAP_NORMAL_MAP",
@@ -182,7 +171,6 @@ export default {
     },
     //绘制新的路线
     paintPolyline (e) {
-
       this.UavPos.tempPos=e.point
       if (!this.polyline.editing) {
         return
@@ -192,7 +180,7 @@ export default {
       //判断该点
       !paths.length && paths.push([])
       //推入点
-      paths[paths.length - 1].push(e.point)
+      paths[paths.length - 1 ].push(e.point)
     },
     show(){
       this.passRoutes[this.i]=this.UavPos.localPos[this.i]
@@ -200,8 +188,14 @@ export default {
       console.log(this.UavPos.localPos)
       this.i=this.i+1
     },
-    startMove(){
-
+    async startMove() {
+      const {data: res} = await this.$http.post('compute/depotData', this.polyline.paths[0])
+      console.log(res)
+      if (res.status === 200) {
+        alert("上传数据库成功")
+      } else {
+        alert("上传数据库失败")
+      }
     }
   }
 }

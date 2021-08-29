@@ -2,7 +2,6 @@ import Vue from 'vue'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import router from './router'
-//导出数据文件
 
 //导入全局样式表
 import './assets/style/global.css'
@@ -30,10 +29,17 @@ Vue.use(BaiduMap, {
   ak: '3LDoMsLxgOE30E57ebARtiIGylD2iYyi'
 })
 //axios安装
-import axios from 'vue-axios'
+// import VueAxios from 'vue-axios'
+import axios from "axios";
+
+/* //错误写法
 Vue.use(axios)
+*/
 //axios挂载
 Vue.prototype.$http=axios;
+//访问地址
+axios.defaults.baseURL='http://localhost:8085/'
+// axios.defaults.baseUrl='http://localhost:8085/'
 
 
 
