@@ -34,6 +34,7 @@
           </el-row>
           <el-row>
             <el-button type="primary" @click="getDepot">获取服务站点</el-button>
+            <el-button type="primary" @click="clearTable">清除所有结果</el-button>
             <el-input placeholder="in" ></el-input>
           </el-row>
         </bm-control>
@@ -193,10 +194,12 @@ export default {
       paths[paths.length - 1 ].push(e.point)
 
     },
+    //进行计算并给出规划结果
     async getDepot() {
       this.showMarker=!this.showMarker
-      const {data: res} = await this.$http.get('compute/list')
+      const {data: res} = await this.$http.get('compute/plan')
       this.depot.positions = res
+      console.log(res)
 
     },
     //上传数据到数据库
@@ -208,6 +211,15 @@ export default {
       } else {
         alert("上传数据库失败")
       }
+    },
+  //  清除后端所有数据
+    async clearTable() {
+      const {data: res} = await this.$http.get('compute/delete')
+      console.log(res)
+      if (res.status !== 200) {
+        return
+      }
+      this.$message.success("成功清除后台数据")
     }
   }
 }
