@@ -20,7 +20,7 @@
             <el-col>
               <el-button type="success" @click="handler">清除所有规划</el-button>
               <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
-              <el-button type="success" @click="uavmission">无人机任务匹配</el-button>
+              <el-button type="success" @click="Fconsole">打印</el-button>
               <el-button type="success" @click="uploadData">上传数据</el-button>
             </el-col>
             <el-card v-show="cardVisible">
@@ -35,13 +35,22 @@
           <el-row>
             <el-button type="primary" @click="getDepot">获取服务站点</el-button>
             <el-button type="primary" @click="clearTable">清除所有结果</el-button>
-            <el-input placeholder="in" ></el-input>
+          </el-row>
+          <el-row>
+            <el-dropdown >
+              <el-button type="primary" size="medium">
+                选择无人机<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>编号：1</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </el-row>
         </bm-control>
 <!--        定位  -->
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
 <!--        图标区-->
-        <bm-marker :position="UavPos.tempPos" :icon="UavIcon" @click="onHand" :dragging="dragMarker" v-if="showMarker"></bm-marker>
+        <bm-marker v-for="path in UavPos.planroutes" :key="path.id" :position="path" :icon="UavIcon" @click="onHand" :dragging="dragMarker" ></bm-marker>
 <!--        服务点位置-->
         <bm-marker v-for="position in depot.positions" :position="position" :key="position.id" :icon="depot" @click="onHand"></bm-marker>
 <!--        <bm-marker v-for="point in polyline.paths" :position="point" :key="point.id" :icon="depot" @click="onHand"></bm-marker>-->
@@ -49,6 +58,10 @@
         <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
                      :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"
                      :key="polyindex" :editing="polyline.editing"></bm-polyline>
+        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
+                     :stroke-weight="6" :path="pathIn" v-for=" (pathIn,pathIndex) in UavPos.planroutes"
+                     :key="pathIndex"></bm-polyline>
+<!--        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5" :stroke-weight="6" :path="UavPos.planroutes"></bm-polyline>-->
 <!--        <bm-polyline stroke-color=" #AF5" :stroke-opacity="0.5"-->
 <!--                     :stroke-weight="6" :path="pathline" v-for="pathline of passRoutes" :key="pathline.id"-->
 <!--                     ></bm-polyline>-->
@@ -83,14 +96,14 @@ export default {
       //无人机位置
       UavPos:{
         localPos:[],
-        tempPos:{}
+        tempPos:{},
+        //规划好的路线
+        planroutes:{vehicle:[]}
       },
       // 飞过去的路线
-      passRoutes:[
-
-      ],
+      passRoutes:{},
       //地图中心点
-      center:{lng: 121.83206, lat: 39.084716},
+      center:{lat: 39.084716,lng: 121.83206},
       //绘制无人机路线
       polyline:{
         editing:false,
@@ -149,13 +162,8 @@ export default {
       console.log(this.showMarker)
     },
     //无人机任务
-    uavmission(){
-      if (!this.polyline.paths.length){
-        return
-      }
-      this.UavPos.localPos=this.polyline.paths[0]
-      this.UavPos.tempPos=this.UavPos.localPos[0]
-      this.showMarker=true
+    Fconsole(){
+      console.log(this.polyline.paths)
     },
   //  toggle button 按钮事件，是否开始绘制路线
     toggle(name){
@@ -196,10 +204,37 @@ export default {
     },
     //进行计算并给出规划结果
     async getDepot() {
-      this.showMarker=!this.showMarker
       const {data: res} = await this.$http.get('compute/plan')
-      this.depot.positions = res
+      // this.depot.positions = res
       console.log(res)
+    //  得到数据后，从后端取出相应的站点数据
+      const {info:listLine} = res
+      const mapRoute=new Map
+      const mapLocation=new Map
+
+      for(let line in listLine){
+        // console.log(listLine[line])
+        mapRoute.set(line,listLine[line])
+      }
+      for(const [key,value] of mapRoute){
+        const routeList=[]
+        console.log(key,value)
+        for(let i=0;i<value.length;i++){
+          // let location={lng:'',lat:''}
+          const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:value[i]+1}})
+
+          delete resData.id
+          console.log(resData)
+          routeList.push(resData)
+        }
+      mapLocation.set(key,routeList)
+      }
+      this.UavPos.planroutes=mapLocation
+      console.log(mapLocation)
+      this.UavPos.planroutes=mapLocation.get("1")
+      console.log(this.UavPos.planroutes)
+      // this.passRoutes=this.UavPos.planroutes
+      console.log(this.passRoutes)
 
     },
     //上传数据到数据库
@@ -217,6 +252,7 @@ export default {
       const {data: res} = await this.$http.get('compute/delete')
       console.log(res)
       if (res.status !== 200) {
+        this.$message.error("网络连接超时")
         return
       }
       this.$message.success("成功清除后台数据")
@@ -240,6 +276,14 @@ export default {
 .el-card{
   width: 300px;
   margin-top: 10px;
+}
+/*下来菜单*/
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409EFF;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
 }
 
 </style>
