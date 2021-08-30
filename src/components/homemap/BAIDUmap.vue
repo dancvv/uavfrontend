@@ -42,7 +42,7 @@
                 选择无人机<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>编号：1</el-dropdown-item>
+                <el-dropdown-item v-for="item in opt" :key="item.value" @click.native="changeUav(item.value)">{{item.label}}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-row>
@@ -50,18 +50,19 @@
 <!--        定位  -->
         <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
 <!--        图标区-->
-        <bm-marker v-for="path in UavPos.planroutes" :key="path.id" :position="path" :icon="UavIcon" @click="onHand" :dragging="dragMarker" ></bm-marker>
+        <bm-marker v-for="path in UavPos.planningRoute" :key="path.id" :position="path" :icon="UavIcon" @click="onHand" :dragging="dragMarker" ></bm-marker>
 <!--        服务点位置-->
         <bm-marker v-for="position in depot.positions" :position="position" :key="position.id" :icon="depot" @click="onHand"></bm-marker>
+        <bm-marker v-for="(loca) in passRoutes" :position="loca" :key="loca.id" :icon="depot" @click="onHand"></bm-marker>
 <!--        <bm-marker v-for="point in polyline.paths" :position="point" :key="point.id" :icon="depot" @click="onHand"></bm-marker>-->
 <!--        绘制路线-->
+<!--        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"-->
+<!--                     :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"-->
+<!--                     :key="polyindex" :editing="polyline.editing"></bm-polyline>-->
         <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
-                     :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"
-                     :key="polyindex" :editing="polyline.editing"></bm-polyline>
-        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
-                     :stroke-weight="6" :path="pathIn" v-for=" (pathIn,pathIndex) in UavPos.planroutes"
+                     :stroke-weight="6" v-for=" (pathIn,pathIndex) in passRoutes" :path="pathIn"
                      :key="pathIndex"></bm-polyline>
-<!--        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5" :stroke-weight="6" :path="UavPos.planroutes"></bm-polyline>-->
+<!--        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5" :stroke-weight="6" :path="passRoutes"></bm-polyline>-->
 <!--        <bm-polyline stroke-color=" #AF5" :stroke-opacity="0.5"-->
 <!--                     :stroke-weight="6" :path="pathline" v-for="pathline of passRoutes" :key="pathline.id"-->
 <!--                     ></bm-polyline>-->
@@ -98,7 +99,7 @@ export default {
         localPos:[],
         tempPos:{},
         //规划好的路线
-        planroutes:{vehicle:[]}
+        planningRoute:{}
       },
       // 飞过去的路线
       passRoutes:{},
@@ -127,6 +128,13 @@ export default {
       dragMarker:false,
       //站点位置
       depotPosition:[],
+    //  菜单栏参数
+      opt:[
+        {label:"UAV:1",value:"1"},
+        {label:"UAV:2",value:"2"},
+        {label:"UAV:3",value:"3"},
+        {label:"UAV:4",value:"4"},
+      ]
     }
   },
   created() {
@@ -204,6 +212,8 @@ export default {
     },
     //进行计算并给出规划结果
     async getDepot() {
+      //得到结果前，先清除所有结果
+      this.polyline.paths=[]
       const {data: res} = await this.$http.get('compute/plan')
       // this.depot.positions = res
       console.log(res)
@@ -211,29 +221,29 @@ export default {
       const {info:listLine} = res
       const mapRoute=new Map
       const mapLocation=new Map
-
       for(let line in listLine){
         // console.log(listLine[line])
         mapRoute.set(line,listLine[line])
       }
       for(const [key,value] of mapRoute){
         const routeList=[]
-        console.log(key,value)
+        // console.log(key,value)
         for(let i=0;i<value.length;i++){
           // let location={lng:'',lat:''}
           const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:value[i]+1}})
 
           delete resData.id
-          console.log(resData)
+          // console.log(resData)
           routeList.push(resData)
         }
       mapLocation.set(key,routeList)
       }
-      this.UavPos.planroutes=mapLocation
+      // this.UavPos.planningRoute=mapLocation
+
       console.log(mapLocation)
-      this.UavPos.planroutes=mapLocation.get("1")
-      console.log(this.UavPos.planroutes)
-      // this.passRoutes=this.UavPos.planroutes
+      this.UavPos.planningRoute=Array.from(mapLocation)
+      console.log(this.UavPos.planningRoute)
+      // this.passRoutes=this.UavPos.planningRoute
       console.log(this.passRoutes)
 
     },
@@ -256,6 +266,12 @@ export default {
         return
       }
       this.$message.success("成功清除后台数据")
+    },
+  //  重新赋值,通过传值改变
+    changeUav(value){
+      this.passRoutes=this.UavPos.planningRoute[value]
+      console.log(value)
+      console.log(this.passRoutes)
     }
   }
 }
