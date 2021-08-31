@@ -10,10 +10,13 @@
   "dependencies": {
     "@amap/amap-jsapi-loader": "^1.0.1",
     "@amap/amap-vue": "^2.0.13",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.3",
+    "file-saver": "^2.0.5",
     "vue": "^2.6.11",
     "vue-amap": "^0.5.10",
+    "vue-axios": "^3.2.5",
     "vue-baidu-map": "^0.21.22",
     "vue-router": "^3.5.2"
   },

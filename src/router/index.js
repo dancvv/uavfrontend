@@ -1,8 +1,10 @@
 import Vue from "vue"
 import router from "vue-router"
 import home from "../components/home";
-import mapview from "../components/homemap/mapview";
-import lessmap from "@/components/homemap/lessmap";
+import BAIDUmap from "../components/homemap/BAIDUmap";
+import webSocket from "@/components/test/webSocket";
+import homepage from "@/components/homepage";
+
 Vue.use(router)
 
 
@@ -10,10 +12,16 @@ export default new router({
     routes:[
         {path:'/home',component:home,
         children:[
-            {path:'/mapview',component:mapview},
-            {path:'/mapview2',component:lessmap}
+            // {path:'/home',redirect:'/homepage'},
+            {path:'/mapview',component:BAIDUmap},
         ]},
         //重定向home页
-        {path:'/',redirect:'/home'}
+        {path:'/',redirect:'/home'},
+        {path:'/homepage',component:homepage},
+        {path:'/setting',component:home,
+            children:[
+                {path:'/webSocket',component:webSocket}
+            ]},
+
     ]
 })
