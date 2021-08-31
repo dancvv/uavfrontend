@@ -33,7 +33,7 @@
             </el-card>
           </el-row>
           <el-row>
-            <el-button type="primary" @click="getDepot">获取服务站点</el-button>
+            <el-button type="primary" @click="getDepot">获取服务规划</el-button>
             <el-button type="primary" @click="clearTable">清除所有结果</el-button>
           </el-row>
           <el-row>
@@ -130,10 +130,10 @@ export default {
       depotPosition:[],
     //  菜单栏参数
       opt:[
-        {label:"UAV:1",value:"1"},
-        {label:"UAV:2",value:"2"},
-        {label:"UAV:3",value:"3"},
-        {label:"UAV:4",value:"4"},
+        {label:"UAV:1",value:"0"},
+        {label:"UAV:2",value:"1"},
+        {label:"UAV:3",value:"2"},
+        {label:"UAV:4",value:"3"},
       ]
     }
   },
@@ -217,6 +217,11 @@ export default {
       const {data: res} = await this.$http.get('compute/plan')
       // this.depot.positions = res
       console.log(res)
+      if(res.status!==200){
+        this.$message.error("规划超时")
+        return
+      }
+      this.$message.success("规划求解成功")
     //  得到数据后，从后端取出相应的站点数据
       const {info:listLine} = res
       const mapRoute=new Map
