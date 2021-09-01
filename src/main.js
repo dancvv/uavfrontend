@@ -10,6 +10,13 @@ import App from "@/App";
 import global from "../public/globalWebSocket";
 Vue.prototype.global=global
 
+//导入mapbox地图
+import mapboxgl from "mapbox-gl"
+import 'mapbox-gl/dist/mapbox-gl.css'
+mapboxgl.accessToken='pk.eyJ1IjoidHJhbnNjZW5kdHJlZSIsImEiOiJja3N6eHRiMzkxeXNzMm90Y2Rhd2JmbjNqIn0.bCRv7xB55jHSDwEF5y5DcA'
+Vue.use(mapboxgl)
+
+
 
 
 //高德地图
@@ -31,7 +38,6 @@ Vue.use(BaiduMap, {
 //axios安装
 // import VueAxios from 'vue-axios'
 import axios from "axios";
-
 /* //错误写法
 Vue.use(axios)
 */

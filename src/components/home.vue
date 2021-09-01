@@ -25,9 +25,9 @@
             <i class="el-icon-user"></i>
             <span slot="title">首页</span>
           </el-menu-item>
-          <el-menu-item index="map">
+          <el-menu-item index="mapboxgl">
             <i class="el-icon-user"></i>
-            <span slot="title">leafMAP</span>
+            <span slot="title">MAPBOX</span>
           </el-menu-item>
           <el-submenu :index="item.path" v-for="item in asideMenu" :key="item.id">
             <template slot="title">
