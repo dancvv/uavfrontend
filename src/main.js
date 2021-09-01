@@ -11,6 +11,7 @@ import global from "../public/globalWebSocket";
 Vue.prototype.global=global
 
 //导入mapbox地图
+//使用单地图组件，不采用全组件加载的形式
 import mapboxgl from "mapbox-gl"
 import 'mapbox-gl/dist/mapbox-gl.css'
 mapboxgl.accessToken='pk.eyJ1IjoidHJhbnNjZW5kdHJlZSIsImEiOiJja3N6eHRiMzkxeXNzMm90Y2Rhd2JmbjNqIn0.bCRv7xB55jHSDwEF5y5DcA'

@@ -1,6 +1,6 @@
 <template>
 <!--    <el-button type="primary" @click="sendMessage('hello')">Send message</el-button>-->
-    <router-view></router-view>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -10,11 +10,13 @@ export default {
     return{
       //websocket连接
       connection:null,
-      ws:{}
+      ws:{},
+    //  websocket链接次数
+      webI:0
     }
   },
 
-  created() {
+  mounted() {
     //初始化websocket方法
     this.createSocket()
   },
@@ -34,11 +36,19 @@ export default {
           console.log("websocket链接成功")
         }
         that.ws.onclose=()=>{
-          console.log("websocket链接已关闭")
-          //断线重连后端
-          setTimeout(()=>{
-            that.createSocket();
-          },2000)
+          //判断机制，如果一旦超过阈值，停止
+          console.log(this.webI)
+          if (this.webI<3){
+            this.webI++;
+            console.log("websocket链接已关闭")
+            //断线重连后端
+            setTimeout(()=>{
+              //延时两秒后重启socket
+              that.createSocket();
+            },500)
+          }else {
+            console.log("超过链接阈值"+this.webI)
+          }
         }
       }else {
         console.log("浏览器不支持websocket")
@@ -47,6 +57,7 @@ export default {
   //  心跳机制，防止后端无法检测无故中段
     keepAlive(){
       let that=this;
+      console.log("没有信息")
       setTimeout(()=>{
         if (that.global.ws.readyState==1){
           console.log('发送keeplive')
@@ -56,7 +67,7 @@ export default {
           that.keepAlive()
         }
       })
-    }
+    },
   }
 }
 </script>
