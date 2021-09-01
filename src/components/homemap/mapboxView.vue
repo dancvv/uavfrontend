@@ -1,5 +1,9 @@
 <template>
 <div class="mapbox">
+  <el-radio-group class="mapTypeGroup" v-model="map.style" @click="changeMap(2)">
+    <el-radio-button label="mapbox://styles/mapbox/streets-v9" size="medium" @click="changeMap">平面地图</el-radio-button>
+    <el-radio-button label="mapbox://styles/mapbox/satellite-v9" size="medium" @click="changeMap">卫星地图</el-radio-button>
+  </el-radio-group>
   <el-card class="card-box">
     <div slot="header">选项设置</div>
     <el-button type="primary" class="mapgroup">按钮事件</el-button>
@@ -23,10 +27,9 @@ export default {
       map:{
         center:[121.81135905402766, 39.084797545212155],
         zoom:14,
-        style:'mapbox://styles/mapbox/streets-v9'
+        style:"mapbox://styles/mapbox/streets-v9"
       },
       location:[121.81135905402766, 39.084797545212155],
-      coordinates:""
     }
   },
   mounted() {
@@ -46,6 +49,11 @@ export default {
         this.location[1]=e.lngLat.lat
         marker1.setLngLat(this.location)
       });
+      map.setStyle(this.map.style)
+    },
+    changeMap(){
+      console.log(this.map.style)
+
     }
   }
 }
@@ -62,12 +70,17 @@ export default {
 }
 .card-box{
   position: absolute;
-  margin-top: 20px;
+  margin-top: 60px;
   margin-left: 20px;
   width: 300px;
   z-index:1
 }
 .mapgroup{
   margin-bottom: 10px;
+}
+.mapTypeGroup{
+  position: absolute;
+  z-index: 1;
+  margin-top: 20px;
 }
 </style>
