@@ -1,12 +1,13 @@
 <template>
 <div class="mapbox">
   <el-radio-group class="mapTypeGroup" v-model="map.style" @click="changeMap(2)">
-    <el-radio-button label="mapbox://styles/mapbox/streets-v9" size="medium" @click="changeMap">平面地图</el-radio-button>
+    <el-radio-button label="mapbox://styles/mapbox/streets-v9" size="medium" @click="changeMap">{{ map.style }}</el-radio-button>
     <el-radio-button label="mapbox://styles/mapbox/satellite-v9" size="medium" @click="changeMap">卫星地图</el-radio-button>
   </el-radio-group>
   <el-card class="card-box">
     <div slot="header">选项设置</div>
-    <el-button type="primary" class="mapgroup">按钮事件</el-button>
+    <el-button type="primary" class="mapgroup" @click="changeState">按钮事件</el-button>
+    <el-button type="primary" class="mapgroup" @click="changeMap">地图更改</el-button>
     <el-input class="mapgroup" >{{location.lat}}</el-input>
   </el-card>
 
@@ -30,6 +31,9 @@ export default {
         style:"mapbox://styles/mapbox/streets-v9"
       },
       location:[121.81135905402766, 39.084797545212155],
+      poly:{
+        edit:false
+      },
     }
   },
   mounted() {
@@ -45,17 +49,32 @@ export default {
       });
       const marker1=new mapboxgl.Marker().setLngLat(this.location).addTo(map)
       map.on('click',(e)=>{
+        if (!this.poly.edit){
+          return
+        }
         this.location[0]=e.lngLat.lng
         this.location[1]=e.lngLat.lat
         marker1.setLngLat(this.location)
       });
       map.setStyle(this.map.style)
-    },
-    changeMap(){
       console.log(this.map.style)
+      map.on('load',()=>{
+        map.setStyle(this.map.style)
+      })
 
+      map.addControl(new mapboxgl.NavigationControl())
+      return map;
+    },
+
+    changeMap(){
+      const map=this.init()
+      map.setStyle('mapbox://styles/mapbox/satellite-v9')
+      console.log(this.map.style)
+    },
+    changeState(){
+      this.poly.edit=!this.poly.edit
     }
-  }
+  },
 }
 </script>
 
