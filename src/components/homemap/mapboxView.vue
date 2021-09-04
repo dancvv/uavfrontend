@@ -7,7 +7,7 @@
   </el-radio-group>
   <el-card class="card-box">
     <div slot="header">选项设置</div>
-    <el-button type="primary" class="mapgroup" @click="changeState">按钮事件</el-button>
+    <el-button type="primary" class="mapgroup" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
     <el-button type="primary" class="mapgroup" @click="changeMap">地图更改</el-button>
     <el-input class="mapgroup" >{{location.lat}}</el-input>
   </el-card>
@@ -33,6 +33,7 @@ export default {
       },
       location:[121.81135905402766, 39.084797545212155],
       poly:{
+        paths:[],
         edit:false
       },
     }
@@ -48,31 +49,45 @@ export default {
         center: this.map.center,
         zoom: this.map.zoom,
       });
-      const marker1=new mapboxgl.Marker().setLngLat(this.location).addTo(map)
+      // element marker元素
+      let el=document.createElement('div')
+      el.className='marker'
+      el.style.backgroundImage='`url(/public/uav48.svg)`'
+      el.style.width='48px'
+      el.style.height='48px'
+      el.style.backgroundSize = '100%';
+      new mapboxgl.Marker(el).setLngLat(this.location).addTo(map)
       map.on('click',(e)=>{
         if (!this.poly.edit){
           return
         }
-        this.location[0]=e.lngLat.lng
-        this.location[1]=e.lngLat.lat
-        marker1.setLngLat(this.location)
+        //临时位置数组
+        let temp=[]
+        temp[0]=e.lngLat.lng
+        temp[1]=e.lngLat.lat
+        console.log(temp)
+        this.poly.paths.push(e.lngLat)
+        console.log(this.poly.paths)
+        //根据点击位置放置一个图标
+        new mapboxgl.Marker(el).setLngLat(temp).addTo(map)
       });
       map.setStyle(this.map.style)
       console.log(this.map.style)
       map.on('load',()=>{
         map.setStyle(this.map.style)
       })
-
       map.addControl(new mapboxgl.NavigationControl())
       return map;
     },
 
-    changeMap(){
+    async changeMap() {
       // const map=this.init()
+      const {data: res} = await this.$http.post('compute/depotData', this.poly.paths)
+      console.log(res)
       map.setStyle(this.map.style)
       console.log(this.map.style)
     },
-    changeState(){
+    placePoint(){
       this.poly.edit=!this.poly.edit
     }
   },

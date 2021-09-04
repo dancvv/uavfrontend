@@ -75,6 +75,7 @@
 
 <script>
 import mapstyle from "/src/assets/style/custom_map_config.json"
+import qs from "qs";
 export default {
   name: "BAIDUmap",
   data(){
@@ -134,7 +135,11 @@ export default {
         {label:"UAV:2",value:"1"},
         {label:"UAV:3",value:"2"},
         {label:"UAV:4",value:"3"},
-      ]
+      ],
+      vehiclePlan:{
+        vehicleNumber:3,
+        depot:2
+      }
     }
   },
   created() {
@@ -214,7 +219,11 @@ export default {
     async getDepot() {
       //得到结果前，先清除所有结果
       this.polyline.paths=[]
-      const {data: res} = await this.$http.get('compute/plan')
+      const {data: res} = await this.$http.post('compute/plan',
+          qs.stringify(
+              {
+                vehicleNumber:this.vehiclePlan.vehicleNumber,
+                depot:this.vehiclePlan.depot},))
       // this.depot.positions = res
       console.log(res)
       if(res.status!==200){
@@ -254,6 +263,7 @@ export default {
     },
     //上传数据到数据库
     async uploadData() {
+      console.log(this.depot.positions)
       const {data: res} = await this.$http.post('compute/depotData', this.depot.positions)
       console.log(res)
       if (res.status === 200) {

@@ -48,6 +48,9 @@ Vue.prototype.$http=axios;
 axios.defaults.baseURL='http://localhost:8085/'
 // axios.defaults.baseUrl='http://localhost:8085/'
 
+//导入qs文件
+import qs from 'qs'
+Vue.prototype.$qs=qs
 
 
 Vue.prototype.$message=Message
