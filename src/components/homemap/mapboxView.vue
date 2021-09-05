@@ -52,22 +52,6 @@ export default {
         center: this.map.center,
         zoom: this.map.zoom,
       });
-      // map.on('click',(e)=>{
-      //   if (!this.poly.edit){
-      //     return
-      //   }
-      //   //临时位置数组
-      //   let temp=[]
-      //   temp[0]=e.lngLat.lng
-      //   temp[1]=e.lngLat.lat
-      //   console.log(temp)
-      //   this.poly.paths.push(e.lngLat)
-      //   console.log(this.poly.paths)
-      //   //根据点击位置放置一个图标
-      //   new mapboxgl.Marker().setLngLat(temp).addTo(map)
-      // });
-      // map.setStyle(this.map.style)
-      // console.log(this.map.style)
       map.addControl(new mapboxgl.NavigationControl())
       return map;
     },
@@ -107,17 +91,17 @@ export default {
       // const marker=new mapboxgl.Marker(el).setLngLat([121.81135905402766, 39.084797545212155]).addTo(map)
 
 
-      const el = document.createElement('div');
-      el.className = 'marker';
-      // el.style.backgroundImage = "url(https://placekitten.com/g/50/50)";
-      // el.style.width = '48px';
-      // el.style.height = '48px';
-      // el.style.backgroundSize = '100%';
-// Add markers to the map.
-      const marker=new mapboxgl.Marker(el)
-          .setLngLat([121.81135905402766, 39.084797545212155])
-          .addTo(map);
-      console.log(marker)
+//       const el = document.createElement('div');
+//       el.className = 'marker';
+//       // el.style.backgroundImage = "url(https://placekitten.com/g/50/50)";
+//       // el.style.width = '48px';
+//       // el.style.height = '48px';
+//       // el.style.backgroundSize = '100%';
+// // Add markers to the map.
+//       const marker=new mapboxgl.Marker(el)
+//           .setLngLat([121.81135905402766, 39.084797545212155])
+//           .addTo(map);
+//       console.log(marker)
     }
   },
 }
@@ -148,7 +132,7 @@ export default {
   margin-top: 20px;
   margin-left: 20px;
 }
-.marker{
+#marker{
   background-image: url('https://placekitten.com/g/50/50');
   background-size: 100%;
   width: 48px;

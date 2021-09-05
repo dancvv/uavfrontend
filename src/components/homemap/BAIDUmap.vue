@@ -138,7 +138,7 @@ export default {
       ],
       vehiclePlan:{
         vehicleNumber:3,
-        depot:2
+        depot:1
       }
     }
   },
