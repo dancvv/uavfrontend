@@ -246,9 +246,11 @@ export default {
           // let location={lng:'',lat:''}
           const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:value[i]+1}})
 
-          delete resData.id
+          console.log(resData)
+
+          delete resData.location.id
           // console.log(resData)
-          routeList.push(resData)
+          routeList.push(resData.location)
         }
       mapLocation.set(key,routeList)
       }
