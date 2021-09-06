@@ -137,7 +137,7 @@ export default {
         {label:"UAV:4",value:"3"},
       ],
       vehiclePlan:{
-        vehicleNumber:3,
+        vehicleNumber:4,
         depot:1
       }
     }
