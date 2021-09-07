@@ -1,21 +1,8 @@
 <template>
 <el-container class="home-container">
-
-  <!--      侧边栏-->
+  <!--      头部和侧边栏组件-->
   <Aside/>
-
     <el-container>
-      <!--  头部区域-->
-      <el-header>
-        <div>
-          <img src="../assets/iconsys.png" alt="empty" width="20px">
-        </div>
-        <span id="header-title" @click="backTo">
-          <h3>无人机管理系统</h3>
-        </span>
-      </el-header>
-
-<!--      主内容区域-->
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -40,9 +27,7 @@ export default {
   },
   methods:{
 
-    backTo(){
-      this.$router.push('/home')
-    }
+
   }
 }
 </script>
@@ -56,7 +41,7 @@ export default {
   font-size: 16px;
   justify-content: flex-start;
 }
-#header-title{
+.header-title{
   padding: 10px;
   display: inline;
   text-align: center;

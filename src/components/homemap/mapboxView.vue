@@ -1,15 +1,15 @@
 <template>
 <div class="mapbox">
-  <el-radio-group class="mapStyle" v-model="map.style" @change="changeStyle">
-    <el-radio-button label="mapbox://styles/mapbox/streets-v9" size="medium" >平面地图</el-radio-button>
-    <el-radio-button label="mapbox://styles/mapbox/satellite-v9" size="medium" >卫星地图</el-radio-button>
-    <el-radio-button label="mapbox://styles/mapbox/outdoors-v10" size="medium" >户外地图</el-radio-button>
+  <el-radio-group class="mapStyle" v-model="map.style" @change="changeStyle" size="mini">
+    <el-radio-button label="mapbox://styles/mapbox/streets-v9" size="mini" >平面地图</el-radio-button>
+    <el-radio-button label="mapbox://styles/mapbox/satellite-v9" size="mini" >卫星地图</el-radio-button>
+    <el-radio-button label="mapbox://styles/mapbox/outdoors-v10" size="mini" >户外地图</el-radio-button>
   </el-radio-group>
   <el-card class="card-box">
     <div slot="header">选项设置</div>
-    <el-button type="primary" class="mapgroup" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
-    <el-button type="primary" class="mapgroup" @click="uploadData">上传数据</el-button>
-    <el-button type="primary" class="mapgroup" @click="showMarker">自定义图标</el-button>
+    <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
+    <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>
+    <el-button type="primary" class="mapgroup" size="mini" @click="showMarker">自定义图标</el-button>
     <el-input class="mapgroup" >{{location}}</el-input>
   </el-card>
 

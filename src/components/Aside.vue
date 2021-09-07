@@ -1,13 +1,11 @@
 <template>
-  <el-aside :width="isCollapse?'64px':'200px'">
-    <div class="toggle-button" @click="toggleCollapse">
-      <!--          展开图标-->
-      <i class="el-icon-s-unfold" v-if="isCollapse"></i>
-      <!--          折叠图标-->
-      <i class="el-icon-s-fold" v-if="!isCollapse"></i>
-    </div>
+<div>
+<!--  头部-->
+  <Header/>
+<!--  侧边栏-->
+  <el-aside width="180px">
     <el-menu text-color="#666" active-text-color="#ffd04b" :router="true"
-             unique-opened :collapse="isCollapse" default-active="1" :collapse-transition="false">
+             unique-opened :collapse="isCollapse" default-active="mapview" :collapse-transition="false">
       <el-menu-item index="mapview">
         <i class="el-icon-user"></i>
         <span slot="title">首页</span>
@@ -28,11 +26,15 @@
       </el-submenu>
     </el-menu>
   </el-aside>
+</div>
 </template>
 
 <script>
+
+import Header from "@/components/Header";
 export default {
   name: "Aside",
+  components: {Header},
   data(){
     return{
       //判断是否合并
@@ -72,6 +74,7 @@ export default {
     toggleCollapse(){
       this.isCollapse=!this.isCollapse
     },
+
   }
 }
 </script>
@@ -80,11 +83,16 @@ export default {
 
 .el-menu{
   border-right:none;
-  background-color:#E6E7E7;
+  background-color: #ffffff;
+  font-size: 15px;
+}
+.el-menu-item{
+  /*background-color: #ffffff;*/
+  font-size: 13px;
 }
 
 .el-aside{
-  background-color:#E6E7E7;
+  background-color:#ffffff;
 }
 
 .toggle-button{
@@ -96,4 +104,8 @@ export default {
   cursor: pointer;
 }
 
+
+.el-menu-item{
+  min-width: 180px;
+}
 </style>
