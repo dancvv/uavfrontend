@@ -16,7 +16,7 @@
 import Aside from "@/components/Aside";
 export default {
   name: "home",
-  components: {Aside },
+  components: {  Aside },
   data(){
     return{
     //  默认激活路径
