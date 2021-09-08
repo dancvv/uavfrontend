@@ -227,10 +227,10 @@ export default {
       // this.depot.positions = res
       console.log(res)
       if(res.status!==200){
-        this.$message.error("规划超时")
+        this.$message.error(res.msg)
         return
       }
-      this.$message.success("规划求解成功")
+      this.$message.success(res.msg)
     //  得到数据后，从后端取出相应的站点数据
       const {info:listLine} = res
       const mapRoute=new Map
@@ -282,7 +282,8 @@ export default {
         this.$message.error("网络连接超时")
         return
       }
-      this.$message.success("成功清除后台数据")
+      console.log(res.msg)
+      this.$message.success(res.msg)
     },
   //  重新赋值,通过传值改变
     changeUav(value){
