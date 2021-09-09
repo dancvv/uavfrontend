@@ -11,6 +11,7 @@
     <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>
     <el-button type="primary" class="mapgroup" size="mini" @click="showMarker">自定义图标</el-button>
     <el-input class="mapgroup" >{{location}}</el-input>
+    <map-component></map-component>
   </el-card>
 
   <div id="map-view">
@@ -24,9 +25,12 @@
 <script>
 import mapboxgl from "mapbox-gl"
 import 'mapbox-gl/dist/mapbox-gl.css'
+import {mapMutations} from "vuex";
+import MapComponent from "@/components/homemap/mapComponent";
 let map=null
 export default {
   name: "mapboxView",
+  components: {MapComponent},
   data(){
     return{
       map:{
@@ -42,18 +46,34 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    // this.init()
+    this.first()
   },
   methods:{
+    ...mapMutations(['initmap']),
+    first(){
+      // const map=new mapboxgl.Map({
+      //   container: 'map-view',
+      //   style: this.map.style,
+      //   center: this.map.center,
+      //   zoom: this.map.zoom,
+      // });
+      this.initmap(new mapboxgl.Map({
+                      container: 'map-view',
+                      style: this.map.style,
+                      center: this.map.center,
+                      zoom: this.map.zoom,
+      }))
+    },
     init(){
-       map=new mapboxgl.Map({
-        container: 'map-view',
-        style: this.map.style,
-        center: this.map.center,
-        zoom: this.map.zoom,
-      });
-      map.addControl(new mapboxgl.NavigationControl())
-      return map;
+      // const map=new mapboxgl.Map({
+      //   container: 'map-view',
+      //   style: this.map.style,
+      //   center: this.map.center,
+      //   zoom: this.map.zoom,
+      // });
+      // map.addControl(new mapboxgl.NavigationControl())
+      // return map;
     },
     //改变地图样式
     changeStyle(){

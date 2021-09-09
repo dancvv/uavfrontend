@@ -52,6 +52,8 @@ axios.defaults.baseURL='http://localhost:8085/'
 import qs from 'qs'
 Vue.prototype.$qs=qs
 
+//导入vuex
+import store from './store/store'
 
 Vue.prototype.$message=Message
 Vue.use(ElementUI);
@@ -61,5 +63,7 @@ Vue.config.productionTip = false
 new Vue({
   //注册router文件
   router,
+  //vuex
+  store,
   render: h => h(App),
 }).$mount('#app')
