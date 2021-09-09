@@ -12,5 +12,8 @@ export default {
 </script>
 
 <style scoped>
-
+.div{
+  text-align: center;
+  justify-content: center;
+}
 </style>

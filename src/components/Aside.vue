@@ -49,9 +49,9 @@ export default {
       //菜单数据
       asideMenu:[
         // {id:'100',path:'/',name:'首页',order:1,icon:'el-icon-user'},
-        {id:'200',path:'/manage',name:'飞行器管理',order:1,icon:'el-icon-s-cooperation',
+        {id:'200',path:'/manage',name:'飞行器位置',order:1,icon:'el-icon-s-cooperation',
           children:[
-            {id:'201',path:'/monitor',name:'飞行监控',order:2},
+            {id:'201',path:'/location',name:'批量上传位置',order:2},
             {id:'202',path:'/fence',name:'地理围栏',order:2},
             {id:'203',path:'/basemap',name:'地图底图',order:2},
           ]},

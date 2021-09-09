@@ -14,7 +14,7 @@ export default {
   name: "Header",
   methods:{
     backTo(){
-      this.$router.push('/home')
+      this.$router.push('/welcomepage')
     }
   }
 }

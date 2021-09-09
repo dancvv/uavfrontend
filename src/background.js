@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow ,Menu} from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -35,6 +35,8 @@ async function createWindow() {
     win.loadURL('app://./index.html')
   }
 }
+// delete the default menu nav
+Menu.setApplicationMenu(null)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
