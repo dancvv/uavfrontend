@@ -23,6 +23,7 @@
 </template>
 
 <script>
+let mapx=''
 import mapboxgl from "mapbox-gl"
 import 'mapbox-gl/dist/mapbox-gl.css'
 import {mapMutations} from "vuex";
@@ -58,12 +59,14 @@ export default {
       //   center: this.map.center,
       //   zoom: this.map.zoom,
       // });
-      this.initmap(new mapboxgl.Map({
+      mapx=this.initmap(new mapboxgl.Map({
                       container: 'map-view',
                       style: this.map.style,
                       center: this.map.center,
                       zoom: this.map.zoom,
       }))
+      console.log(mapx)
+      mapx.addControl(new map.NavigationControl)
     },
     init(){
       // const map=new mapboxgl.Map({
