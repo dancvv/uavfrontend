@@ -12,12 +12,10 @@
     <el-button type="success" @click="send">发送</el-button>
   </div>
   <div class="input">
-    <div>new content</div>
-    <p>{{count}}</p>
-    <span>{{string}}</span><br>
-    <el-button type="primary" @click="getfount">加法</el-button>
+<!--    computed属性测试-->
+    <el-input>{{textInput}}</el-input><br>
+    <p>{{textInput}}</p>
   </div>
-
 
 </div>
 </template>
@@ -29,18 +27,13 @@ export default {
     return{
       wsmsg:"",
       connectText:"",
-      inputText:"",
-      voidvalue:"dwede"
+      inputText:""
     }
   },
   computed:{
-    //通过计算属性获取对象中的值
-    count(){
-      // voidvalue=this.$store.state.count
-      return this.$store.state.count
-    },
-    string(){
-      return this.$store.state.map
+    //属性测试
+    textInput(){
+      return this.$store.state.testIndex
     }
   },
   methods:{
@@ -49,17 +42,7 @@ export default {
     },
     send(){
       console.log("send")
-    },
-    getfount() {
-      this.voidvalue=this.$store.state.count
-      this.voidvalue+=1
-      console.log(this.voidvalue)
-    },
-    testAdd(){
-      // this.$store.commit('addmethod')
-      console.log(this.$store.state.count)
     }
-
   }
 }
 </script>

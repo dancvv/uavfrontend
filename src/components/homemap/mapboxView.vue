@@ -46,14 +46,14 @@ export default {
     }
   },
   computed:{
-    ...mapState({maps:'mapbox'})
+    ...mapState(['mapbox'])
   },
   mounted() {
     // this.init()
     this.first()
+
   },
   methods:{
-    //更改方向
     ...mapMutations(['initmap']),
     first(){
       // const map=new mapboxgl.Map({
@@ -68,8 +68,6 @@ export default {
                       center: this.map.center,
                       zoom: this.map.zoom,
       }))
-      // console.log(mapx)
-      // mapx.addControl(new map.NavigationControl)
     },
     init(){
       // const map=new mapboxgl.Map({
@@ -83,7 +81,9 @@ export default {
     },
     //改变地图样式
     changeStyle(){
-      map.setStyle(this.map.style)
+      //利用vuex调整地图样式
+      this.$store.commit('styleChange',this.map.style)
+      // map.setStyle(this.map.style)
       console.log(this.map.style)
     },
     //上传数据

@@ -4,28 +4,23 @@ import vuex from "vuex"
 Vue.use(vuex)
 
 export default new vuex.Store({
-    //严格模式，用于调试，发布环境应当取消
-    strict:true,
     state:{
         mapbox:'',
-        map:'hsdkfjhds',
-        count:2323
+        mapStyle:'',
+        testIndex:'string test'
     },
-
     mutations:{
         initmap(state,pay){
             state.mapbox=pay;
         },
-        addmethod(state){
-            state.count++
+        styleChange(state,payload){
+            state.mapStyle=payload
+            state.mapbox.setStyle(state.mapStyle)
         }
     },
     getters:{
         getMap(state){
             return state.mapbox;
-        },
-        getCount(state){
-            return state.count;
         }
     }
 })
