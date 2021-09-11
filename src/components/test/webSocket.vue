@@ -12,6 +12,7 @@
     <el-button type="success" @click="send">发送</el-button>
   </div>
   <div class="input">
+    <div>new content</div>
     <p>{{count}}</p>
     <span>{{string}}</span><br>
     <el-button type="primary" @click="getfount">加法</el-button>

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-let map='';
+// let map='';
 export default {
   name: "mapComponent",
   data(){
@@ -21,8 +21,8 @@ export default {
   methods:{
     add(){
       //访问地图信息
-      map=this.$store.getters.getMap
-      map.addControl(new map.NavigationControl)
+      // map=this.$store.getters.getMap
+      // map.addControl(new map.NavigationControl)
 
       // this.map.addControl(new this.map.NavigationControl())
     },

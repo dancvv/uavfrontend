@@ -23,10 +23,9 @@
 </template>
 
 <script>
-let mapx=''
 import mapboxgl from "mapbox-gl"
 import 'mapbox-gl/dist/mapbox-gl.css'
-import {mapMutations} from "vuex";
+import {mapMutations, mapState} from "vuex";
 import MapComponent from "@/components/homemap/mapComponent";
 let map=null
 export default {
@@ -46,11 +45,15 @@ export default {
       },
     }
   },
+  computed:{
+    ...mapState({maps:'mapbox'})
+  },
   mounted() {
     // this.init()
     this.first()
   },
   methods:{
+    //更改方向
     ...mapMutations(['initmap']),
     first(){
       // const map=new mapboxgl.Map({
@@ -59,14 +62,14 @@ export default {
       //   center: this.map.center,
       //   zoom: this.map.zoom,
       // });
-      mapx=this.initmap(new mapboxgl.Map({
+      this.initmap(new mapboxgl.Map({
                       container: 'map-view',
                       style: this.map.style,
                       center: this.map.center,
                       zoom: this.map.zoom,
       }))
-      console.log(mapx)
-      mapx.addControl(new map.NavigationControl)
+      // console.log(mapx)
+      // mapx.addControl(new map.NavigationControl)
     },
     init(){
       // const map=new mapboxgl.Map({
