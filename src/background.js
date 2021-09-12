@@ -14,8 +14,8 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 700,
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -36,7 +36,7 @@ async function createWindow() {
   }
 }
 // delete the default menu nav
-Menu.setApplicationMenu(null)
+// Menu.setApplicationMenu(null)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {

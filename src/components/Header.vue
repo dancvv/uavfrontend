@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="header-icon">
-    <img src="../assets/uavIcon.png" alt="None">
+    <img src="../assets/uavIcon.svg" alt="None">
   </div>
   <span class="header-title" @click="backTo">
           <p id="headName">无人机管理系统</p>

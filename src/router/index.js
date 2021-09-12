@@ -3,10 +3,10 @@ import home from "../components/home";
 import webSocket from "@/components/test/webSocket";
 import homepage from "@/components/homepage";
 
-import BAIDUmap from "@/components/homemap/BAIDUmap";
 import mapboxView from "@/components/homemap/mapboxView";
 import VueRouter from "vue-router";
 import BodyContent from "@/components/BodyContent";
+import elmap from "@/components/homemap/elmap";
 
 //处理push操作的重复点击问题
 const originalPush=VueRouter.prototype.push
@@ -23,7 +23,7 @@ export default new VueRouter({
         {path:'/home',component:home,
         children:[
             {path:'/mapview',component:mapboxView},
-            {path:'/mapboxgl',component:BAIDUmap},
+            {path:'/mapboxgl',component:elmap},
             {path:'/welcomepage',component:BodyContent}
         ]},
         //重定向home页
