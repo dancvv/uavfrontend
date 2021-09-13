@@ -9,19 +9,19 @@
         <bm-control>
           <el-row type="flex" class="row-bg">
             <el-col>
-              <el-radio-group v-model="mapType">
-                <el-radio-button label="BMAP_NORMAL_MAP" size="medium">2D地图</el-radio-button>
-                <el-radio-button label="BMAP_SATELLITE_MAP" size="medium">卫星地图</el-radio-button>
+              <el-radio-group v-model="mapType" size="mini">
+                <el-radio-button label="BMAP_NORMAL_MAP" size="mini">2D地图</el-radio-button>
+                <el-radio-button label="BMAP_SATELLITE_MAP" size="mini">卫星地图</el-radio-button>
               </el-radio-group>
             </el-col>
           </el-row>
           <el-row>
 
             <el-col>
-              <el-button type="success" @click="handler">清除所有规划</el-button>
-              <el-button type="primary" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
-              <el-button type="success" @click="Fconsole">打印</el-button>
-              <el-button type="success" @click="uploadData">上传数据</el-button>
+              <el-button type="success" size="mini" @click="handler">清除所有规划</el-button>
+              <el-button type="primary" size="mini" @click="toggle('polyline')">{{polyline.editing?'停止绘制':'开始绘制'}}</el-button>
+              <el-button type="success" size="mini" @click="Fconsole">打印</el-button>
+              <el-button type="success" size="mini" @click="uploadData">上传数据</el-button>
             </el-col>
             <el-card v-show="cardVisible">
               <h3>参数设置</h3>
@@ -33,12 +33,12 @@
             </el-card>
           </el-row>
           <el-row>
-            <el-button type="primary" @click="getDepot">获取服务规划</el-button>
-            <el-button type="primary" @click="clearTable">清除所有结果</el-button>
+            <el-button type="primary" size="mini" @click="getDepot">获取服务规划</el-button>
+            <el-button type="primary" size="mini" @click="clearTable">清除所有结果</el-button>
           </el-row>
           <el-row>
             <el-dropdown >
-              <el-button type="primary" size="medium">
+              <el-button type="primary" size="mini">
                 选择无人机<i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
@@ -60,7 +60,7 @@
 <!--                     :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"-->
 <!--                     :key="polyindex" :editing="polyline.editing"></bm-polyline>-->
         <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
-                     :stroke-weight="6" v-for=" item in passRoutes" :path="item"
+                     :stroke-weight="6" v-for=" item of passRoutes" path="item"
                      :key="item.index"></bm-polyline>
 <!--        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5" :stroke-weight="6" :path="passRoutes"></bm-polyline>-->
 <!--        <bm-polyline stroke-color=" #AF5" :stroke-opacity="0.5"-->

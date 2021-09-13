@@ -5,8 +5,8 @@
   <el-row type="flex" class="row-bg">
     <el-col>
       <el-radio-group v-model="mapType">
-        <el-radio-button label="BMAP_NORMAL_MAP" size="medium">2D地图</el-radio-button>
-        <el-radio-button label="BMAP_SATELLITE_MAP" size="medium">卫星地图</el-radio-button>
+        <el-radio-button label="BMAP_NORMAL_MAP" size="mini">2D地图</el-radio-button>
+        <el-radio-button label="BMAP_SATELLITE_MAP" size="mini">卫星地图</el-radio-button>
       </el-radio-group>
     </el-col>
   </el-row>

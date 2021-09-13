@@ -55,6 +55,11 @@ Vue.prototype.$qs=qs
 //导入vuex
 import store from './store/store'
 
+//leaflet地图
+import L from "leaflet"
+import "leaflet/dist/leaflet.css";
+Vue.use(L)
+
 Vue.prototype.$message=Message
 Vue.use(ElementUI);
 
