@@ -60,8 +60,8 @@
 <!--                     :stroke-weight="6" :path="path" v-for="(path,polyindex) of polyline.paths"-->
 <!--                     :key="polyindex" :editing="polyline.editing"></bm-polyline>-->
         <bm-polyline stroke-color="#28F" :stroke-opacity="0.5"
-                     :stroke-weight="6" v-for=" (pathIn,pathIndex) in passRoutes" :path="pathIn"
-                     :key="pathIndex"></bm-polyline>
+                     :stroke-weight="6" v-for=" item in passRoutes" :path="item"
+                     :key="item.index"></bm-polyline>
 <!--        <bm-polyline stroke-color="#28F" :stroke-opacity="0.5" :stroke-weight="6" :path="passRoutes"></bm-polyline>-->
 <!--        <bm-polyline stroke-color=" #AF5" :stroke-opacity="0.5"-->
 <!--                     :stroke-weight="6" :path="pathline" v-for="pathline of passRoutes" :key="pathline.id"-->
@@ -103,7 +103,7 @@ export default {
         planningRoute:{}
       },
       // 飞过去的路线
-      passRoutes:{},
+      passRoutes:[],
       //地图中心点
       center:{lat: 39.084716,lng: 121.83206},
       //绘制无人机路线
@@ -287,7 +287,14 @@ export default {
     },
   //  重新赋值,通过传值改变
     changeUav(value){
-      this.passRoutes=this.UavPos.planningRoute[value]
+      // this.passRoutes=this.UavPos.planningRoute[value]
+      let tempPath=this.UavPos.planningRoute[value][1]
+      console.log(tempPath)
+      for(var item in tempPath){
+        console.log(item)
+        // this.passRoutes.push(item)
+      }
+      this.passRoutes=tempPath
       console.log(value)
       console.log(this.passRoutes)
     }

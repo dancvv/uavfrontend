@@ -2,10 +2,9 @@ import Vue from "vue"
 import home from "../components/home";
 import webSocket from "@/components/test/webSocket";
 import homepage from "@/components/homepage";
-
-import mapboxView from "@/components/homemap/mapboxView";
 import VueRouter from "vue-router";
 import BodyContent from "@/components/BodyContent";
+import BAIDUmap from "@/components/homemap/BAIDUmap";
 import elmap from "@/components/homemap/elmap";
 
 //处理push操作的重复点击问题
@@ -22,8 +21,8 @@ export default new VueRouter({
     routes:[
         {path:'/home',component:home,
         children:[
-            {path:'/mapview',component:mapboxView},
-            {path:'/mapboxgl',component:elmap},
+            {path:'/mapview',component:elmap},
+            {path:'/mapboxgl',component:BAIDUmap},
             {path:'/welcomepage',component:BodyContent}
         ]},
         //重定向home页

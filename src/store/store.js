@@ -8,11 +8,17 @@ export default new vuex.Store({
         mapbox:'',
         mapStyle:'',
         mapMarker:'',
+        gmap:'',
+        //高德地图
+        map_gd:'',
         testIndex:'string test'
     },
     mutations:{
         initmap(state,payload){
             state.mapbox=payload;
+        },
+        initGmap(state,payload){
+            state.mapbox=payload
         },
         styleChange(state,payload){
             state.mapStyle=payload
