@@ -15,7 +15,9 @@ export default new vuex.Store({
     //    leaflet
         leafletMap:'',
     //    存储全局marker
-        leafMarker:''
+        leafMarker:'',
+    //    当前marker存储位置
+        markersLocate:'',
     },
     mutations:{
         initleaflet(state,payload){
@@ -34,6 +36,13 @@ export default new vuex.Store({
             state.mapStyle=payload
             state.mapbox.setStyle(state.mapStyle)
         },
+        markerChangeLocation(state,payload){
+            state.leafMarker.setLatLng(payload)
+        },
+        //存储点击的marker是哪一个
+        recordLocate(state,payload){
+            state.markersLocate=payload
+        }
 
     },
     getters:{

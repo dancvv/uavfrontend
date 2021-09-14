@@ -7,24 +7,24 @@
     <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
     <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>
     <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清楚数据</el-button>
-    <el-button type="primary" class="mapgroup" size="mini" @click="showMarker">自定义图标</el-button>
+<!--    <el-button type="primary" class="mapgroup" size="mini" @click="locationInput">坐标输入</el-button>-->
     <el-input class="mapgroup" ></el-input>
   </el-card>
   <el-card id="card-box2" v-show="cardVisible">
     <h3>参数设置</h3>
-    无人机编号：<el-input size="mini"></el-input><br>
-    经度(lat)：<el-input v-model="markerEdit.lat" size="mini">{{markerEdit.lat}}</el-input><br>
-    纬度(lng)：<el-input v-model="markerEdit.lng" size="mini">{{markerEdit.lng}}</el-input><br>
+    设备编号：<el-input size="mini" v-model="markerEdit.number"></el-input><br>
+    经度(lat)：<el-input v-model="markerEdit.lat" size="mini" width="40px">{{markerEdit.lat}}</el-input><br>
+    纬度(lng)：<el-input v-model="markerEdit.lng" size="mini" width="40px">{{markerEdit.lng}}</el-input><br>
     <el-button class="el-button" @click="cardVisible = false" size="mini">取 消</el-button>
-    <el-button class="el-button" type="primary" @click="editConfirm" size="mini">确 定</el-button>
+    <el-button class="el-button" type="primary" @click="editConfirm(markerEdit)" size="mini">确 定</el-button>
   </el-card>
 </div>
 </template>
 
 <script>
-import {mapMutations, mapState} from "vuex";
+import {mapMutations,mapState} from "vuex";
 import L from "leaflet"
-
+let markers=[]
 let LeafIcon = L.Icon.extend({
   options: {
     iconSize:     [48, 48],
@@ -49,6 +49,7 @@ export default {
       // 是否展示编辑界面
       cardVisible:false,
       markerEdit:{
+        number:'',
         lat:'',
         lng:''
       }
@@ -59,7 +60,7 @@ export default {
   mounted() {
   },
   methods:{
-    ...mapMutations([])
+    ...mapMutations(['initmarker','markerChangeLocation','recordLocate']),
     showEdit(){
       this.showCard=!this.showCard
     },
@@ -72,6 +73,7 @@ export default {
       //   iconSize: [48,48],
       //   iconAnchor: [24,48]
       // })
+
       mapLeaf.on('click',(e)=>{
         if (!this.poly.edit){
           return
@@ -79,22 +81,34 @@ export default {
         this.poly.paths.push(e.latlng)
         console.log(this.poly.paths)
         //根据点击位置放置一个图标
-
-        const marker=L.marker((e.latlng),{icon:depotIcon}).addTo(mapLeaf).on('click',(e)=>{
+        // this.initmarker(L.marker((e.latlng),{icon:depotIcon}).addTo(mapLeaf))
+            markers[markers.length]=L.marker((e.latlng),{icon:depotIcon}).addTo(mapLeaf)
+        // const mark=this.leafMarker
+        let markerLength=markers.length-1
+        console.log(markerLength)
+        markers[markerLength].on('click',(e)=>{
+          this.recordLocate(markerLength)
           this.cardVisible=!this.cardVisible
-          // this.editConfirm()
-          console.log(e)
+          this.markerEdit.number=markerLength+1
+          this.markerEdit.lat=e.latlng.lat
+          this.markerEdit.lng=e.latlng.lng
         })
+        // const marker=L.marker((e.latlng),{icon:depotIcon}).addTo(mapLeaf).on('click',(e)=>{
+        //   this.cardVisible=!this.cardVisible
+        //   // this.editConfirm()
+        //   console.log(e)
+        // })
         // 弹出窗口
         // marker.bindPopup(popup).openPopup()
         // var popup = L.popup().setLatLng(e.latlng).setContent('<p>hello world<p/>').openOn(mapLeaf)
-        console.log(marker)
+        // console.log(marker)
       });
     },
     newMethod(){
       console.log("test success")
     },
-    showMarker(){
+    locationInput(){
+      this.cardVisible=!this.cardVisible
     },
     //上传数据到数据库
     async uploadData() {
@@ -118,12 +132,24 @@ export default {
       console.log(res.msg)
       this.$message.success(res.msg)
     },
-    editConfirm(){
+    editConfirm(location){
+      let latlng = L.latLng(location)
+      let locate=this.markersLocate
+      markers[locate].setLatLng(latlng)
+      //改变数组中的数值
+      this.poly.paths[locate]=latlng
+      console.log(this.poly.paths)
+      // this.poly.paths.push(latlng)
+      // this.markerChangeLocation(location)
+      // let tempMarker=this.leafMarker
+      // console.log(this.markerEdit)
+      // tempMarker.setLngLat(this.markerEdit)
       //取消显示
       this.cardVisible=!this.cardVisible
-      marker.setLatLng()
-      console.log(this.cardVisible)
+      // marker.setLatLng()
       /*提交表单数据并进行设置*/
+      this.markerEdit.lat=''
+      this.markerEdit.lng=''
     }
 
 
@@ -133,7 +159,7 @@ export default {
     //   console.log(this.$store.getters.getCount)
     //   return this.$store.getters.getCount
     // }
-    ...mapState(['leafletMap'])
+    ...mapState(['leafletMap','leafMarker','markersLocate'])
   }
 }
 </script>

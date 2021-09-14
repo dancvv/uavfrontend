@@ -34,7 +34,7 @@ export default {
     ...mapMutations(['initleaflet']),
     initMap() {
       map = L.map("map", {
-        minZoom: 3,
+        minZoom: 0,
         maxZoom: 20,
         center: [ 39.082324815761126,121.81149363525782],
         zoom: 16,
@@ -62,7 +62,7 @@ export default {
         maxZoom: 20,
         id: this.mapId,
         tileSize: 512,
-        zoomOffset: -1,
+        // zoomOffset: -1,
         accessToken: 'pk.eyJ1IjoidHJhbnNjZW5kdHJlZSIsImEiOiJja3N6eHRiMzkxeXNzMm90Y2Rhd2JmbjNqIn0.bCRv7xB55jHSDwEF5y5DcA'
       }).addTo(map);
     }
