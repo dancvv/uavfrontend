@@ -14,10 +14,15 @@ export default new vuex.Store({
         testIndex:'string test',
     //    leaflet
         leafletMap:'',
+    //    存储全局marker
+        leafMarker:''
     },
     mutations:{
         initleaflet(state,payload){
             state.leafletMap=payload;
+        },
+        initmarker(state,payload){
+            state.leafMarker=payload
         },
         initmap(state,payload){
             state.mapbox=payload;
