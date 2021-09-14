@@ -14,6 +14,10 @@
         <i class="el-icon-user"></i>
         <span slot="title">MAPBOX</span>
       </el-menu-item>
+      <el-menu-item index="leaflet">
+        <i class="el-icon-user"></i>
+        <span slot="title">LEAFLET</span>
+      </el-menu-item>
       <el-submenu :index="item.path" v-for="item in asideMenu" :key="item.id">
         <template slot="title">
           <i :class="item.icon"></i>

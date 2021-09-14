@@ -6,6 +6,7 @@ import VueRouter from "vue-router";
 import BodyContent from "@/components/BodyContent";
 import mapboxView from "@/components/homemap/mapboxView";
 import BAIDUmap from "@/components/homemap/BAIDUmap";
+import leaflet from "@/components/homemap/leaflet";
 
 //处理push操作的重复点击问题
 const originalPush=VueRouter.prototype.push
@@ -23,6 +24,7 @@ export default new VueRouter({
         children:[
             {path:'/mapview',component:BAIDUmap},
             {path:'/mapboxgl',component:mapboxView},
+            {path:'/leaflet',component:leaflet},
             {path:'/welcomepage',component:BodyContent}
         ]},
         //重定向home页

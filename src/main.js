@@ -58,6 +58,8 @@ import store from './store/store'
 //leaflet地图
 import L from "leaflet"
 import "leaflet/dist/leaflet.css";
+// 设置图片默认访问路径
+L.Icon.Default.prototype.options.imagePath="static/assets/leaflet"
 Vue.use(L)
 
 Vue.prototype.$message=Message

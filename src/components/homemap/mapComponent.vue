@@ -1,8 +1,6 @@
 <template>
 <div>
-<!--  <el-button type="primary" @click="add">添加按钮</el-button>-->
-<!--  <el-button type="primary" @click="add2">加法</el-button>-->
-  <!--  <el-button type="primary" @click="add3">添加按钮</el-button>-->
+
   <el-button id="card-edit" type="primary" size="mini" @click="showEdit">{{!showCard?'进入设置':'停止编辑'}}</el-button>
   <el-card id="card-box" v-show="showCard">
     <div slot="header">选项设置</div>
@@ -12,19 +10,28 @@
     <el-button type="primary" class="mapgroup" size="mini" @click="showMarker">自定义图标</el-button>
     <el-input class="mapgroup" ></el-input>
   </el-card>
-  <img src="url(`+require('/assets/uavIcon.png')+`)" alt="kjf">
 </div>
 </template>
 
 <script>
 import {mapState} from "vuex";
-import mapboxgl from "mapbox-gl";
+import L from "leaflet"
 
+var LeafIcon = L.Icon.extend({
+  options: {
+    iconUrl:'mobile.svg',
+    iconSize:     [48, 48],
+    shadowSize:   [0, 0],
+    iconAnchor:   [24, 48],
+    // popupAnchor:  [24, 48]
+  }
+});
 export default {
   name: "mapComponent",
   data(){
     return{
       // map:''
+      center: [ 39.082324815761126,121.81149363525782],
       //展示卡片
       showCard:false,
     //  开始编辑地图
@@ -32,56 +39,36 @@ export default {
         paths:[],
         edit:false
       },
-      img:'url(../../assets/uav48.svg'
+
     }
   },
   mounted() {
   },
   methods:{
+
     showEdit(){
       this.showCard=!this.showCard
     },
     placePoint(){
+      let depotIcon=new LeafIcon({iconUrl: 'depot.svg'})
       this.poly.edit=!this.poly.edit
-      const mapbox=this.mapbox
-      // map.on('click',e=>{
-      //   console.log(e)
-      // })
-      mapbox.on('click',(e)=>{
+      const mapLeaf=this.leafletMap
+      mapLeaf.on('click',(e)=>{
         if (!this.poly.edit){
           return
         }
-        //临时位置数组
-        let temp=[]
-        temp[0]=e.lngLat.lng
-        temp[1]=e.lngLat.lat
-        console.log(temp)
-        this.poly.paths.push(e.lngLat)
+        console.log(e)
+        this.poly.paths.push(e.latlng)
         console.log(this.poly.paths)
         //根据点击位置放置一个图标
-        new mapboxgl.Marker().setLngLat(temp).addTo(mapbox)
+        const marker=L.marker((e.latlng),{icon:depotIcon}).addTo(mapLeaf)
+        console.log(marker)
       });
     },
+    newMethod(){
+      console.log("test success")
+    },
     showMarker(){
-      // element marker元素
-      // const el = document.createElement('div');
-      // el.id = 'marker';
-      // const marker=new mapboxgl.Marker(el).setLngLat([121.81135905402766, 39.084797545212155]).addTo(map)
-
-      const map=this.mapbox
-      const el = document.createElement('div');
-      el.className = 'marker';
-      el.style.backgroundImage = "url('+require('assets/uav48.svg')+')";
-      el.style.width = '48px';
-      el.style.height = '48px';
-      // el.style.backgroundSize = '100%';
-// Add markers to the map.
-//       const map=new map.Marker(el)
-      const marker=new mapboxgl.Marker(el)
-          .setLngLat([121.81135905402766, 39.084797545212155])
-          .addTo(map);
-      //挂载到mapbox对象上
-      console.log(marker)
     },
     //上传数据到数据库
     async uploadData() {
@@ -105,6 +92,9 @@ export default {
       console.log(res.msg)
       this.$message.success(res.msg)
     },
+    changeStyle(){
+
+    }
 
   },
   computed:{
@@ -112,7 +102,7 @@ export default {
     //   console.log(this.$store.getters.getCount)
     //   return this.$store.getters.getCount
     // }
-    ...mapState(['mapbox'])
+    ...mapState(['leafletMap'])
   }
 }
 </script>
@@ -134,5 +124,11 @@ export default {
 }
 .mapgroup{
   margin-bottom: 10px;
+}
+.mapStyle{
+  position: absolute;
+  z-index: 1;
+  margin-top: 20px;
+  margin-left: 20px;
 }
 </style>

@@ -11,9 +11,14 @@ export default new vuex.Store({
         gmap:'',
         //高德地图
         map_gd:'',
-        testIndex:'string test'
+        testIndex:'string test',
+    //    leaflet
+        leafletMap:'',
     },
     mutations:{
+        initleaflet(state,payload){
+            state.leafletMap=payload;
+        },
         initmap(state,payload){
             state.mapbox=payload;
         },
@@ -24,10 +29,7 @@ export default new vuex.Store({
             state.mapStyle=payload
             state.mapbox.setStyle(state.mapStyle)
         },
-        // markerChange(state,payload){
-        //     const map = new state.mapbox.Map
-        //     // const map=new state.
-        // }
+
     },
     getters:{
         getMap(state){

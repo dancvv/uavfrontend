@@ -117,7 +117,7 @@ export default {
         size: {width: 48, height: 48}
       },
       depot:{
-        url:require('/public/depot.svg'),
+        url:require('/src/assets/leaflet/depot.svg'),
         size: {width: 48,height: 48},
         positions:[]
       },
