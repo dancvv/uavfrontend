@@ -6,14 +6,14 @@
   <el-aside width="180px">
     <el-menu text-color="#666" active-text-color="#ffd04b" :router="true"
              unique-opened :collapse="isCollapse" default-active="mapview" :collapse-transition="false">
-      <el-menu-item index="mapview">
-        <i class="el-icon-user"></i>
-        <span slot="title">首页</span>
-      </el-menu-item>
-      <el-menu-item index="mapboxgl">
-        <i class="el-icon-user"></i>
-        <span slot="title">MAPBOX</span>
-      </el-menu-item>
+<!--      <el-menu-item index="mapview">-->
+<!--        <i class="el-icon-user"></i>-->
+<!--        <span slot="title">首页</span>-->
+<!--      </el-menu-item>-->
+<!--      <el-menu-item index="mapboxgl">-->
+<!--        <i class="el-icon-user"></i>-->
+<!--        <span slot="title">MAPBOX</span>-->
+<!--      </el-menu-item>-->
       <el-menu-item index="leaflet">
         <i class="el-icon-user"></i>
         <span slot="title">LEAFLET</span>
@@ -52,7 +52,7 @@ export default {
       },
       //菜单数据
       asideMenu:[
-        // {id:'100',path:'/',name:'首页',order:1,icon:'el-icon-user'},
+        {id:'100',path:'/leaflet',name:'首页',order:1,icon:'el-icon-user'},
         {id:'200',path:'/manage',name:'飞行器位置',order:1,icon:'el-icon-s-cooperation',
           children:[
             {id:'201',path:'/location',name:'批量上传位置',order:2},

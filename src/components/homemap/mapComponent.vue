@@ -5,6 +5,7 @@
     <div slot="header">选项设置</div>
     <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
     <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>
+    <el-button type="primary" class="mapgroup" size="mini" @click="planSolution">任务规划</el-button>
     <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清除后台</el-button>
     <el-button type="primary" class="mapgroup" size="mini" @click="resetMarker">重置</el-button>
 <!--    <el-button type="primary" class="mapgroup" size="mini" @click="locationInput">坐标输入</el-button>-->
@@ -23,6 +24,7 @@
 <script>
 import {mapMutations,mapState} from "vuex";
 import L from "leaflet"
+import qs from "qs";
 let markers=[]
 let LeafIcon = L.Icon.extend({
   options: {
@@ -56,12 +58,22 @@ export default {
       markerSet:'',
       markerLength:'',
       reset:false,
+      // 无人机任务设置
+      vehiclePlan:{
+        vehicleNumber:4,
+        depot:1
+      },
+    //  规划路线
+      polyline:{
+        editing:false,
+        paths:[],
+        planningRoute:{}
+      }
 
     }
   },
   mounted() {
   },
-  inject:['reload'],
   methods:{
     ...mapMutations(['initmarker','markerChangeLocation','recordLocate']),
     showEdit(){
@@ -146,7 +158,52 @@ export default {
       this.recordLocate(0)
       console.log("reset:"+this.markersLocate)
       this.$message.success('重置成功')
-    }
+    },
+    //进行计算并给出规划结果
+    async planSolution() {
+      //得到结果前，先清除所有结果
+      this.polyline.paths=[]
+      const {data: res} = await this.$http.post('compute/plan',
+          qs.stringify(
+              {
+                vehicleNumber:this.vehiclePlan.vehicleNumber,
+                depot:this.vehiclePlan.depot},))
+      // this.depot.positions = res
+      console.log(res)
+      if(res.status!==200){
+        this.$message.error(res.msg)
+        return
+      }
+      this.$message.success(res.msg)
+      //  得到数据后，从后端取出相应的站点数据
+      const {info:listLine} = res
+      const mapRoute=new Map
+      const mapLocation=new Map
+      for(let line in listLine){
+        // console.log(listLine[line])
+        mapRoute.set(line,listLine[line])
+      }
+      for(const [key,value] of mapRoute){
+        const routeList=[]
+        // console.log(key,value)
+        for(let i=0;i<value.length;i++){
+          // let location={lng:'',lat:''}
+          // 后台计算默认从0开始，所以查询的时候需要+1
+          const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:value[i]+1}})
+          console.log(resData)
+          delete resData.location.id
+          // console.log(resData)
+          routeList.push(resData.location)
+        }
+        mapLocation.set(key,routeList)
+      }
+      // this.UavPos.planningRoute=mapLocation
+      console.log(mapLocation)
+      this.polyline.planningRoute=Array.from(mapLocation)
+      console.log(this.polyline.planningRoute)
+      // this.passRoutes=this.UavPos.planningRoute
+      // console.log(this.passRoutes)
+    },
 
 
   },
