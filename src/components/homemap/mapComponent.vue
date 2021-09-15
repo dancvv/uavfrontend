@@ -1,18 +1,17 @@
 <template>
 <div>
-
   <el-button id="card-edit" type="primary" size="mini" @click="showEdit">{{!showCard?'进入设置':'停止编辑'}}</el-button>
   <el-card id="card-box" v-show="showCard">
     <div slot="header">选项设置</div>
     <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
     <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>
-    <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清楚数据</el-button>
+    <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清除后台</el-button>
+    <el-button type="primary" class="mapgroup" size="mini" @click="resetMarker">重置</el-button>
 <!--    <el-button type="primary" class="mapgroup" size="mini" @click="locationInput">坐标输入</el-button>-->
-    <el-input class="mapgroup" ></el-input>
   </el-card>
   <el-card id="card-box2" v-show="cardVisible">
     <h3>参数设置</h3>
-    设备编号：<el-input size="mini" v-model="markerEdit.number"></el-input><br>
+    设备编号：<el-input size="mini" v-model="markerEdit.number">{{markerEdit.number}}</el-input><br>
     经度(lat)：<el-input v-model="markerEdit.lat" size="mini" width="40px">{{markerEdit.lat}}</el-input><br>
     纬度(lng)：<el-input v-model="markerEdit.lng" size="mini" width="40px">{{markerEdit.lng}}</el-input><br>
     <el-button class="el-button" @click="cardVisible = false" size="mini">取 消</el-button>
@@ -52,13 +51,17 @@ export default {
         number:'',
         lat:'',
         lng:''
-      }
-
+      },
+      // markerSet:new L.layerGroup()
+      markerSet:'',
+      markerLength:'',
+      reset:false,
 
     }
   },
   mounted() {
   },
+  inject:['reload'],
   methods:{
     ...mapMutations(['initmarker','markerChangeLocation','recordLocate']),
     showEdit(){
@@ -68,12 +71,8 @@ export default {
       let depotIcon=new LeafIcon({iconUrl: 'mobile.png'})
       this.poly.edit=!this.poly.edit
       const mapLeaf=this.leafletMap
-      // let mobileIcon=L.icon({
-      //   iconUrl: 'mobile version (1).svg',
-      //   iconSize: [48,48],
-      //   iconAnchor: [24,48]
-      // })
-
+      // 添加至layergroup,实现群体控制
+      this.markerSet=new L.layerGroup().addTo(mapLeaf)
       mapLeaf.on('click',(e)=>{
         if (!this.poly.edit){
           return
@@ -81,11 +80,10 @@ export default {
         this.poly.paths.push(e.latlng)
         console.log(this.poly.paths)
         //根据点击位置放置一个图标
-        // this.initmarker(L.marker((e.latlng),{icon:depotIcon}).addTo(mapLeaf))
-            markers[markers.length]=L.marker((e.latlng),{icon:depotIcon}).addTo(mapLeaf)
+        markers[markers.length]=L.marker((e.latlng),{icon:depotIcon}).addTo(this.markerSet)
+        console.log("tubiao"+markers.length)
         // const mark=this.leafMarker
-        let markerLength=markers.length-1
-        console.log(markerLength)
+        let markerLength = markers.length - 1;
         markers[markerLength].on('click',(e)=>{
           this.recordLocate(markerLength)
           this.cardVisible=!this.cardVisible
@@ -93,16 +91,8 @@ export default {
           this.markerEdit.lat=e.latlng.lat
           this.markerEdit.lng=e.latlng.lng
         })
-        // const marker=L.marker((e.latlng),{icon:depotIcon}).addTo(mapLeaf).on('click',(e)=>{
-        //   this.cardVisible=!this.cardVisible
-        //   // this.editConfirm()
-        //   console.log(e)
-        // })
-        // 弹出窗口
-        // marker.bindPopup(popup).openPopup()
-        // var popup = L.popup().setLatLng(e.latlng).setContent('<p>hello world<p/>').openOn(mapLeaf)
-        // console.log(marker)
       });
+
     },
     newMethod(){
       console.log("test success")
@@ -132,24 +122,30 @@ export default {
       console.log(res.msg)
       this.$message.success(res.msg)
     },
-    editConfirm(location){
+    editConfirm(location) {
       let latlng = L.latLng(location)
-      let locate=this.markersLocate
+      let locate = this.markersLocate
       markers[locate].setLatLng(latlng)
       //改变数组中的数值
-      this.poly.paths[locate]=latlng
+      this.poly.paths[locate] = latlng
       console.log(this.poly.paths)
-      // this.poly.paths.push(latlng)
-      // this.markerChangeLocation(location)
-      // let tempMarker=this.leafMarker
-      // console.log(this.markerEdit)
-      // tempMarker.setLngLat(this.markerEdit)
       //取消显示
-      this.cardVisible=!this.cardVisible
+      this.cardVisible = !this.cardVisible
       // marker.setLatLng()
       /*提交表单数据并进行设置*/
-      this.markerEdit.lat=''
-      this.markerEdit.lng=''
+      this.markerEdit.number=''
+      this.markerEdit.lat = ''
+      this.markerEdit.lng = ''
+    },
+    resetMarker(){
+      this.poly.paths=[]
+      // this.reload()
+      this.markerSet.clearLayers()
+      markers=[]
+      // 重置索引为0
+      this.recordLocate(0)
+      console.log("reset:"+this.markersLocate)
+      this.$message.success('重置成功')
     }
 
 

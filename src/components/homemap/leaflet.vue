@@ -57,12 +57,14 @@ export default {
       }).addTo(map);
     },
     changeStyle(){
+      console.log(this.mapId)
       L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 20,
         id: this.mapId,
         tileSize: 512,
-        // zoomOffset: -1,
+        // zoomOffset 注释掉会出大问题
+        zoomOffset: -1,
         accessToken: 'pk.eyJ1IjoidHJhbnNjZW5kdHJlZSIsImEiOiJja3N6eHRiMzkxeXNzMm90Y2Rhd2JmbjNqIn0.bCRv7xB55jHSDwEF5y5DcA'
       }).addTo(map);
     }
