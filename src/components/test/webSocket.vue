@@ -13,6 +13,7 @@
   </div>
   <div class="input">
 <!--    computed属性测试-->
+
     <el-input>{{textInput}}</el-input><br>
     <p>{{textInput}}</p>
   </div>

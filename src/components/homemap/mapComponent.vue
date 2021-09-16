@@ -14,7 +14,7 @@
     <el-tab-pane label="路线规划" name="uncertain">
       <el-button type="primary" class="mapgroup" size="mini" @click="planSolution">任务规划</el-button>
       <el-button type="primary" class="mapgroup" size="mini" @click="drawLine">绘制路线</el-button>
-      <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清除后台</el-button>
+      <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清除所有数据</el-button>
     </el-tab-pane>
   </el-tabs>
 <!--  <el-card>-->
@@ -81,13 +81,16 @@ export default {
         depot:0
       },
     //  规划路线
-      polyline:{
+      planningLine:{
         editing:false,
         paths:[],
         planningRoute:{}
       },
     //  激活的选项卡名
-      activeTab:'missionManage'
+      activeTab:'missionManage',
+    //  路线结果数组
+      multiLine:[],
+      polyline:'',
     }
   },
   created() {
@@ -150,6 +153,9 @@ export default {
     },
     //  清除后端所有数据
     async clearBackend() {
+      // 清除前端和后端数据状态
+      // console.log(markers)
+      // markers.remove()
       const {data: res} = await this.$http.get('compute/delete')
       console.log(res)
       if (res.status !== 200) {
@@ -158,6 +164,10 @@ export default {
       }
       console.log(res.msg)
       this.$message.success(res.msg)
+      console.log(this.polyline)
+      if(this.polyline!==''){
+        this.polyline.remove()
+      }
     },
     editConfirm(location) {
       let latlng = L.latLng(location)
@@ -176,8 +186,10 @@ export default {
       this.markerEdit.lng = ''
     },
     resetMarker(){
+      // 清除图标位置信息，图标信息，路径数组
       this.poly.paths=[]
       markers=[]
+      this.multiLine=[]
       // this.reload()
       console.log(this.markerSet)
       if(this.markerSet===null){
@@ -191,7 +203,7 @@ export default {
     //进行计算并给出规划结果
     async planSolution() {
       //得到结果前，先清除所有结果
-      this.polyline.paths=[]
+      this.planningLine.paths=[]
       const {data: res} = await this.$http.post('compute/plan',
           qs.stringify(
               {
@@ -229,19 +241,18 @@ export default {
         mapLocation.set(Number(key),routeList)
       }
       console.log(mapLocation)
-      this.polyline.planningRoute=mapLocation
-      console.log(this.polyline.planningRoute)
+      this.planningLine.planningRoute=mapLocation
+      console.log(this.planningLine.planningRoute)
     //  展示规划路线
     },
     drawLine(){
       const mapLeaf=this.leafletMap
-      let multiLine=[]
-      for(let i=0;i<this.polyline.planningRoute.size;i++){
-        multiLine.push(this.polyline.planningRoute.get(i))
+      for(let i=0;i<this.planningLine.planningRoute.size;i++){
+        this.multiLine.push(this.planningLine.planningRoute.get(i))
       }
-      console.log(multiLine)
-      var polyline=L.polyline(multiLine,{color:'red'}).addTo(mapLeaf)
-      mapLeaf.fitBounds(polyline.getBounds())
+      console.log(this.multiLine)
+      this.polyline=L.polyline(this.multiLine,{color:'red'}).addTo(mapLeaf)
+      mapLeaf.fitBounds(this.polyline.getBounds())
     }
   },
   computed:{
@@ -280,4 +291,5 @@ export default {
   margin-bottom: 10px;
   width: 60px;
 }
+
 </style>
