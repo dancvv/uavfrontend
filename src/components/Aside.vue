@@ -15,7 +15,7 @@
 <!--        <span slot="title">MAPBOX</span>-->
 <!--      </el-menu-item>-->
       <el-menu-item index="leaflet">
-        <i class="el-icon-user"></i>
+        <i class="el-icon-map-location"></i>
         <span slot="title">LEAFLET</span>
       </el-menu-item>
       <el-submenu :index="item.path" v-for="item in asideMenu" :key="item.id">
@@ -44,7 +44,7 @@ export default {
       //判断是否合并
       isCollapse:false,
       iconObj:{
-        100: 'el-icon-user',
+        100: 'el-icon-map-location',
         200: 'el-icon-s-cooperation',
         300: 'el-icon-s-goods',
         400: 'el-icon-s-order',
@@ -59,7 +59,7 @@ export default {
             {id:'202',path:'/fence',name:'地理围栏',order:2},
             {id:'203',path:'/basemap',name:'地图底图',order:2},
           ]},
-        {id:'300',path:'/mission',name:'任务管理',order:1,icon:'el-icon-s-goods',
+        {id:'300',path:'/mission',name:'任务执行',order:1,icon:'el-icon-s-goods',
           children: [
             {id:'301',path:'/current',name:'当前路线',order:2},
             {id:'302',path:'/add',name:'路线添加',order:2},
