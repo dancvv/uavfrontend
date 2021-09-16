@@ -1,17 +1,34 @@
 <template>
 <div>
   <el-button id="card-edit" type="primary" size="mini" @click="showEdit">{{!showCard?'进入设置':'停止编辑'}}</el-button>
-  <el-card id="card-box" v-show="showCard">
-    <div slot="header">选项设置</div>
-    <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
-    <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>
-    <el-button type="primary" class="mapgroup" size="mini" @click="planSolution">任务规划</el-button>
-    <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清除后台</el-button>
-    <el-button type="primary" class="mapgroup" size="mini" @click="resetMarker">重置</el-button>
-<!--    <el-button type="primary" class="mapgroup" size="mini" @click="locationInput">坐标输入</el-button>-->
-  </el-card>
-  <el-card id="card-box2" v-show="cardVisible">
-    <h3>参数设置</h3>
+  <el-tabs id="card-box" v-model="activeTab" type="border-card" v-show="showCard">
+    <el-tab-pane label="任务设置" name="missionManage">
+      <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
+      <el-card v-show="poly.edit">
+        <span>无人机数：</span><el-input class="inputSetting" label="无人机数量" v-model="vehiclePlan.vehicleNumber" size="mini"></el-input><br>
+        <span>起始站点：</span><el-input class="inputSetting" label="仓库位置" v-model="vehiclePlan.depot" size="mini"></el-input><br>
+        <el-button type="primary" class="mapgroup" size="mini" @click="resetMarker">重置</el-button>
+        <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>
+      </el-card>
+    </el-tab-pane>
+    <el-tab-pane label="路线规划" name="uncertain">
+      <el-button type="primary" class="mapgroup" size="mini" @click="planSolution">任务规划</el-button>
+      <el-button type="primary" class="mapgroup" size="mini" @click="drawLine">绘制路线</el-button>
+      <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清除后台</el-button>
+    </el-tab-pane>
+  </el-tabs>
+<!--  <el-card>-->
+<!--    <div slot="header">选项设置</div>-->
+<!--    <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>-->
+<!--    <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>-->
+<!--    <el-button type="primary" class="mapgroup" size="mini" @click="planSolution">任务规划</el-button>-->
+<!--    <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清除后台</el-button>-->
+<!--    <el-button type="primary" class="mapgroup" size="mini" @click="resetMarker">重置</el-button>-->
+<!--    <el-button type="primary" class="mapgroup" size="mini" @click="drawLine">绘制路线</el-button>-->
+<!--&lt;!&ndash;    <el-button type="primary" class="mapgroup" size="mini" @click="locationInput">坐标输入</el-button>&ndash;&gt;-->
+<!--  </el-card>-->
+  <el-card id="card-box" v-show="cardVisible">
+    <h3>当前设备设置</h3>
     设备编号：<el-input size="mini" v-model="markerEdit.number">{{markerEdit.number}}</el-input><br>
     经度(lat)：<el-input v-model="markerEdit.lat" size="mini" width="40px">{{markerEdit.lat}}</el-input><br>
     纬度(lng)：<el-input v-model="markerEdit.lng" size="mini" width="40px">{{markerEdit.lng}}</el-input><br>
@@ -58,19 +75,23 @@ export default {
       markerSet:'',
       markerLength:'',
       reset:false,
-      // 无人机任务设置
+      // 无人机任务参数设置
       vehiclePlan:{
         vehicleNumber:4,
-        depot:1
+        depot:0
       },
     //  规划路线
       polyline:{
         editing:false,
         paths:[],
         planningRoute:{}
-      }
-
+      },
+    //  激活的选项卡名
+      activeTab:'missionManage'
     }
+  },
+  created() {
+    this.clearBackend()
   },
   mounted() {
   },
@@ -97,6 +118,7 @@ export default {
         // const mark=this.leafMarker
         let markerLength = markers.length - 1;
         markers[markerLength].on('click',(e)=>{
+          // 记录当前点击的序号，存入vuex
           this.recordLocate(markerLength)
           this.cardVisible=!this.cardVisible
           this.markerEdit.number=markerLength+1
@@ -106,21 +128,24 @@ export default {
       });
 
     },
-    newMethod(){
-      console.log("test success")
-    },
     locationInput(){
       this.cardVisible=!this.cardVisible
     },
     //上传数据到数据库
     async uploadData() {
+      this.$http.get('compute/delete').then((e)=>{
+        console.log(e)
+      }).catch((err)=>{
+        console.log(err)
+      })
+
       console.log(this.poly.paths)
       const {data: res} = await this.$http.post('compute/depotData', this.poly.paths)
       console.log(res)
       if (res.status === 200) {
-        alert("上传数据库成功")
+        this.$message.success(res.msg)
       } else {
-        alert("上传数据库失败")
+        this.$message.error(res.msg)
       }
     },
     //  清除后端所有数据
@@ -136,6 +161,7 @@ export default {
     },
     editConfirm(location) {
       let latlng = L.latLng(location)
+      // 根据前面的点击数据找到marker，并对其设置值
       let locate = this.markersLocate
       markers[locate].setLatLng(latlng)
       //改变数组中的数值
@@ -151,13 +177,16 @@ export default {
     },
     resetMarker(){
       this.poly.paths=[]
-      // this.reload()
-      this.markerSet.clearLayers()
       markers=[]
-      // 重置索引为0
-      this.recordLocate(0)
+      // this.reload()
+      console.log(this.markerSet)
+      if(this.markerSet===null){
+        this.$message.success('并未放置坐标点')
+      }else {
+        this.markerSet.clearLayers()
+        this.$message.success('重置成功')
+      }
       console.log("reset:"+this.markersLocate)
-      this.$message.success('重置成功')
     },
     //进行计算并给出规划结果
     async planSolution() {
@@ -177,8 +206,8 @@ export default {
       this.$message.success(res.msg)
       //  得到数据后，从后端取出相应的站点数据
       const {info:listLine} = res
-      const mapRoute=new Map
-      const mapLocation=new Map
+      const mapRoute=new Map()
+      const mapLocation=new Map()
       for(let line in listLine){
         // console.log(listLine[line])
         mapRoute.set(line,listLine[line])
@@ -190,22 +219,30 @@ export default {
           // let location={lng:'',lat:''}
           // 后台计算默认从0开始，所以查询的时候需要+1
           const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:value[i]+1}})
-          console.log(resData)
+          // console.log(resData)
           delete resData.location.id
           // console.log(resData)
           routeList.push(resData.location)
         }
-        mapLocation.set(key,routeList)
+        console.log("routelist: "+" key value "+ key)
+        console.log(routeList)
+        mapLocation.set(Number(key),routeList)
       }
-      // this.UavPos.planningRoute=mapLocation
       console.log(mapLocation)
-      this.polyline.planningRoute=Array.from(mapLocation)
+      this.polyline.planningRoute=mapLocation
       console.log(this.polyline.planningRoute)
-      // this.passRoutes=this.UavPos.planningRoute
-      // console.log(this.passRoutes)
+    //  展示规划路线
     },
-
-
+    drawLine(){
+      const mapLeaf=this.leafletMap
+      let multiLine=[]
+      for(let i=0;i<this.polyline.planningRoute.size;i++){
+        multiLine.push(this.polyline.planningRoute.get(i))
+      }
+      console.log(multiLine)
+      var polyline=L.polyline(multiLine,{color:'red'}).addTo(mapLeaf)
+      mapLeaf.fitBounds(polyline.getBounds())
+    }
   },
   computed:{
     // add3(){
@@ -232,17 +269,15 @@ export default {
   width: 300px;
   z-index:1
 }
-#card-box2{
-  position: absolute;
-  margin-top: 100px;
-  margin-left: 20px;
-  width: 300px;
-  z-index:1
-}
 .mapgroup{
+  margin-top: 0px;
   margin-bottom: 10px;
 }
 .el-button{
   margin-top: 20px;
+}
+.inputSetting{
+  margin-bottom: 10px;
+  width: 60px;
 }
 </style>

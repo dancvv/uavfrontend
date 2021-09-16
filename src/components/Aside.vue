@@ -4,7 +4,7 @@
   <Header/>
 <!--  侧边栏-->
   <el-aside width="180px">
-    <el-menu text-color="#666" active-text-color="#ffd04b" :router="true"
+    <el-menu text-color="#666" active-text-color="#409eff" :router="true"
              unique-opened :collapse="isCollapse" default-active="mapview" :collapse-transition="false">
 <!--      <el-menu-item index="mapview">-->
 <!--        <i class="el-icon-user"></i>-->
@@ -98,7 +98,6 @@ export default {
 .el-aside{
   background-color:#ffffff;
 }
-
 .toggle-button{
   /*background-color: palevioletred;*/
   font-size: 14px;
@@ -107,9 +106,13 @@ export default {
   letter-spacing: 0.2em;
   cursor: pointer;
 }
-
-
 .el-menu-item{
   min-width: 180px;
+}
+::v-deep.el-submenu.is-active > .el-submenu__title {
+  color: #409eff !important;
+}
+::v-deep .el-submenu.is-active > .el-submenu__title i {
+  color: #409eff !important;
 }
 </style>
