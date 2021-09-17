@@ -18,9 +18,33 @@ export default {
 
   mounted() {
     //初始化websocket方法
-    this.createSocket()
+    this.linkTest()
+    // this.createSocket()
   },
   methods:{
+    async linkTest() {
+      this.$http.get('/test').then(function (res) {
+        if (res.status===200){
+          this.$message.success(res.msg)
+        }else{
+          this.$message.error("检查连接")
+        }
+      }).catch(
+          function (err){
+            console.log(err)
+          }
+      )
+      // const {data:res} = await this.$http.get('/test')
+      // console.log(res)
+      // if(res.status===200){
+      //   this.$message.success(res.msg)
+      // }else {
+      //   this.$message.error("检查连接")
+      //   setTimeout(function(){
+      //     this.$message.error("检查连接")
+      //   },500)
+      // }
+    },
     sendMessage(message){
       console.log(this.connection)
       this.connection.send(message)

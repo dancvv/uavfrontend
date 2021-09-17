@@ -24,20 +24,10 @@ export default {
     }
   },
   created() {
-    this.linkTest()
+
   },
   methods:{
-    async linkTest() {
-      const {data:res} = await this.$http.get('/')
-      console.log(res)
-      if(res.status===200){
-        this.$message.success(res.msg)
-      }else {
-        setTimeout(function(){
-          this.$message.error("检查连接")
-        },500)
-      }
-    }
+
 
   }
 }
