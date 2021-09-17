@@ -58,7 +58,7 @@ export default {
       // map:''
       center: [ 39.082324815761126,121.81149363525782],
       //展示卡片
-      showCard:true,
+      showCard:false,
     //  开始编辑地图
       poly:{
         paths:[],
@@ -94,12 +94,13 @@ export default {
     }
   },
   created() {
-    this.clearBackend()
+    // 全局删除状态
+    // this.clearBackend()
   },
   mounted() {
   },
   methods:{
-    ...mapMutations(['initmarker','markerChangeLocation','recordLocate']),
+    ...mapMutations(['initmarker','markerChangeLocation','recordLocate','changeLocations']),
     showEdit(){
       this.showCard=!this.showCard
     },
@@ -136,12 +137,16 @@ export default {
     },
     //上传数据到数据库
     async uploadData() {
+      // 上传前先删掉本地结果
       this.$http.get('compute/delete').then((e)=>{
         console.log(e)
       }).catch((err)=>{
         console.log(err)
       })
-
+      // 改变状态，上传完成完成前改变卡片显示状态
+      this.poly.edit=!this.poly.edit
+      // 存储各个设备的GPS经纬度数据
+      this.changeLocations(this.poly.paths)
       console.log(this.poly.paths)
       const {data: res} = await this.$http.post('compute/depotData', this.poly.paths)
       console.log(res)
@@ -150,10 +155,23 @@ export default {
       } else {
         this.$message.error(res.msg)
       }
+      // 改变编辑状态和取消显示卡片
+
+      // this.showCard=!this.showCard
     },
     //  清除后端所有数据
     async clearBackend() {
       // 清除前端和后端数据状态
+      this.poly.paths=[]
+      markers=[]
+      // 将vuex中gps经纬度数据清零
+      this.changeLocations('')
+      if(this.markerSet===''){
+        this.$message.success('并未放置坐标点')
+      }else {
+        this.markerSet.clearLayers()
+        this.$message.success('重置成功')
+      }
       // console.log(markers)
       // markers.remove()
       const {data: res} = await this.$http.get('compute/delete')
@@ -166,6 +184,7 @@ export default {
       this.$message.success(res.msg)
       console.log(this.polyline)
       if(this.polyline!==''){
+        this.multiLine=[]
         this.polyline.remove()
       }
     },
@@ -260,7 +279,7 @@ export default {
     //   console.log(this.$store.getters.getCount)
     //   return this.$store.getters.getCount
     // }
-    ...mapState(['leafletMap','leafMarker','markersLocate'])
+    ...mapState(['leafletMap','leafMarker','markersLocate','depotLocations'])
   }
 }
 </script>
