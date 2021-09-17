@@ -11,6 +11,7 @@ export default new vuex.Store({
         leafMarker:'',
     //    当前marker位置，存储点击的序号
         markersLocate:'',
+        // 服务点所在位置
         depotLocations:'',
     },
     mutations:{

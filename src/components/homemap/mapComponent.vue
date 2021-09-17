@@ -270,7 +270,7 @@ export default {
         this.multiLine.push(this.planningLine.planningRoute.get(i))
       }
       console.log(this.multiLine)
-      this.polyline=L.polyline(this.multiLine,{color:'red'}).addTo(mapLeaf)
+      this.polyline=L.polyline(this.multiLine,{color:'green'}).addTo(mapLeaf)
       mapLeaf.fitBounds(this.polyline.getBounds())
     }
   },

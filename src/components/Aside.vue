@@ -52,8 +52,8 @@ export default {
       },
       //菜单数据
       asideMenu:[
-        {id:'100',path:'/leaflet',name:'首页',order:1,icon:'el-icon-user'},
-        {id:'200',path:'/manage',name:'飞行器位置',order:1,icon:'el-icon-s-cooperation',
+        // {id:'100',path:'/leaflet',name:'首页',order:1,icon:'el-icon-user'},
+        {id:'200',path:'/manage',name:'飞行器设置',order:1,icon:'el-icon-s-cooperation',
           children:[
             {id:'201',path:'/location',name:'批量上传位置',order:2},
             {id:'202',path:'/fence',name:'地理围栏',order:2},
