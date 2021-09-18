@@ -12,7 +12,7 @@ export default new vuex.Store({
     //    当前marker位置，存储点击的序号
         markersLocate:'',
         // 服务点所在位置
-        depotLocations:'',
+        depotLocations:[{lat:'',lng:''}],
     },
     mutations:{
         initleaflet(state,payload){
@@ -29,6 +29,7 @@ export default new vuex.Store({
         recordLocate(state,payload){
             state.markersLocate=payload
         },
+        // 改变默认当前的用户坐标点
         changeLocations(state,payload){
             state.depotLocations=payload
         }

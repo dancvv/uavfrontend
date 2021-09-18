@@ -5,6 +5,7 @@ import VueRouter from "vue-router";
 import BodyContent from "@/components/BodyContent";
 import leaflet from "@/components/homemap/leaflet";
 import locationTable from "@/components/location/locationTable";
+import geofence from "@/components/location/geofence";
 
 
 //处理push操作的重复点击问题
@@ -24,6 +25,7 @@ export default new VueRouter({
             {path:'/leaflet',component:leaflet},
             {path:'/welcomepage',component:BodyContent},
             {path:'/location',component: locationTable},
+            {path: '/geofence',component: geofence}
         ]},
         //重定向home页
         {path:'/',redirect:'/home'},

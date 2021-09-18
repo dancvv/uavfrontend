@@ -19,18 +19,22 @@ export default {
   mounted() {
     //初始化websocket方法
     this.linkTest()
-    // this.createSocket()
+    this.createSocket()
   },
   methods:{
     async linkTest() {
+      let that = this
       this.$http.get('/test').then(function (res) {
-        if (res.status===200){
-          this.$message.success(res.msg)
+        console.log(res)
+        if (res.data.status===200){
+          console.log(res.data.msg)
+          that.$message.success(res.data.msg)
         }else{
-          this.$message.error("检查连接")
+          that.$message.error("检查连接")
         }
       }).catch(
           function (err){
+            that.$message.error("检查连接")
             console.log(err)
           }
       )

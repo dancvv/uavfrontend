@@ -8,19 +8,25 @@
   </el-breadcrumb>
   <el-card class="boxCard">
     <h3>无人机任务参数设置</h3>
-    <div id="missionSetting">
-      <el-row :gutter="20">
-        <el-col :span="6">
-          <p>无人机数量</p><el-input v-model="vehicleSetting.vehicleNumber" placeholder="执行任务的无人机数量"></el-input>
-        </el-col>
-        <el-col :span="6">
-          <p>仓库位置</p><el-input v-model="vehicleSetting.depot" placeholder="无人机起飞和返航的位置"></el-input>
-        </el-col>
-      </el-row>
-    </div>
+    <el-form :model="vehicleSetting" :rules="rules" ref="settingRuleRef">
+      <div id="missionSetting">
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="无人机数量" prop="vehicleNumber">
+              <el-input v-model="vehicleSetting.vehicleNumber" placeholder="执行任务的无人机数量"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="仓库位置" prop="depot">
+              <el-input v-model="vehicleSetting.depot" placeholder="无人机起飞和返航的位置"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </div>
+    </el-form>
   </el-card>
   <el-card class="boxCard">
-    <h3>输入坐标信息</h3>
+    <h3>输入任务坐标信息</h3>
     <el-table class="table-group" :data="locations" highlight-current-row>
       <el-table-column type="selection" width="100px" ></el-table-column>
       <el-table-column type="index" label="序号" width="100" ></el-table-column>
@@ -34,7 +40,7 @@
           <el-input ref="editInput" v-model="scope.row.lng" placeholder="请输入经度坐标"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150" property="lng" >
+      <el-table-column label="操作" width="150" property="lng">
         <template slot-scope="scope">
           <el-button type="danger" size="mini" @click="rowDelete(scope.row)" >删除</el-button>
         </template>
@@ -62,9 +68,9 @@
         width="30%">
       <span>是否重置所有输入</span>
       <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogResetVisible = false" size="mini">取 消</el-button>
-    <el-button type="primary" @click="resetTable" size="mini">确 定</el-button>
-  </span>
+        <el-button @click="dialogResetVisible = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="resetTable" size="mini">确 定</el-button>
+      </span>
     </el-dialog>
   </div>
 
@@ -72,7 +78,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapMutations, mapState} from "vuex";
 
 export default {
   name: "locationTable",
@@ -89,24 +95,45 @@ export default {
       dialogResetVisible:false,
     //  无人机参数设置
       vehicleSetting:{
-        vehicleNumber:4,
-        depot:0,
+        vehicleNumber:'',
+        depot:'',
+      },
+      rules:{
+        vehicleNumber:[
+          {required:true,message:'请输入执行任务的无人机数量',trigger:'blur'},
+        ],
+        depot:[
+          {required:true,message:'请输入仓库位置',trigger:'blur'}
+        ]
       }
     }
   },
   computed:{
     ...mapState(['depotLocations']),
-    getLat(){
-      return this.depotLocations
-    }
+  },
+  created() {
+    this.initData()
   },
   methods:{
+    ...mapMutations(['changeLocations']),
+    async initData() {
+      const {data: res} = await this.$http.get('compute/list')
+      if(res.data.length===0){
+        this.locations=[{lat:'',lng:''}]
+      }else {
+        this.locations=res.data
+        console.log(res)
+      }
+      this.$message.success(res.msg)
+
+    },
     rowDelete(menu){
       console.log("rowdelete")
       this.dialogVisible=!this.dialogVisible
       this.deleteIndex = this.locations.indexOf(menu)
     },
     addNewRow(){
+      console.log(this.depotLocations)
       let lastIndex = this.locations.length-1
       console.log(lastIndex)
       if(this.locations[lastIndex].lat!==''||this.locations[lastIndex].lng!==''){
@@ -123,14 +150,26 @@ export default {
     },
     async upload() {
       console.log("upload")
-      console.log(this.locations)
-      const {data: res} = await this.$http.post('compute/depotData', this.locations)
-      console.log(res)
-      if (res.status === 200) {
-        this.$message.success(res.msg)
-      } else {
-        this.$message.error(res.msg)
-      }
+      this.$refs.settingRuleRef.validate(async valid => {
+        if (valid === true) {
+          // 数据改变，将其存入vuex
+          this.changeLocations(this.locations)
+          // 上传前先删除所有数据
+          this.$http.get('compute/delete').then().catch(function (err) {
+            console.log(err)
+          })
+          const {data: res} = await this.$http.post('compute/depotData', this.locations)
+          console.log(res)
+          if (res.status === 200) {
+            this.$message.success(res.msg)
+          } else {
+            this.$message.error(res.msg)
+          }
+        }else {
+          this.$message.error("参数输入不能为空")
+        }
+      })
+
     },
     currentChange(){
       console.log("currentChange")
