@@ -13,6 +13,7 @@ export default new vuex.Store({
         markersLocate:'',
         // 服务点所在位置
         depotLocations:[{lat:'',lng:''}],
+        vehiclePlan:{vehicleNumber:3, depot:4},
     },
     mutations:{
         initleaflet(state,payload){
@@ -32,6 +33,10 @@ export default new vuex.Store({
         // 改变默认当前的用户坐标点
         changeLocations(state,payload){
             state.depotLocations=payload
+        },
+    //    改变无人机参数
+        changeVehicles(state,payload){
+            state.vehiclePlan=payload
         }
 
     },

@@ -109,14 +109,15 @@ export default {
     }
   },
   computed:{
-    ...mapState(['depotLocations']),
+    ...mapState(['depotLocations','vehiclePlan']),
   },
   created() {
     this.initData()
   },
   methods:{
-    ...mapMutations(['changeLocations']),
+    ...mapMutations(['changeLocations','changeVehicles']),
     async initData() {
+      this.vehicleSetting=this.vehiclePlan
       const {data: res} = await this.$http.get('compute/list')
       if(res.data.length===0){
         this.locations=[{lat:'',lng:''}]
@@ -154,6 +155,8 @@ export default {
         if (valid === true) {
           // 数据改变，将其存入vuex
           this.changeLocations(this.locations)
+          // 无人机任务参数存入vuex
+          this.changeVehicles(this.vehicleSetting)
           // 上传前先删除所有数据
           this.$http.get('compute/delete').then().catch(function (err) {
             console.log(err)

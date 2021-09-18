@@ -5,8 +5,8 @@
     <el-tab-pane label="任务设置" name="missionManage">
       <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
       <div class="editBox" v-show="poly.edit">
-        <span>无人机数：</span><el-input class="inputSetting" label="无人机数量" v-model="vehiclePlan.vehicleNumber" size="mini"></el-input><br>
-        <span>起始站点：</span><el-input class="inputSetting" label="仓库位置" v-model="vehiclePlan.depot" size="mini"></el-input><br>
+        <span>无人机数：</span><el-input class="inputSetting" label="无人机数量" v-model="vehiclesSetting.vehicleNumber" size="mini"></el-input><br>
+        <span>起始站点：</span><el-input class="inputSetting" label="仓库位置" v-model="vehiclesSetting.depot" size="mini"></el-input><br>
         <el-button type="primary" size="mini" @click="resetMarker">重置</el-button>
         <el-button type="primary" size="mini" @click="uploadData">上传数据</el-button>
       </div>
@@ -66,9 +66,9 @@ export default {
       markerLength:'',
       reset:false,
       // 无人机任务参数设置
-      vehiclePlan:{
-        vehicleNumber:4,
-        depot:0
+      vehiclesSetting:{
+        vehicleNumber:'',
+        depot:''
       },
     //  规划路线
       planningLine:{
@@ -86,11 +86,15 @@ export default {
   created() {
     // 全局删除状态
     // this.clearBackend()
+    this.initVariable()
   },
   mounted() {
   },
   methods:{
-    ...mapMutations(['initmarker','markerChangeLocation','recordLocate','changeLocations']),
+    ...mapMutations(['initmarker','markerChangeLocation','recordLocate','changeLocations','changeVehicles']),
+    initVariable(){
+      this.vehiclesSetting=this.vehiclePlan
+    },
     showEdit(){
       this.showCard=!this.showCard
     },
@@ -105,9 +109,10 @@ export default {
           return
         }
         this.poly.paths.push(e.latlng)
-        console.log(this.poly.paths)
+        // console.log(this.poly.paths)
+        let titleString='用户'+(markers.length+1)
         //根据点击位置放置一个图标
-        markers[markers.length]=L.marker((e.latlng),{icon:depotIcon}).addTo(this.markerSet)
+        markers[markers.length]=L.marker((e.latlng),{icon:depotIcon,title:titleString}).addTo(this.markerSet)
         console.log("tubiao"+markers.length)
         // const mark=this.leafMarker
         let markerLength = markers.length - 1;
@@ -137,6 +142,8 @@ export default {
       this.poly.edit=!this.poly.edit
       // 存储各个设备的GPS经纬度数据
       this.changeLocations(this.poly.paths)
+      // 参数存储至全局状态 vuex
+      this.changeVehicles(this.vehiclesSetting)
       console.log(this.poly.paths)
       const {data: res} = await this.$http.post('compute/depotData', this.poly.paths)
       console.log(res)
@@ -218,16 +225,16 @@ export default {
       for(let item in resList.data){
         // console.log("dede: ")
         id.push(resList.data[item].id)
-        console.log(id)
       }
       console.log(resList)
       //得到结果前，先清除所有结果
       this.planningLine.paths=[]
+      const {vehicleNumber,depot}=this.vehiclePlan
       const {data: res} = await this.$http.post('compute/plan',
           qs.stringify(
               {
-                vehicleNumber:this.vehiclePlan.vehicleNumber,
-                depot:this.vehiclePlan.depot},))
+                vehicleNumber:vehicleNumber,
+                depot:depot-1},))
       // this.depot.positions = res
       console.log(res)
       if(res.status!==200){
@@ -245,21 +252,12 @@ export default {
       }
       for(const [key,value] of mapRoute){
         const routeList=[]
-        // console.log(key,value)
         for(let i=0;i<value.length;i++){
-          // let location={lng:'',lat:''}
           // 后台计算默认从0开始，此时不需要加1
           let locationReal = id[value[i]]
-          console.log("get value")
-          console.log(locationReal)
           const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:locationReal}})
-          // console.log(resData)
-          // delete resData.location.id
-          // console.log(resData)
           routeList.push(resData.location)
         }
-        console.log("routelist: "+" key value "+ key)
-        console.log(routeList)
         mapLocation.set(Number(key),routeList)
       }
       console.log(mapLocation)
@@ -283,7 +281,7 @@ export default {
     //   console.log(this.$store.getters.getCount)
     //   return this.$store.getters.getCount
     // }
-    ...mapState(['leafletMap','leafMarker','markersLocate','depotLocations'])
+    ...mapState(['leafletMap','leafMarker','markersLocate','depotLocations','vehiclePlan'])
   }
 }
 </script>
