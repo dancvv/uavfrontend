@@ -138,6 +138,9 @@ export default {
       }).catch((err)=>{
         console.log(err)
       })
+      if (this.vehiclesSetting.vehicleNumber===''||this.vehiclesSetting.depot===''){
+        return this.$message.warning("必须输入无人机任务参数")
+      }
       // 改变状态，上传完成完成前改变卡片显示状态
       this.poly.edit=!this.poly.edit
       // 存储各个设备的GPS经纬度数据
