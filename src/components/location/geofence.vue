@@ -9,7 +9,7 @@
     <el-card class="boxCard">
       <h3>地理围栏</h3>
       <el-form>
-
+        <el-form-item></el-form-item>
       </el-form>
 
     </el-card>
@@ -18,7 +18,15 @@
 
 <script>
 export default {
-  name: "geofence"
+  name: "geofence",
+  data(){
+    return{
+      geoFenceData:{
+        points:[{lat:'',lng:''}],
+        fenceType:''
+      }
+    }
+  }
 }
 </script>
 

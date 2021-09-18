@@ -5,8 +5,8 @@
     <el-tab-pane label="任务设置" name="missionManage">
       <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
       <div class="editBox" v-show="poly.edit">
-        <span>无人机数：</span><el-input class="inputSetting" label="无人机数量" v-model="vehiclesSetting.vehicleNumber" size="mini"></el-input><br>
-        <span>起始站点：</span><el-input class="inputSetting" label="仓库位置" v-model="vehiclesSetting.depot" size="mini"></el-input><br>
+        <span>无人机数：</span><el-input class="inputSetting" label="无人机数量" placeholder="至少1台无人机" v-model="vehiclesSetting.vehicleNumber" size="mini"></el-input><br>
+        <span>起始站点：</span><el-input class="inputSetting" label="仓库位置" placeholder="输入1以上的数字" v-model="vehiclesSetting.depot" size="mini"></el-input><br>
         <el-button type="primary" size="mini" @click="resetMarker">重置</el-button>
         <el-button type="primary" size="mini" @click="uploadData">上传数据</el-button>
       </div>

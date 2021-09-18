@@ -13,7 +13,7 @@ export default new vuex.Store({
         markersLocate:'',
         // 服务点所在位置
         depotLocations:[{lat:'',lng:''}],
-        vehiclePlan:{vehicleNumber:3, depot:4},
+        vehiclePlan:{vehicleNumber:'', depot:''},
     },
     mutations:{
         initleaflet(state,payload){
