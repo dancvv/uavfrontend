@@ -185,6 +185,10 @@ export default {
     },
     resetTable(){
       this.dialogResetVisible=!this.dialogResetVisible
+      // 重置后端所有数据
+      this.$http.get('compute/delete').then().catch(function (err) {
+        console.log(err)
+      })
       this.locations=[{lat:'',lng:''}]
       this.vehicleSetting={
         vehicleNumber:4,

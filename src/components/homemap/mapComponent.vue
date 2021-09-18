@@ -4,12 +4,12 @@
   <el-tabs id="card-box" v-model="activeTab" type="border-card" v-show="showCard">
     <el-tab-pane label="任务设置" name="missionManage">
       <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
-      <el-card v-show="poly.edit">
+      <div class="editBox" v-show="poly.edit">
         <span>无人机数：</span><el-input class="inputSetting" label="无人机数量" v-model="vehiclePlan.vehicleNumber" size="mini"></el-input><br>
         <span>起始站点：</span><el-input class="inputSetting" label="仓库位置" v-model="vehiclePlan.depot" size="mini"></el-input><br>
-        <el-button type="primary" class="mapgroup" size="mini" @click="resetMarker">重置</el-button>
-        <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>
-      </el-card>
+        <el-button type="primary" size="mini" @click="resetMarker">重置</el-button>
+        <el-button type="primary" size="mini" @click="uploadData">上传数据</el-button>
+      </div>
     </el-tab-pane>
     <el-tab-pane label="路线规划" name="uncertain">
       <el-button type="primary" class="mapgroup" size="mini" @click="planSolution">任务规划</el-button>
@@ -17,16 +17,6 @@
       <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清除所有数据</el-button>
     </el-tab-pane>
   </el-tabs>
-<!--  <el-card>-->
-<!--    <div slot="header">选项设置</div>-->
-<!--    <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>-->
-<!--    <el-button type="primary" class="mapgroup" size="mini" @click="uploadData">上传数据</el-button>-->
-<!--    <el-button type="primary" class="mapgroup" size="mini" @click="planSolution">任务规划</el-button>-->
-<!--    <el-button type="primary" class="mapgroup" size="mini" @click="clearBackend">清除后台</el-button>-->
-<!--    <el-button type="primary" class="mapgroup" size="mini" @click="resetMarker">重置</el-button>-->
-<!--    <el-button type="primary" class="mapgroup" size="mini" @click="drawLine">绘制路线</el-button>-->
-<!--&lt;!&ndash;    <el-button type="primary" class="mapgroup" size="mini" @click="locationInput">坐标输入</el-button>&ndash;&gt;-->
-<!--  </el-card>-->
   <el-card id="card-box" v-show="cardVisible">
     <h3>当前设备设置</h3>
     设备编号：<el-input size="mini" v-model="markerEdit.number">{{markerEdit.number}}</el-input><br>
@@ -221,6 +211,16 @@ export default {
     },
     //进行计算并给出规划结果
     async planSolution() {
+      // 查询后端数据库
+      const {data:resList} = await this.$http.get('compute/list')
+      let id=[]
+      console.log(resList.data[0].id)
+      for(let item in resList.data){
+        // console.log("dede: ")
+        id.push(resList.data[item].id)
+        console.log(id)
+      }
+      console.log(resList)
       //得到结果前，先清除所有结果
       this.planningLine.paths=[]
       const {data: res} = await this.$http.post('compute/plan',
@@ -248,10 +248,13 @@ export default {
         // console.log(key,value)
         for(let i=0;i<value.length;i++){
           // let location={lng:'',lat:''}
-          // 后台计算默认从0开始，所以查询的时候需要+1
-          const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:value[i]+1}})
+          // 后台计算默认从0开始，此时不需要加1
+          let locationReal = id[value[i]]
+          console.log("get value")
+          console.log(locationReal)
+          const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:locationReal}})
           // console.log(resData)
-          delete resData.location.id
+          // delete resData.location.id
           // console.log(resData)
           routeList.push(resData.location)
         }
@@ -266,6 +269,7 @@ export default {
     },
     drawLine(){
       const mapLeaf=this.leafletMap
+      console.log("draw line")
       for(let i=0;i<this.planningLine.planningRoute.size;i++){
         this.multiLine.push(this.planningLine.planningRoute.get(i))
       }
@@ -310,5 +314,10 @@ export default {
   margin-bottom: 10px;
   width: 60px;
 }
-
+.editBox{
+  margin: 10px;
+  display: block;
+  flex-wrap: wrap;
+  align-content: center;
+}
 </style>
