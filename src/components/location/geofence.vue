@@ -23,18 +23,18 @@
         </el-table-column>
         <el-table-column label="操作" width="150" property="lng">
           <template slot-scope="scope">
-            <el-button type="danger" size="mini" @click="rowDelete(scope.row)" >删除</el-button>
+            <el-button type="danger" size="mini" @click="rowFenceDelete(scope.row)" >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-dialog
           title="提示"
-          :visible.sync="dialogVisible"
+          :visible.sync="dialogFenceVisible"
           width="30%">
         <span>确认删除该坐标</span>
         <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false" size="mini">取 消</el-button>
-    <el-button type="primary" @click="handleDeleteClose" size="mini">确 定</el-button>
+    <el-button @click="dialogFenceVisible = false" size="mini">取 消</el-button>
+    <el-button type="primary" @click="handleDeleteFenceClose" size="mini">确 定</el-button>
   </span>
       </el-dialog>
       <el-button class="buttonGroup" type="primary" @click="addFenceRow" size="mini">添加</el-button>
@@ -47,10 +47,10 @@
           title="提示"
           :visible.sync="dialogResetVisible"
           width="30%">
-        <span>是否重置所有输入</span>
+        <span>是否重置所有地理围栏输入</span>
         <span slot="footer" class="dialog-footer">
         <el-button @click="dialogResetVisible = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="resetTable" size="mini">确 定</el-button>
+        <el-button type="primary" @click="resetFenceTable" size="mini">确 定</el-button>
       </span>
       </el-dialog>
     </div>
@@ -58,6 +58,8 @@
 </template>
 
 <script>
+import {mapMutations, mapState} from "vuex";
+
 export default {
   name: "geofence",
   data(){
@@ -67,19 +69,57 @@ export default {
         fenceType:''
       },
       dialogResetVisible:false,
+      dialogFenceVisible:false,
+      // 删除的索引值
+      deleteFenceIndex:''
     }
   },
   methods:{
+    ...mapMutations(['changeFenceParams']),
     addFenceRow(){
-      let lastIndex = this.locations.length-1
+      let lastIndex = this.geoFenceData.points.length-1
       console.log(lastIndex)
       if(this.geoFenceData.points[lastIndex].lat!==''&& this.geoFenceData.points[lastIndex].lng!==''){
         this.geoFenceData.points.push({lat:'',lng:''})
       }else {
         this.$message.info("坐标数据不能为空")
       }
+    },
+    rowFenceDelete(menu){
+      console.log("rowFenceDelete")
+      this.dialogFenceVisible=!this.dialogFenceVisible
+      this.deleteFenceIndex = this.geoFenceData.points.indexOf(menu)
+      console.log(this.deleteFenceIndex)
+    },
+    handleDeleteFenceClose(){
+      console.log("close")
+      if(this.geoFenceData.points.length<=1){
+        this.$message.error("必须输入至少一个坐标")
+      }else{
+        this.dialogFenceVisible=!this.dialogFenceVisible
+        this.geoFenceData.points.splice(this.deleteFenceIndex,1)
+      }
+      console.log(this.geoFenceData.points)
+    },
+    resetFenceTable(){
+      this.dialogResetVisible=!this.dialogResetVisible
+      // 重置后端所有数据
+      this.$http.get('compute/delete').then().catch(function (err) {
+        console.log(err)
+      })
+      this.geoFenceData.points=[{lat:'',lng:''}]
+    },
+    deleteAll(){
+    },
+    upload(){
+      // 存入vuex，使得可以全局调用
+      this.changeFenceParams(this.geoFenceData.points)
+      console.log(this.fenceParam.points)
     }
 
+  },
+  computed:{
+    ...mapState(['fenceParam'])
   }
 }
 </script>

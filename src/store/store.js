@@ -14,6 +14,10 @@ export default new vuex.Store({
         // 服务点所在位置
         depotLocations:[{lat:'',lng:''}],
         vehiclePlan:{vehicleNumber:'', depot:''},
+        fenceParam:{
+            points:[{lat:'',lng:''}],
+            fenceType:''
+        }
     },
     mutations:{
         initleaflet(state,payload){
@@ -37,6 +41,10 @@ export default new vuex.Store({
     //    改变无人机参数
         changeVehicles(state,payload){
             state.vehiclePlan=payload
+        },
+    //    改变地理围栏参数
+        changeFenceParams(state,payload){
+            state.fenceParam.points=payload
         }
 
     },
