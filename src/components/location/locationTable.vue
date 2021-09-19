@@ -137,7 +137,7 @@ export default {
       console.log(this.depotLocations)
       let lastIndex = this.locations.length-1
       console.log(lastIndex)
-      if(this.locations[lastIndex].lat!==''||this.locations[lastIndex].lng!==''){
+      if(this.locations[lastIndex].lat!==''&&this.locations[lastIndex].lng!==''){
         this.locations.push({lat:'',lng:''})
       }else {
         this.$message.info("坐标数据不能为空")
