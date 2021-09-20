@@ -7,6 +7,10 @@
       <el-breadcrumb-item>地理围栏</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card class="boxCard">
+      <h3>围栏类型</h3>
+      <el-select v-model="geoFenceData.value" placeholder="请选择围栏类型" :clearable="true" @change="changeFenceType">
+        <el-option v-for="item in geoFenceData.fenceType" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      </el-select>
       <h3>地理围栏坐标</h3>
       <el-table class="table-group" :data="geoFenceData.points" highlight-current-row>
         <el-table-column type="selection" width="100px" ></el-table-column>
@@ -59,19 +63,23 @@
 
 <script>
 import {mapMutations, mapState} from "vuex";
-
+import {geoFenceEnum} from "../../common/enum/enumIndex"
 export default {
   name: "geofence",
   data(){
     return{
       geoFenceData:{
         points:[{lat:'',lng:''}],
-        fenceType:''
+        fenceType:[
+          {value:1 ,label:'EXCLUSION'},
+          {value:0 ,label:'INCLUSION'}
+        ],
+        value:''
       },
       dialogResetVisible:false,
       dialogFenceVisible:false,
       // 删除的索引值
-      deleteFenceIndex:''
+      deleteFenceIndex:'',
     }
   },
   methods:{
@@ -112,9 +120,24 @@ export default {
     deleteAll(){
     },
     upload(){
-      // 存入vuex，使得可以全局调用
-      this.changeFenceParams(this.geoFenceData.points)
-      console.log(this.fenceParam.points)
+      console.log(geoFenceEnum)
+      let lastIndex = this.geoFenceData.points.length-1
+      if (this.geoFenceData.points[lastIndex].lat!==''&& this.geoFenceData.points[lastIndex].lng!==''){
+        // 存入vuex，使得可以全局调用
+        this.changeFenceParams(this.geoFenceData.points)
+        console.log(this.fenceParam.points)
+      }else {
+        this.$message.error("地理围栏坐标输入不能为空")
+      }
+    },
+    changeFenceType(){
+      if (this.geoFenceData.value===1){
+        console.log("get the EXCLUSION type and return it")
+        console.log(geoFenceEnum.EXCLUSION)
+      }else {
+        console.log("get the INCLUSION type and return it")
+        console.log(geoFenceEnum.INCLUSION)
+      }
     }
 
   },
@@ -133,8 +156,8 @@ export default {
   margin-left: 80px;
   margin-right: 80px;
 }
-.geoFenceForm{
-  width: 200px;
+.buttonGroup{
+  margin-top: 10px;
 }
 #resultSetting{
   margin-top: 20px;

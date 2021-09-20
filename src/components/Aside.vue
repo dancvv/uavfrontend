@@ -57,7 +57,6 @@ export default {
           children:[
             {id:'201',path:'/location',name:'批量上传位置',order:2},
             {id:'202',path:'/geofence',name:'地理围栏',order:2},
-            {id:'203',path:'/basemap',name:'地图底图',order:2},
           ]},
         {id:'300',path:'/mission',name:'任务执行',order:1,icon:'el-icon-s-goods',
           children: [
