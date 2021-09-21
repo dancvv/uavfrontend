@@ -91,7 +91,7 @@ export default {
   mounted() {
   },
   methods:{
-    ...mapMutations(['initmarker','markerChangeLocation','recordLocate','changeLocations','changeVehicles']),
+    ...mapMutations(['initmarker','markerChangeLocation','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting']),
     initVariable(){
       this.vehiclesSetting=this.vehiclePlan
     },
@@ -264,6 +264,8 @@ export default {
         mapLocation.set(Number(key),routeList)
       }
       console.log(mapLocation)
+      // 存入vuex状态管理
+      this.uavRoutesMapSetting(mapLocation)
       this.planningLine.planningRoute=mapLocation
       console.log(this.planningLine.planningRoute)
     //  展示规划路线
@@ -274,6 +276,8 @@ export default {
       for(let i=0;i<this.planningLine.planningRoute.size;i++){
         this.multiLine.push(this.planningLine.planningRoute.get(i))
       }
+      // 存入vuex状态管理
+      this.uavRoutesMultiLineSetting(this.multiLine)
       console.log(this.multiLine)
       this.polyline=L.polyline(this.multiLine,{color:'green'}).addTo(mapLeaf)
       mapLeaf.fitBounds(this.polyline.getBounds())

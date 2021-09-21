@@ -6,6 +6,7 @@ import BodyContent from "@/components/BodyContent";
 import leaflet from "@/components/homemap/leaflet";
 import locationTable from "@/components/location/locationTable";
 import geofence from "@/components/location/geofence";
+import currentRoute from "@/components/mission/currentRoute";
 
 
 //处理push操作的重复点击问题
@@ -20,15 +21,17 @@ Vue.use(VueRouter)
 
 export default new VueRouter({
     routes:[
-        {path:'/home',component:home,
+        //重定向home页
+        {path:'/',redirect:'/home'},
+        {path:'/home',component:home,redirect:'/welcomepage',
         children:[
             {path:'/leaflet',component:leaflet},
             {path:'/welcomepage',component:BodyContent},
             {path:'/location',component: locationTable},
-            {path: '/geofence',component: geofence}
+            {path: '/geofence',component: geofence},
+            {path: '/current',component: currentRoute},
+
         ]},
-        //重定向home页
-        {path:'/',redirect:'/home'},
         {path:'/setting',component:home,
             children:[
                 {path:'/webSocket',component:webSocket}

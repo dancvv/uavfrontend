@@ -17,6 +17,10 @@ export default new vuex.Store({
         fenceParam:{
             points:[{lat:'',lng:''}],
             fenceType:''
+        },
+        uavPlanningRoutes:{
+            drawMultiLine:'',
+            routeMapLocation:'',
         }
     },
     mutations:{
@@ -45,6 +49,12 @@ export default new vuex.Store({
     //    改变地理围栏参数
         changeFenceParams(state,payload){
             state.fenceParam.points=payload
+        },
+        uavRoutesMultiLineSetting(state,payload){
+            state.uavPlanningRoutes.drawMultiLine=payload
+        },
+        uavRoutesMapSetting(state,payload){
+            state.uavPlanningRoutes.routeMapLocation=payload
         }
 
     },
