@@ -27,7 +27,7 @@
   </el-card>
   <el-card class="boxCard">
     <h3>输入任务坐标信息</h3>
-    <el-table class="table-group" :data="locations" highlight-current-row>
+    <el-table class="table-group" height="370px" :data="locations" highlight-current-row>
       <el-table-column type="selection" width="100px" ></el-table-column>
       <el-table-column type="index" label="序号" width="100" ></el-table-column>
       <el-table-column label="纬度(Lat)" width="200" property="lat" >

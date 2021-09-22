@@ -18,9 +18,15 @@ export default new vuex.Store({
             points:[{lat:'',lng:''}],
             fenceType:''
         },
+        // 无人机路线规划
         uavPlanningRoutes:{
             drawMultiLine:'',
             routeMapLocation:'',
+        },
+        // 存储规划值
+        planValue:{
+            objectiveValue:'',
+            routeDistance:''
         }
     },
     mutations:{
@@ -55,7 +61,14 @@ export default new vuex.Store({
         },
         uavRoutesMapSetting(state,payload){
             state.uavPlanningRoutes.routeMapLocation=payload
-        }
+        },
+        // 获取规划值
+        storeObjectiveValue(state,payload){
+            const {objectiveValue,routeDistance}=payload
+            state.planValue.objectiveValue=objectiveValue
+            state.planValue.routeDistance=routeDistance
+        },
+
 
     },
     getters:{

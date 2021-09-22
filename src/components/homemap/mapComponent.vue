@@ -87,13 +87,20 @@ export default {
     // 全局删除状态
     // this.clearBackend()
     this.initVariable()
+
   },
   mounted() {
   },
+  updated() {
+    //  进入立马开始划线
+    this.drawLine()
+  },
   methods:{
-    ...mapMutations(['initmarker','markerChangeLocation','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting']),
+    ...mapMutations(['initmarker','markerChangeLocation','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting','storeObjectiveValue']),
     initVariable(){
+      // 无人机任务参数设置 从vuex获取状态
       this.vehiclesSetting=this.vehiclePlan
+
     },
     showEdit(){
       this.showCard=!this.showCard
@@ -156,7 +163,6 @@ export default {
         this.$message.error(res.msg)
       }
       // 改变编辑状态和取消显示卡片
-
       // this.showCard=!this.showCard
     },
     //  清除后端所有数据
@@ -221,15 +227,15 @@ export default {
     },
     //进行计算并给出规划结果
     async planSolution() {
+      // 规划前确保数据为空
+      this.planningLine.planningRoute={}
       // 查询后端数据库
       const {data:resList} = await this.$http.get('compute/list')
       let id=[]
-      console.log(resList.data[0].id)
+      console.log(resList)
       for(let item in resList.data){
-        // console.log("dede: ")
         id.push(resList.data[item].id)
       }
-      console.log(resList)
       //得到结果前，先清除所有结果
       this.planningLine.paths=[]
       const {vehicleNumber,depot}=this.vehiclePlan
@@ -239,7 +245,18 @@ export default {
                 vehicleNumber:vehicleNumber,
                 depot:depot-1},))
       // this.depot.positions = res
-      console.log(res)
+      let objectiveValue=res.info.routeDistance.shift()
+      let routeDistance=res.info.routeDistance
+      let planValue={objectiveValue,routeDistance}
+      // 存入vuex
+      this.storeObjectiveValue(planValue)
+
+      // 删除
+      delete res.info.routeDistance
+      console.log("删除后")
+      console.log(res.info)
+      // 将无人机路线任务存入vuex
+      this.uavRoutesMultiLineSetting(res.info)
       if(res.status!==200){
         this.$message.error(res.msg)
         return
@@ -259,6 +276,7 @@ export default {
           // 后台计算默认从0开始，此时不需要加1
           let locationReal = id[value[i]]
           const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:locationReal}})
+          // 按顺序查询各个站点的坐标
           routeList.push(resData.location)
         }
         mapLocation.set(Number(key),routeList)
@@ -272,12 +290,19 @@ export default {
     },
     drawLine(){
       const mapLeaf=this.leafletMap
+      console.log(this.uavPlanningRoutes.routeMapLocation)
+      //  获取原始路线图
+      this.planningLine.planningRoute=this.uavPlanningRoutes.routeMapLocation
       console.log("draw line")
+      console.log(this.planningLine.planningRoute.size)
+      if (this.planningLine.planningRoute.size===undefined){
+        return
+      }
+      console.log("th")
+      console.log(this.planningLine.planningRoute)
       for(let i=0;i<this.planningLine.planningRoute.size;i++){
         this.multiLine.push(this.planningLine.planningRoute.get(i))
       }
-      // 存入vuex状态管理
-      this.uavRoutesMultiLineSetting(this.multiLine)
       console.log(this.multiLine)
       this.polyline=L.polyline(this.multiLine,{color:'green'}).addTo(mapLeaf)
       mapLeaf.fitBounds(this.polyline.getBounds())
@@ -288,7 +313,7 @@ export default {
     //   console.log(this.$store.getters.getCount)
     //   return this.$store.getters.getCount
     // }
-    ...mapState(['leafletMap','leafMarker','markersLocate','depotLocations','vehiclePlan'])
+    ...mapState(['leafletMap','leafMarker','markersLocate','depotLocations','vehiclePlan','uavPlanningRoutes'])
   }
 }
 </script>
