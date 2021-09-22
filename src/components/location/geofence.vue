@@ -8,10 +8,12 @@
     </el-breadcrumb>
     <el-card class="boxCard">
       <h3>围栏类型</h3>
+      <el-divider></el-divider>
       <el-select v-model="geoFenceData.value" placeholder="请选择围栏类型" :clearable="true" @change="changeFenceType">
         <el-option v-for="item in geoFenceData.fenceType" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <h3>地理围栏坐标</h3>
+      <el-divider></el-divider>
       <el-table class="table-group" :data="geoFenceData.points" highlight-current-row>
         <el-table-column type="selection" width="100px" ></el-table-column>
         <el-table-column type="index" label="序号" width="100" ></el-table-column>
@@ -153,8 +155,8 @@ export default {
 }
 .boxCard{
   margin-top: 30px;
-  margin-left: 80px;
-  margin-right: 80px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 .buttonGroup{
   margin-top: 10px;

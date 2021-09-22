@@ -17,6 +17,7 @@
     "@amap/amap-vue": "^2.0.13",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "dplayer": "^1.26.0",
     "element-ui": "^2.15.3",
     "file-saver": "^2.0.5",
     "leaflet": "^1.7.1",

@@ -7,6 +7,7 @@ import leaflet from "@/components/homemap/leaflet";
 import locationTable from "@/components/location/locationTable";
 import geofence from "@/components/location/geofence";
 import currentRoute from "@/components/mission/currentRoute";
+import videoWatch from "@/components/mission/videoWatch";
 
 
 //处理push操作的重复点击问题
@@ -30,6 +31,7 @@ export default new VueRouter({
             {path:'/location',component: locationTable},
             {path: '/geofence',component: geofence},
             {path: '/current',component: currentRoute},
+            {path: '/video',component: videoWatch},
 
         ]},
         {path:'/setting',component:home,

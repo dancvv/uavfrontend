@@ -8,6 +8,7 @@
   </el-breadcrumb>
   <el-card class="boxCard">
     <h3>无人机任务参数设置</h3>
+    <el-divider></el-divider>
     <el-form :model="vehicleSetting" :rules="rules" ref="settingRuleRef">
       <div id="missionSetting">
         <el-row :gutter="20">
@@ -27,6 +28,7 @@
   </el-card>
   <el-card class="boxCard">
     <h3>输入任务坐标信息</h3>
+    <el-divider></el-divider>
     <el-table class="table-group" height="370px" :data="locations" highlight-current-row>
       <el-table-column type="selection" width="100px" ></el-table-column>
       <el-table-column type="index" label="序号" width="100" ></el-table-column>
@@ -207,8 +209,8 @@ export default {
 }
 .boxCard{
   margin-top: 30px;
-  margin-left: 80px;
-  margin-right: 80px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 .buttonGroup{
   margin-top: 10px;

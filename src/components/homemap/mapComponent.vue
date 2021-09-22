@@ -90,6 +90,7 @@ export default {
 
   },
   mounted() {
+
   },
   updated() {
     //  进入立马开始划线
@@ -227,6 +228,9 @@ export default {
     },
     //进行计算并给出规划结果
     async planSolution() {
+      // 清空绘制库
+      // this.multiLine=[]
+      // this.polyline.remove()
       // 规划前确保数据为空
       this.planningLine.planningRoute={}
       // 查询后端数据库
@@ -250,11 +254,8 @@ export default {
       let planValue={objectiveValue,routeDistance}
       // 存入vuex
       this.storeObjectiveValue(planValue)
-
       // 删除
       delete res.info.routeDistance
-      console.log("删除后")
-      console.log(res.info)
       // 将无人机路线任务存入vuex
       this.uavRoutesMultiLineSetting(res.info)
       if(res.status!==200){
@@ -290,11 +291,8 @@ export default {
     },
     drawLine(){
       const mapLeaf=this.leafletMap
-      console.log(this.uavPlanningRoutes.routeMapLocation)
       //  获取原始路线图
       this.planningLine.planningRoute=this.uavPlanningRoutes.routeMapLocation
-      console.log("draw line")
-      console.log(this.planningLine.planningRoute.size)
       if (this.planningLine.planningRoute.size===undefined){
         return
       }

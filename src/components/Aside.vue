@@ -61,7 +61,7 @@ export default {
         {id:'300',path:'/mission',name:'任务执行',order:1,icon:'el-icon-s-goods',
           children: [
             {id:'301',path:'/current',name:'当前路线',order:2},
-            {id:'302',path:'/add',name:'路线添加',order:2},
+            {id:'302',path:'/video',name:'实时画面',order:2},
             {id:'303',path:'/edit',name:'路线更改',order:2},
           ]},
         {id:'400',path:'/status',name:'飞行器状态',order:1,icon:'el-icon-s-order',

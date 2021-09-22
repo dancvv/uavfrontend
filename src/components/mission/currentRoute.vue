@@ -8,7 +8,8 @@
   </el-breadcrumb>
   <el-card class="card-box">
     <h3>无人机路线</h3>
-    <div id="objBox" >
+    <el-divider></el-divider>
+    <div id="objBox" v-show="mapRoute.length!==0">
       <h4>无人机的优化数值</h4>
       <p>总长度 {{objValue/10}} m</p>
       <p v-for="(route,index) in routeValue" :key="index">无人机 {{index+1}} 的路线长度： {{route/10}} m</p>
@@ -81,7 +82,9 @@ export default {
   margin: 20px;
 }
 .card-box{
-  margin: 20px;
+  margin-top: 30px;
+  margin-left: 30px;
+  margin-right: 30px;
 }
 .routeBox{
   align-content: center;
