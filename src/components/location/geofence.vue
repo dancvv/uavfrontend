@@ -9,7 +9,7 @@
     <el-card class="boxCard">
       <h3>围栏类型</h3>
       <el-divider></el-divider>
-      <el-select v-model="geoFenceData.value" placeholder="请选择围栏类型" :clearable="true" @change="changeFenceType">
+      <el-select v-model="geoFenceData.value" placeholder="请选择围栏类型" :clearable="true" @change="changeFenceType" size="small">
         <el-option v-for="item in geoFenceData.fenceType" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
       <h3>地理围栏坐标</h3>
@@ -19,12 +19,12 @@
         <el-table-column type="index" label="序号" width="100" ></el-table-column>
         <el-table-column label="纬度(Lat)" width="200" property="lat" >
           <template slot-scope="scope">
-            <el-input ref="editInput" v-model="scope.row.lat" placeholder="请输入纬度坐标"></el-input>
+            <el-input ref="editInput" v-model="scope.row.lat" placeholder="请输入纬度坐标" size="small"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="经度(Lng)" width="200" property="lng" >
           <template slot-scope="scope">
-            <el-input ref="editInput" v-model="scope.row.lng" placeholder="请输入经度坐标"></el-input>
+            <el-input ref="editInput" v-model="scope.row.lng" placeholder="请输入经度坐标" size="small"></el-input>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="150" property="lng">

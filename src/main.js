@@ -63,8 +63,8 @@ L.Icon.Default.prototype.options.imagePath="static/assets/leaflet"
 Vue.use(L)
 
 // dplayer视频播放
-import DPlayer from 'dplayer';
-Vue.use(DPlayer)
+// import DPlayer from 'dplayer';
+// Vue.use(DPlayer)
 
 Vue.prototype.$message=Message
 Vue.use(ElementUI);

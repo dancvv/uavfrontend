@@ -7,7 +7,7 @@
     <el-breadcrumb-item>当前路线</el-breadcrumb-item>
   </el-breadcrumb>
   <el-card class="card-box">
-    <h3>无人机路线</h3>
+    <h3>无人机当前路线</h3>
     <el-divider></el-divider>
     <div id="objBox" v-show="mapRoute.length!==0">
       <h4>无人机的优化数值</h4>

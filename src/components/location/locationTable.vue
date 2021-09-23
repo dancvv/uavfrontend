@@ -9,17 +9,17 @@
   <el-card class="boxCard">
     <h3>无人机任务参数设置</h3>
     <el-divider></el-divider>
-    <el-form :model="vehicleSetting" :rules="rules" ref="settingRuleRef">
+    <el-form :model="vehicleSetting" :rules="rules" ref="settingRuleRef" size="small">
       <div id="missionSetting">
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="无人机数量" prop="vehicleNumber">
-              <el-input v-model="vehicleSetting.vehicleNumber" placeholder="执行任务的无人机数量"></el-input>
+              <el-input v-model="vehicleSetting.vehicleNumber" placeholder="执行任务的无人机数量" size="small"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="仓库位置" prop="depot">
-              <el-input v-model="vehicleSetting.depot" placeholder="无人机起飞和返航的位置"></el-input>
+              <el-input v-model="vehicleSetting.depot" placeholder="无人机起飞和返航的位置" size="small"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -29,17 +29,17 @@
   <el-card class="boxCard">
     <h3>输入任务坐标信息</h3>
     <el-divider></el-divider>
-    <el-table class="table-group" height="370px" :data="locations" highlight-current-row>
+    <el-table class="table-group" height="370px" :data="locations" highlight-current-row size="small">
       <el-table-column type="selection" width="100px" ></el-table-column>
       <el-table-column type="index" label="序号" width="100" ></el-table-column>
       <el-table-column label="纬度(Lat)" width="200" property="lat" >
         <template slot-scope="scope">
-          <el-input ref="editInput" v-model="scope.row.lat" placeholder="请输入纬度坐标"></el-input>
+          <el-input ref="editInput" v-model="scope.row.lat" placeholder="请输入纬度坐标" size="small"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="经度(Lng)" width="200" property="lng" >
         <template slot-scope="scope">
-          <el-input ref="editInput" v-model="scope.row.lng" placeholder="请输入经度坐标"></el-input>
+          <el-input ref="editInput" v-model="scope.row.lng" placeholder="请输入经度坐标" size="small"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150" property="lng">
