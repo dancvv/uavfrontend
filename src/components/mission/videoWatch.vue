@@ -34,6 +34,7 @@ export default {
       container: document.getElementById('dplayer'),
       autoplay: false,
       theme: '#FADFA3',
+       live: 'true',
       loop: true,
       lang: 'zh-cn',
       screenshot: true,

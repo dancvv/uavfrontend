@@ -19,9 +19,9 @@
   </el-tabs>
   <el-card id="card-box" v-show="cardVisible">
     <h3>当前设备设置</h3>
-    设备编号：<el-input size="mini" v-model="markerEdit.number">{{markerEdit.number}}</el-input><br>
-    经度(lat)：<el-input v-model="markerEdit.lat" size="mini" width="40px">{{markerEdit.lat}}</el-input><br>
-    纬度(lng)：<el-input v-model="markerEdit.lng" size="mini" width="40px">{{markerEdit.lng}}</el-input><br>
+    <span>设备编号：</span><el-input size="mini" v-model="markerEdit.number">{{markerEdit.number}}</el-input><br>
+    <span>经度(lat)：</span><el-input v-model="markerEdit.lat" size="mini" width="40px">{{markerEdit.lat}}</el-input><br>
+    <span>纬度(lng)：</span><el-input v-model="markerEdit.lng" size="mini" width="40px">{{markerEdit.lng}}</el-input><br>
     <el-button class="el-button" @click="cardVisible = false" size="mini">取 消</el-button>
     <el-button class="el-button" type="primary" @click="editConfirm(markerEdit)" size="mini">确 定</el-button>
   </el-card>

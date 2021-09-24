@@ -6,6 +6,8 @@
       <el-radio-button label='mapbox/outdoors-v10' size="mini" >户外地图</el-radio-button>
     </el-radio-group>
     <map-component></map-component>
+    <mission-start></mission-start>
+
     <div id="map"></div>
   </div>
 </template>
@@ -15,11 +17,12 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import MapComponent from "@/components/homemap/mapComponent";
 import {mapMutations} from "vuex";
+import MissionStart from "@/components/homemap/missionStart";
 
 let map=null
 export default {
   name: "leaflet",
-  components: {MapComponent},
+  components: {MissionStart, MapComponent},
   data(){
     return{
       // map:''
