@@ -18,7 +18,6 @@ import 'leaflet/dist/leaflet.css'
 import MapComponent from "@/components/homemap/mapComponent";
 import {mapMutations} from "vuex";
 import MissionStart from "@/components/homemap/missionStart";
-
 let map=null
 export default {
   name: "leaflet",

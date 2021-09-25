@@ -107,7 +107,7 @@ export default {
       this.showCard=!this.showCard
     },
     placePoint(){
-      let depotIcon=new LeafIcon({iconUrl: 'mobile.png'})
+      let depotIcon=new LeafIcon({iconUrl: '/leaflet/mobile.png'})
       this.poly.edit=!this.poly.edit
       const mapLeaf=this.leafletMap
       // 添加至layergroup,实现群体控制
