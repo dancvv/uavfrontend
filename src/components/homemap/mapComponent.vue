@@ -293,11 +293,13 @@ export default {
       const mapLeaf=this.leafletMap
       //  获取原始路线图
       this.planningLine.planningRoute=this.uavPlanningRoutes.routeMapLocation
+      // 如果原来不存在规划结果，画线函数就生效
       if (this.planningLine.planningRoute.size===undefined){
         return
       }
       console.log("th")
       console.log(this.planningLine.planningRoute)
+      // 将Map数据转换为array数组
       for(let i=0;i<this.planningLine.planningRoute.size;i++){
         this.multiLine.push(this.planningLine.planningRoute.get(i))
       }
