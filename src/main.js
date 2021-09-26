@@ -10,28 +10,8 @@ import App from "@/App";
 import global from "../public/globalWebSocket";
 Vue.prototype.global=global
 
-
-
-//高德地图
-import VueAMap from 'vue-amap';
-//高德地图配置
-Vue.use(VueAMap);
-VueAMap.initAMapApiLoader({
-  key: 'ddd292c88aa1bad9c04891a47724f40a',
-  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor', 'AMap.Marker'],
-  // 默认高德 sdk 版本为 1.4.4
-  v: '1.4.4'
-});
-//百度地图配置
-import BaiduMap from 'vue-baidu-map'
-Vue.use(BaiduMap, {
-  /* Visit http://lbsyun.baidu.com/apiconsole/key for details about app key. */
-  ak: '3LDoMsLxgOE30E57ebARtiIGylD2iYyi'
-})
-//axios安装
 // import VueAxios from 'vue-axios'
 import axios from "axios";
-
 /* //错误写法
 Vue.use(axios)
 */
@@ -41,7 +21,23 @@ Vue.prototype.$http=axios;
 axios.defaults.baseURL='http://localhost:8085/'
 // axios.defaults.baseUrl='http://localhost:8085/'
 
+//导入qs文件
+import qs from 'qs'
+Vue.prototype.$qs=qs
 
+//导入vuex
+import store from './store/store'
+
+//leaflet地图
+import L from "leaflet"
+import "leaflet/dist/leaflet.css";
+// 设置图片默认访问路径
+
+Vue.use(L)
+
+// dplayer视频播放
+// import DPlayer from 'dplayer';
+// Vue.use(DPlayer)
 
 Vue.prototype.$message=Message
 Vue.use(ElementUI);
@@ -51,5 +47,7 @@ Vue.config.productionTip = false
 new Vue({
   //注册router文件
   router,
+  //vuex
+  store,
   render: h => h(App),
 }).$mount('#app')

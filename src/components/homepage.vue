@@ -1,6 +1,5 @@
 <template>
 <div>
-
   <el-row :gutter="20">
     <el-col :span="6"><div class="grid-content bg-purple">fdfe</div></el-col>
     <el-col :span="6"><div class="grid-content bg-purple">fdf</div></el-col>
