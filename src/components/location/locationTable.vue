@@ -64,6 +64,7 @@
   <div id="resultSetting">
     <el-button type="primary" @click="dialogResetVisible=true" size="mini">重置</el-button>
     <el-button type="success" @click="upload" size="mini">提交</el-button>
+    <el-button type="primary" @click="planSolution" size="mini">规划</el-button>
     <el-dialog
         title="提示"
         :visible.sync="dialogResetVisible"
@@ -81,11 +82,14 @@
 
 <script>
 import {mapMutations, mapState} from "vuex";
+import qs from "qs";
 
 export default {
   name: "locationTable",
   data(){
     return{
+      // 提交数据验证
+      uploadTrue:'',
       // 路线坐标数据
       locations:[
           {lat:'',lng:''}
@@ -117,7 +121,7 @@ export default {
     this.initData()
   },
   methods:{
-    ...mapMutations(['changeLocations','changeVehicles']),
+    ...mapMutations(['changeLocations','changeVehicles','storeObjectiveValue','uavRoutesMultiLineSetting','uavRoutesMapSetting']),
     async initData() {
       this.vehicleSetting=this.vehiclePlan
       const {data: res} = await this.$http.get('compute/list')
@@ -166,8 +170,12 @@ export default {
           const {data: res} = await this.$http.post('compute/depotData', this.locations)
           console.log(res)
           if (res.status === 200) {
+            // 确认提交数据
+            this.uploadTrue=200
             this.$message.success(res.msg)
           } else {
+            // 确认提交数据验证失败
+            this.uploadTrue=404
             this.$message.error(res.msg)
           }
         }else {
@@ -198,6 +206,63 @@ export default {
       this.vehicleSetting={
         vehicleNumber:4,
         depot:0,}
+    },
+    async planSolution() {
+      if(this.uploadTrue!==200){
+        this.$message.warning("请先提交数据")
+        return
+      }
+      const {data:resList} = await this.$http.get('compute/list')
+      let id=[]
+      console.log(resList)
+      for(let item in resList.data){
+        id.push(resList.data[item].id)
+      }
+      const {data: res} = await this.$http.post('compute/plan',
+          qs.stringify(
+              {
+                vehicleNumber: this.vehicleSetting.vehicleNumber,
+                depot: this.vehicleSetting.depot - 1
+              },))
+      console.log("get the plan solution")
+      console.log(res)
+      let objectiveValue=res.info.routeDistance.shift()
+      let routeDistance=res.info.routeDistance
+      let planValue={objectiveValue,routeDistance}
+      // 存入vuex
+      this.storeObjectiveValue(planValue)
+      // 删除
+      delete res.info.routeDistance
+      // 将无人机路线任务存入vuex
+      this.uavRoutesMultiLineSetting(res.info)
+      if(res.status!==200){
+        this.$message.error(res.msg)
+        return
+      }
+      this.$message.success(res.msg)
+      //  得到数据后，从后端取出相应的站点数据
+      const {info:listLine} = res
+      const mapRoute=new Map()
+      const mapLocation=new Map()
+      for(let line in listLine){
+        // console.log(listLine[line])
+        mapRoute.set(line,listLine[line])
+      }
+      for(const [key,value] of mapRoute){
+        const routeList=[]
+        for(let i=0;i<value.length;i++){
+          // 后台计算默认从0开始，此时不需要加1
+          let locationReal = id[value[i]]
+          const {data:resData} = await this.$http.get('compute/getLocationByID',{params:{locationId:locationReal}})
+          // 按顺序查询各个站点的坐标
+          routeList.push(resData.location)
+        }
+        mapLocation.set(Number(key),routeList)
+      }
+      console.log(mapLocation)
+      // 存入vuex状态管理
+      this.uavRoutesMapSetting(mapLocation)
+
     }
   }
 }

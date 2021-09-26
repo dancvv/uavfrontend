@@ -36,10 +36,6 @@ export default new vuex.Store({
         initmarker(state,payload){
             state.leafMarker=payload
         },
-        // 设置marker的坐标
-        markerChangeLocation(state,payload){
-            state.leafMarker.setLatLng(payload)
-        },
         //存储点击的marker是哪一个
         recordLocate(state,payload){
             state.markersLocate=payload
@@ -59,6 +55,7 @@ export default new vuex.Store({
         uavRoutesMultiLineSetting(state,payload){
             state.uavPlanningRoutes.drawMultiLine=payload
         },
+        // 获取路线值
         uavRoutesMapSetting(state,payload){
             state.uavPlanningRoutes.routeMapLocation=payload
         },
