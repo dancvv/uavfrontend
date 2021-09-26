@@ -1,12 +1,25 @@
 <template>
 <div id="mission-group">
-  <el-button type="success">无人机起飞</el-button>
+  <el-button type="success" @click="startUav">无人机起飞</el-button>
 </div>
 </template>
 
 <script>
 export default {
-  name: "missionStart"
+  name: "missionStart",
+  data(){
+    return{
+      data:null
+    }
+  },
+  methods:{
+    startUav(){
+      const mapLeaf=this.leafletMap
+      mapLeaf.on('click',(e)=>{
+        console.log(e)
+      })
+    }
+  }
 }
 </script>
 
