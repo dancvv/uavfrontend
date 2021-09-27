@@ -9,7 +9,7 @@
 import {mapState} from "vuex";
 import L from 'leaflet'
 // 导入动态动画库
-import "../../assets/jsplugin/MovingMarker"
+// import "../../assets/jsplugin/MovingMarker"
 let UavIcon = L.Icon.extend({
   options: {
     iconSize:     [48, 48],
