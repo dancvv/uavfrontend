@@ -36,7 +36,7 @@ async function createWindow() {
   }
 }
 // delete the default menu nav
-Menu.setApplicationMenu(null)
+// Menu.setApplicationMenu(null)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
