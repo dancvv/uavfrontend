@@ -8,6 +8,8 @@
 <script>
 import {mapState} from "vuex";
 import L from 'leaflet'
+// 导入marker动画插件
+require('leaflet.animatedmarker/src/AnimatedMarker');
 // 导入动态动画库
 // import "../../assets/jsplugin/MovingMarker"
 let UavIcon = L.Icon.extend({

@@ -10,12 +10,12 @@
       <h3>实时画面</h3>
       <el-divider></el-divider>
       <el-table :data="videoData" :highlight-current-row="true">
-        <el-table-column type="index" label="序号" width="100px"></el-table-column>
+        <el-table-column type="index" label="序号" width="100px" align="center"></el-table-column>
         <el-table-column prop="uavId" label="无人机编号" min-width="100px"></el-table-column>
         <el-table-column prop="image" label="视频流" min-width="200px"></el-table-column>
         <el-table-column prop="manage" label="管理" width="200px">
           <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="previewUav">{{ videoPreview?'停止':'预览' }}</el-button>
+            <el-button type="primary" size="mini" @click="previewUav">预览</el-button>
             <el-button type="error" size="mini" @click="deleteUav(scope.$index)">删除</el-button>
           </template>
         </el-table-column>
@@ -55,7 +55,7 @@ export default {
       this.videoPreview=!this.videoPreview
     },
     deleteUav(rowIndex){
-      this.videoData.delete(rowIndex)
+      this.videoData.splice(rowIndex,1)
     }
 
 
@@ -85,7 +85,8 @@ export default {
     this.dp = new DPlayer({
       container: document.getElementById('dplayer'),
       video: {
-        url: 'http://192.168.1.109:8080/live/stream.flv',
+        url: 'http://172.19.187.52:8080/live/stream.flv',
+        // url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
         type: 'customFlv',
         customType: {
           customFlv: function (video) {
@@ -99,6 +100,8 @@ export default {
         },
       },
     });
+
+
     // flv 直播形式
     // if (flvjs.isSupported()) {
     //   let videoElement = document.getElementById('videoElement');

@@ -4,6 +4,7 @@
   <el-tabs id="card-box" v-model="activeTab" type="border-card" v-show="showCard">
     <el-tab-pane label="任务设置" name="missionManage">
       <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
+      <el-button type="primary" class="mapgroup" size="mini" >地理围栏</el-button>
       <div class="editBox" v-show="poly.edit">
         <span>无人机数：</span><el-input class="inputSetting" label="无人机数量" placeholder="至少1台无人机" v-model="vehiclesSetting.vehicleNumber" size="mini"></el-input><br>
         <span>起始站点：</span><el-input class="inputSetting" label="仓库位置" placeholder="输入1以上的数字" v-model="vehiclesSetting.depot" size="mini"></el-input><br>
@@ -88,13 +89,15 @@ export default {
     // this.clearBackend()
     this.initVariable()
 
-  },
-  mounted() {
+
 
   },
-  updated() {
-    //  进入立马开始划线
+  mounted() {
+//  进入立马开始划线
     this.drawLine()
+  },
+  updated() {
+
   },
   methods:{
     ...mapMutations(['initmarker','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting','storeObjectiveValue']),
@@ -334,6 +337,8 @@ export default {
   z-index:1
 }
 .mapgroup{
+  padding-left: 10px;
+  padding-right: 10px;
   margin-top: 0px;
   margin-bottom: 10px;
 }

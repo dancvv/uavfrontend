@@ -21,6 +21,7 @@
     "flv.js": "^1.6.2",
     "hls.js": "^1.0.10",
     "leaflet": "^1.7.1",
+    "leaflet.animatedmarker": "^1.0.0",
     "qs": "^6.10.1",
     "videojs-contrib-hls": "^5.15.0",
     "vue": "^2.6.11",
