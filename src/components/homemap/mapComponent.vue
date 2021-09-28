@@ -36,9 +36,9 @@ import qs from "qs";
 let markers=[]
 let LeafIcon = L.Icon.extend({
   options: {
-    iconSize:     [48, 48],
+    iconSize:     [24, 24],
     shadowSize:   [0, 0],
-    iconAnchor:   [24, 48],
+    iconAnchor:   [12, 24],
     // popupAnchor:  [24, 48]
   }
 });
@@ -88,19 +88,16 @@ export default {
     // 全局删除状态
     // this.clearBackend()
     this.initVariable()
-
-
-
   },
   mounted() {
 //  进入立马开始划线
-    this.drawLine()
+//     this.drawLine()
   },
   updated() {
 
   },
   methods:{
-    ...mapMutations(['initmarker','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting','storeObjectiveValue']),
+    ...mapMutations(['initmarker','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting','storeObjectiveValue','storeMultiLine']),
     initVariable(){
       // 无人机任务参数设置 从vuex获取状态
       this.vehiclesSetting=this.vehiclePlan
@@ -307,7 +304,9 @@ export default {
         this.multiLine.push(this.planningLine.planningRoute.get(i))
       }
       console.log(this.multiLine)
-      this.polyline=L.polyline(this.multiLine,{color:'green'}).addTo(mapLeaf)
+      // 把路线存入vuex，从vuex取得唯一地图函数
+      this.storeMultiLine(L.polyline(this.multiLine,{color:'green'}).addTo(mapLeaf))
+      this.polyline=this.leafletLine
       mapLeaf.fitBounds(this.polyline.getBounds())
     }
   },
@@ -316,7 +315,7 @@ export default {
     //   console.log(this.$store.getters.getCount)
     //   return this.$store.getters.getCount
     // }
-    ...mapState(['leafletMap','leafMarker','markersLocate','depotLocations','vehiclePlan','uavPlanningRoutes'])
+    ...mapState(['leafletMap','leafMarker','markersLocate','depotLocations','vehiclePlan','uavPlanningRoutes','leafletLine'])
   }
 }
 </script>

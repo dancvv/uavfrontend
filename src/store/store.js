@@ -27,7 +27,9 @@ export default new vuex.Store({
         planValue:{
             objectiveValue:'',
             routeDistance:''
-        }
+        },
+        // 存储路线的leaflet状态
+        leafletLine:null,
     },
     mutations:{
         initleaflet(state,payload){
@@ -65,6 +67,10 @@ export default new vuex.Store({
             state.planValue.objectiveValue=objectiveValue
             state.planValue.routeDistance=routeDistance
         },
+        // 存储leaflet路线状态
+        storeMultiLine(state,payload){
+            state.leafletLine=payload
+        }
 
 
     },
