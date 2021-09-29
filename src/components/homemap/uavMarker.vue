@@ -6,7 +6,13 @@
 
 <script>
 export default {
-  name: "uavMarker"
+  name: "uavMarker",
+  data(){
+    return{
+      center: [ 39.082324815761126,121.81149363525782],
+    }
+  },
+
 }
 </script>
 

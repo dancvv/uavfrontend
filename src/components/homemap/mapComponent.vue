@@ -92,22 +92,22 @@ export default {
   created() {
     // 全局删除状态
     // this.clearBackend()
-    this.initVariable()
+
   },
   mounted() {
+    this.initVariable()
+    // this.drawLine()
 
   },
   updated() {
 //  进入立马开始划线
-//     this.drawLine()
+    this.drawLine()
   },
   methods:{
     ...mapMutations(['initmarker','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting','storeObjectiveValue','storeDecoratorLine']),
     initVariable(){
       // 无人机任务参数设置 从vuex获取状态
       this.vehiclesSetting=this.vehiclePlan
-      this.leafletLine
-
     },
     showEdit(){
       this.showCard=!this.showCard
@@ -117,7 +117,7 @@ export default {
       this.poly.edit=!this.poly.edit
       const mapLeaf=this.leafletMap
       // 添加至layergroup,实现群体控制
-      this.markerSet=new L.layerGroup().addTo(mapLeaf)
+      this.markerSet = L.layerGroup().addTo(mapLeaf)
       mapLeaf.on('click',(e)=>{
         if (!this.poly.edit){
           return
@@ -127,9 +127,10 @@ export default {
         let titleString='用户'+(markers.length+1)
         //根据点击位置放置一个图标
         markers[markers.length]=L.marker((e.latlng),{icon:depotIcon,title:titleString}).addTo(this.markerSet)
-        console.log("tubiao"+markers.length)
+        // console.log("tubiao"+markers.length)
         // const mark=this.leafMarker
         let markerLength = markers.length - 1;
+        // 单击图标实现弹框编辑
         markers[markerLength].on('click',(e)=>{
           // 记录当前点击的序号，存入vuex
           this.recordLocate(markerLength)
