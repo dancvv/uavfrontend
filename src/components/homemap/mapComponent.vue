@@ -5,6 +5,7 @@
     <el-tab-pane label="任务设置" name="missionManage">
       <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
       <el-button type="primary" class="mapgroup" size="mini" >地理围栏</el-button>
+      <el-button type="primary" class="mapgroup" size="mini" @click="initUavMarker">Test</el-button>
       <div class="editBox" v-show="poly.edit">
         <span>无人机数：</span><el-input class="inputSetting" label="无人机数量" placeholder="至少1台无人机" v-model="vehiclesSetting.vehicleNumber" size="mini"></el-input><br>
         <span>起始站点：</span><el-input class="inputSetting" label="仓库位置" placeholder="输入1以上的数字" v-model="vehiclesSetting.depot" size="mini"></el-input><br>
@@ -39,7 +40,6 @@ let LeafIcon = L.Icon.extend({
     iconSize:     [36, 36],
     shadowSize:   [0, 0],
     iconAnchor:   [18, 30],
-    // popupAnchor:  [24, 48]
   }
 });
 export default {
@@ -97,17 +97,23 @@ export default {
   mounted() {
     this.initVariable()
     // this.drawLine()
-
   },
   updated() {
 //  进入立马开始划线
     this.drawLine()
+    this.initUavMarker()
+  },
+  beforeDestroy(){
+    // 销毁组件时自动清空markers
+    // markers=[]
   },
   methods:{
     ...mapMutations(['initmarker','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting','storeObjectiveValue','storeDecoratorLine']),
     initVariable(){
       // 无人机任务参数设置 从vuex获取状态
       this.vehiclesSetting=this.vehiclePlan
+      // 添加至layergroup,实现群体控制
+      // this.markerSet = L.layerGroup().addTo(mapLeaf)
     },
     showEdit(){
       this.showCard=!this.showCard
@@ -122,13 +128,12 @@ export default {
         if (!this.poly.edit){
           return
         }
+      // 按照顺序加入各个点
         this.poly.paths.push(e.latlng)
         // console.log(this.poly.paths)
         let titleString='用户'+(markers.length+1)
         //根据点击位置放置一个图标
         markers[markers.length]=L.marker((e.latlng),{icon:depotIcon,title:titleString}).addTo(this.markerSet)
-        // console.log("tubiao"+markers.length)
-        // const mark=this.leafMarker
         let markerLength = markers.length - 1;
         // 单击图标实现弹框编辑
         markers[markerLength].on('click',(e)=>{
@@ -329,6 +334,23 @@ export default {
                           }))
       let decoratorLine = this.leafletLine.decoratorLine
       decoratorLine.addTo(mapLeaf)
+    },
+    initUavMarker(){
+      console.log("markers length")
+      console.log(this.depotLocations.length)
+      console.log(markers)
+      if (this.depotLocations.length !==0 && markers.length===0){
+        const mapLeaf = this.leafletMap
+        let depotIcon=new LeafIcon({iconUrl: '/leaflet/mobile.png'})
+        this.markerSet = L.layerGroup().addTo(mapLeaf)
+        for (let i = 0;i<this.depotLocations.length; i++){
+          let titleString='用户'+(markers.length+1)
+          markers[i]=L.marker((this.depotLocations[i]),{icon:depotIcon,title:titleString}).addTo(this.markerSet)
+        }
+        console.log("this is not 0")
+      } else{
+        console.log("this is 0")
+      }
     }
   },
   computed:{
