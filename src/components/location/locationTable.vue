@@ -121,7 +121,7 @@ export default {
     this.initData()
   },
   methods:{
-    ...mapMutations(['changeLocations','changeVehicles','storeObjectiveValue','uavRoutesMultiLineSetting','uavRoutesMapSetting']),
+    ...mapMutations(['changeLocations','changeVehicles','storeObjectiveValue','storeLineResults','uavRoutesMapSetting']),
     async initData() {
       this.vehicleSetting=this.vehiclePlan
       const {data: res} = await this.$http.get('compute/list')
@@ -234,7 +234,7 @@ export default {
       // 删除
       delete res.info.routeDistance
       // 将无人机路线任务存入vuex
-      this.uavRoutesMultiLineSetting(res.info)
+      this.storeLineResults(res.info)
       if(res.status!==200){
         this.$message.error(res.msg)
         return

@@ -22,6 +22,7 @@ export default new vuex.Store({
         uavPlanningRoutes:{
             drawMultiLine:'',
             routeMapLocation:'',
+            originLine:[],
         },
         // 存储规划值
         planValue:{
@@ -30,7 +31,9 @@ export default new vuex.Store({
         },
         // 存储路线的leaflet状态
         leafletLine:{
-            decoratorLine:null
+            originLine:'',
+            decoratorLine:'',
+            layer:'',
         },
     },
     mutations:{
@@ -56,7 +59,7 @@ export default new vuex.Store({
         changeFenceParams(state,payload){
             state.fenceParam.points=payload
         },
-        uavRoutesMultiLineSetting(state,payload){
+        storeLineResults(state,payload){
             state.uavPlanningRoutes.drawMultiLine=payload
         },
         // 获取路线值
@@ -72,7 +75,12 @@ export default new vuex.Store({
         // 存储leaflet路线状态
         storeDecoratorLine(state,payload){
             state.leafletLine.decoratorLine=payload
+        },
+    //    存储无人机路线数组
+        storeOriginLine(state,payload){
+            state.uavPlanningRoutes.originLine=payload
         }
+
 
 
     },

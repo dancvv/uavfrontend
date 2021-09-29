@@ -5,7 +5,7 @@
     <el-tab-pane label="任务设置" name="missionManage">
       <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.edit?'停止绘制':'开始绘制'}}</el-button>
       <el-button type="primary" class="mapgroup" size="mini" >地理围栏</el-button>
-      <el-button type="primary" class="mapgroup" size="mini" @click="initUavMarker">Test</el-button>
+      <el-button type="primary" class="mapgroup" size="mini" @click="updateMarker">Test</el-button>
       <div class="editBox" v-show="poly.edit">
         <span>无人机数：</span><el-input class="inputSetting" label="无人机数量" placeholder="至少1台无人机" v-model="vehiclesSetting.vehicleNumber" size="mini"></el-input><br>
         <span>起始站点：</span><el-input class="inputSetting" label="仓库位置" placeholder="输入1以上的数字" v-model="vehiclesSetting.depot" size="mini"></el-input><br>
@@ -63,13 +63,16 @@ export default {
         lng:''
       },
       // markerSet:new L.layerGroup()
-      markerSet:'',
+      layerSet:{
+        markerSet:'',
+        lineSet:'',
+      },      
       markerLength:'',
       reset:false,
       // 无人机任务参数设置
       vehiclesSetting:{
-        vehicleNumber:'',
-        depot:''
+        vehicleNumber:1,
+        depot:1
       },
     //  规划路线
       planningLine:{
@@ -85,14 +88,14 @@ export default {
     //  原始路线
         originLine:null,
     //  装饰路线，绿色
-        decoratorLine:null
+        decoratorLine:null,
+        controlLayer:''
       },
     }
   },
   created() {
     // 全局删除状态
     // this.clearBackend()
-
   },
   mounted() {
     this.initVariable()
@@ -100,20 +103,20 @@ export default {
   },
   updated() {
 //  进入立马开始划线
-    this.drawLine()
-    this.initUavMarker()
+    this.updateLine()
+    this.updateMarker()
   },
   beforeDestroy(){
     // 销毁组件时自动清空markers
-    // markers=[]
+    markers=[]
   },
   methods:{
-    ...mapMutations(['initmarker','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting','storeObjectiveValue','storeDecoratorLine']),
+    ...mapMutations(['initmarker','recordLocate','changeLocations','changeVehicles','storeLineResults','uavRoutesMapSetting','storeObjectiveValue','storeDecoratorLine','storeOriginLine']),
     initVariable(){
       // 无人机任务参数设置 从vuex获取状态
       this.vehiclesSetting=this.vehiclePlan
       // 添加至layergroup,实现群体控制
-      // this.markerSet = L.layerGroup().addTo(mapLeaf)
+      // this.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
     },
     showEdit(){
       this.showCard=!this.showCard
@@ -123,7 +126,7 @@ export default {
       this.poly.edit=!this.poly.edit
       const mapLeaf=this.leafletMap
       // 添加至layergroup,实现群体控制
-      this.markerSet = L.layerGroup().addTo(mapLeaf)
+      this.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
       mapLeaf.on('click',(e)=>{
         if (!this.poly.edit){
           return
@@ -133,7 +136,7 @@ export default {
         // console.log(this.poly.paths)
         let titleString='用户'+(markers.length+1)
         //根据点击位置放置一个图标
-        markers[markers.length]=L.marker((e.latlng),{icon:depotIcon,title:titleString}).addTo(this.markerSet)
+        markers[markers.length]=L.marker((e.latlng),{icon:depotIcon,title:titleString}).addTo(this.layerSet.markerSet)
         let markerLength = markers.length - 1;
         // 单击图标实现弹框编辑
         markers[markerLength].on('click',(e)=>{
@@ -180,19 +183,30 @@ export default {
     },
     //  清除后端所有数据
     async clearBackend() {
-      // 清除前端和后端数据状态
-      this.poly.paths=[]
-      markers=[]
-      // 将vuex中gps经纬度数据清零
-      this.changeLocations('')
-      if(this.markerSet===''){
+      // 清除图标
+      if(this.layerSet.markerSet===''){
         this.$message.success('并未放置坐标点')
       }else {
-        this.markerSet.clearLayers()
+        this.layerSet.markerSet.clearLayers()
         this.$message.success('重置成功')
       }
-      // console.log(markers)
-      // markers.remove()
+
+      // 清除前端和后端数据状态
+      this.poly.paths=[]
+      // 清除图标
+      markers=[]
+      // 把原始数组存入一个空值，放置后期反复添加
+      this.storeOriginLine([])
+      // 将vuex中gps经纬度数据清零,保证其他界面数据状态也为空
+      this.changeLocations('')
+      this.storeLineResults('')
+      this.uavRoutesMapSetting('')
+
+      // 清除路线
+      this.layerSet.lineSet.clearLayers()
+      console.log(this.leafletLine.decoratorLine)
+      this.storeDecoratorLine('')
+
       const {data: res} = await this.$http.get('compute/delete')
       console.log(res)
       if (res.status !== 200) {
@@ -201,8 +215,7 @@ export default {
       }
       console.log(res.msg)
       this.$message.success(res.msg)
-      console.log(this.pathLine.originLine)
-      if(this.pathLine.originLine!==''){
+      if(this.pathLine.originLine!==null){
         this.multiLine=[]
         this.pathLine.originLine.remove()
       }
@@ -229,11 +242,11 @@ export default {
       markers=[]
       this.multiLine=[]
       // this.reload()
-      console.log(this.markerSet)
-      if(this.markerSet===null){
+      console.log(this.layerSet.markerSet)
+      if(this.layerSet.markerSet===null){
         this.$message.success('并未放置坐标点')
       }else {
-        this.markerSet.clearLayers()
+        this.layerSet.markerSet.clearLayers()
         this.$message.success('重置成功')
       }
       console.log("reset:"+this.markersLocate)
@@ -268,8 +281,8 @@ export default {
       this.storeObjectiveValue(planValue)
       // 删除
       delete res.info.routeDistance
-      // 将无人机路线任务存入vuex
-      this.uavRoutesMultiLineSetting(res.info)
+      // 将无人机路线任务存入vuex，里面存储的是纯数字
+      this.storeLineResults(res.info)
       if(res.status!==200){
         this.$message.error(res.msg)
         return
@@ -301,6 +314,13 @@ export default {
     //  展示规划路线
     },
     drawLine() {
+      // 已经有规划结果，无论如何都不会调用
+      console.log("palnm")
+      console.log(this.multiLine)
+      if (this.multiLine.length!==0){
+        this.$message.error("不会调用")
+        return;
+      }
       const mapLeaf = this.leafletMap
       //  获取原始路线图
       this.planningLine.planningRoute = this.uavPlanningRoutes.routeMapLocation
@@ -315,42 +335,66 @@ export default {
         this.multiLine.push(this.planningLine.planningRoute.get(i))
       }
       console.log(this.multiLine)
+      // 纯数组数据存入vuex，方便后期调用
+      this.storeOriginLine(this.multiLine)
+      this.layerSet.lineSet = L.layerGroup().addTo(mapLeaf)
       // 把路线存入vuex，从vuex取得唯一地图函数
-      this.pathLine.originLine = L.polyline(this.multiLine, {weight: 8, color: '#00bd01'}).addTo(mapLeaf)
+      this.pathLine.originLine=L.polyline(this.multiLine, {weight: 8, color: '#00bd01'}).addTo(this.layerSet.lineSet)
       mapLeaf.fitBounds(this.pathLine.originLine.getBounds())
-      this.storeDecoratorLine(L.polylineDecorator(this.pathLine.originLine, {
-                            patterns: [
-                              {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
-                                  pixelSize: 5,
-                                  headAngle: 75,
-                                  polygon: false,
-                                  pathOptions: {
-                                    stroke: true,
-                                    weight: 2,
-                                    color: '#ffffff'
-                                  }
-                                })}
-                            ]
-                          }))
-      let decoratorLine = this.leafletLine.decoratorLine
-      decoratorLine.addTo(mapLeaf)
+      L.polylineDecorator(this.pathLine.originLine, {
+        patterns: [
+          {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
+              pixelSize: 5,
+              headAngle: 75,
+              polygon: false,
+              pathOptions: {
+                stroke: true,
+                weight: 2,
+                color: '#ffffff'
+              }
+            })}
+        ]
+      }).addTo(this.layerSet.lineSet)
     },
-    initUavMarker(){
-      console.log("markers length")
-      console.log(this.depotLocations.length)
-      console.log(markers)
+    updateMarker(){
       if (this.depotLocations.length !==0 && markers.length===0){
         const mapLeaf = this.leafletMap
         let depotIcon=new LeafIcon({iconUrl: '/leaflet/mobile.png'})
-        this.markerSet = L.layerGroup().addTo(mapLeaf)
+        this.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
         for (let i = 0;i<this.depotLocations.length; i++){
           let titleString='用户'+(markers.length+1)
-          markers[i]=L.marker((this.depotLocations[i]),{icon:depotIcon,title:titleString}).addTo(this.markerSet)
+          markers[i]=L.marker((this.depotLocations[i]),{icon:depotIcon,title:titleString}).addTo(this.layerSet.markerSet)
         }
         console.log("this is not 0")
       } else{
         console.log("this is 0")
       }
+    },
+    updateLine(){
+      const mapLeaf = this.leafletMap
+      let decorateLine = this.uavPlanningRoutes.originLine
+      console.log(this.uavPlanningRoutes.originLine)
+      if (decorateLine.length === 0 ){
+        return
+      }
+      this.layerSet.lineSet = L.layerGroup().addTo(mapLeaf)
+      // 把路线存入vuex，从vuex取得唯一地图函数
+      this.pathLine.originLine=L.polyline(decorateLine, {weight: 8, color: '#00bd01'}).addTo(this.layerSet.lineSet)
+      mapLeaf.fitBounds(this.pathLine.originLine.getBounds())
+      L.polylineDecorator(this.pathLine.originLine, {
+        patterns: [
+          {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
+              pixelSize: 5,
+              headAngle: 75,
+              polygon: false,
+              pathOptions: {
+                stroke: true,
+                weight: 2,
+                color: '#ffffff'
+              }
+            })}
+        ]
+      }).addTo(this.layerSet.lineSet)
     }
   },
   computed:{
