@@ -101,8 +101,8 @@ export default {
       dialogResetVisible:false,
     //  无人机参数设置
       vehicleSetting:{
-        vehicleNumber:'',
-        depot:'',
+        vehicleNumber:1,
+        depot:1,
       },
       rules:{
         vehicleNumber:[

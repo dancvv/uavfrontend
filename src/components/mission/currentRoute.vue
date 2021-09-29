@@ -62,6 +62,7 @@ export default {
         let routeLine=routes.get(i)
         let serialNum = serial[i]
         for (let innerSeq=0;innerSeq<routeLine.length;innerSeq++){
+          // 添加的路线站点编号不影响全局状态
           routeLine[innerSeq]["sequence"]= serialNum[innerSeq]+1
         }
         mapList.push(routeLine)

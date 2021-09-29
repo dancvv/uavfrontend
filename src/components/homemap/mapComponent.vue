@@ -36,9 +36,9 @@ import qs from "qs";
 let markers=[]
 let LeafIcon = L.Icon.extend({
   options: {
-    iconSize:     [24, 24],
+    iconSize:     [36, 36],
     shadowSize:   [0, 0],
-    iconAnchor:   [12, 24],
+    iconAnchor:   [18, 30],
     // popupAnchor:  [24, 48]
   }
 });
@@ -81,7 +81,12 @@ export default {
       activeTab:'missionManage',
     //  路线结果数组
       multiLine:[],
-      polyline:'',
+      pathLine: {
+    //  原始路线
+        originLine:null,
+    //  装饰路线，绿色
+        decoratorLine:null
+      },
     }
   },
   created() {
@@ -90,17 +95,18 @@ export default {
     this.initVariable()
   },
   mounted() {
+
+  },
+  updated() {
 //  进入立马开始划线
 //     this.drawLine()
   },
-  updated() {
-
-  },
   methods:{
-    ...mapMutations(['initmarker','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting','storeObjectiveValue','storeMultiLine']),
+    ...mapMutations(['initmarker','recordLocate','changeLocations','changeVehicles','uavRoutesMultiLineSetting','uavRoutesMapSetting','storeObjectiveValue','storeDecoratorLine']),
     initVariable(){
       // 无人机任务参数设置 从vuex获取状态
       this.vehiclesSetting=this.vehiclePlan
+      this.leafletLine
 
     },
     showEdit(){
@@ -189,10 +195,10 @@ export default {
       }
       console.log(res.msg)
       this.$message.success(res.msg)
-      console.log(this.polyline)
-      if(this.polyline!==''){
+      console.log(this.pathLine.originLine)
+      if(this.pathLine.originLine!==''){
         this.multiLine=[]
-        this.polyline.remove()
+        this.pathLine.originLine.remove()
       }
     },
     editConfirm(location) {
@@ -286,35 +292,45 @@ export default {
       // 存入vuex状态管理
       this.uavRoutesMapSetting(mapLocation)
       this.planningLine.planningRoute=mapLocation
-      console.log(this.planningLine.planningRoute)
     //  展示规划路线
     },
-    drawLine(){
-      const mapLeaf=this.leafletMap
+    drawLine() {
+      const mapLeaf = this.leafletMap
       //  获取原始路线图
-      this.planningLine.planningRoute=this.uavPlanningRoutes.routeMapLocation
+      this.planningLine.planningRoute = this.uavPlanningRoutes.routeMapLocation
       // 如果原来不存在规划结果，画线函数就生效
-      if (this.planningLine.planningRoute.size===undefined){
+      if (this.planningLine.planningRoute.size === undefined) {
         return
       }
-      console.log("th")
+      console.log("the planning route")
       console.log(this.planningLine.planningRoute)
       // 将Map数据转换为array数组
-      for(let i=0;i<this.planningLine.planningRoute.size;i++){
+      for (let i = 0; i < this.planningLine.planningRoute.size; i++) {
         this.multiLine.push(this.planningLine.planningRoute.get(i))
       }
       console.log(this.multiLine)
       // 把路线存入vuex，从vuex取得唯一地图函数
-      this.storeMultiLine(L.polyline(this.multiLine,{color:'green'}).addTo(mapLeaf))
-      this.polyline=this.leafletLine
-      mapLeaf.fitBounds(this.polyline.getBounds())
+      this.pathLine.originLine = L.polyline(this.multiLine, {weight: 8, color: '#00bd01'}).addTo(mapLeaf)
+      mapLeaf.fitBounds(this.pathLine.originLine.getBounds())
+      this.storeDecoratorLine(L.polylineDecorator(this.pathLine.originLine, {
+                            patterns: [
+                              {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
+                                  pixelSize: 5,
+                                  headAngle: 75,
+                                  polygon: false,
+                                  pathOptions: {
+                                    stroke: true,
+                                    weight: 2,
+                                    color: '#ffffff'
+                                  }
+                                })}
+                            ]
+                          }))
+      let decoratorLine = this.leafletLine.decoratorLine
+      decoratorLine.addTo(mapLeaf)
     }
   },
   computed:{
-    // add3(){
-    //   console.log(this.$store.getters.getCount)
-    //   return this.$store.getters.getCount
-    // }
     ...mapState(['leafletMap','leafMarker','markersLocate','depotLocations','vehiclePlan','uavPlanningRoutes','leafletLine'])
   }
 }

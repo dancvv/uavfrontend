@@ -10,18 +10,15 @@ import {mapState} from "vuex";
 import L from 'leaflet'
 // 导入marker动画插件
 import 'leaflet.animatedmarker/src/AnimatedMarker'
-// 导入动态动画库
-// import "../../assets/jsplugin/MovingMarker"
 let UavIcon = L.Icon.extend({
   options: {
     iconSize:     [48, 48],
     shadowSize:   [0, 0],
-    iconAnchor:   [24, 48],
-    // popupAnchor:  [24, 48]
+    iconAnchor:   [24, 24],
   }
 });
 let uavIcon=new UavIcon({iconUrl: '/leaflet/uav48.svg'})
-let uavmar=null
+// let uavmar=null
 export default {
   name: "missionStart",
   data(){
@@ -47,20 +44,20 @@ export default {
       }
       this.data=uav0[0]
       console.log(uav0)
-      console.log(this.leafletLine.getLatLngs())
+      // console.log(this.leafletLine.getLatLngs())
 
-      this.animateMarker=L.animatedMarker(uav0,{icon:uavIcon,interval:3000}).addTo(mapLeaf)
+      this.animateMarker=L.animatedMarker(this.leafletLine.getLatLngs(),{icon:uavIcon,interval:3000}).addTo(mapLeaf)
 
 
     },
   //  改变方向
     position(){
       this.animateMarker.start()
-      this.data.lat=this.data.lat+0.0001
-      this.data.lng=this.data.lng+0.0001
-      // 实现实时定位的方法，不停的设置无人机经纬度坐标
-      uavmar.setLatLng(this.data)
-      console.log(this.data)
+      // this.data.lat=this.data.lat+0.0001
+      // this.data.lng=this.data.lng+0.0001
+      // // 实现实时定位的方法，不停的设置无人机经纬度坐标
+      // uavmar.setLatLng(this.data)
+      // console.log(this.data)
     }
   }
 }
