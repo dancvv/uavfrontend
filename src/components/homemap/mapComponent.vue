@@ -87,7 +87,7 @@ export default {
       multiLine:[],
       pathLine: {
     //  原始路线
-        originLine:null,
+        originLine:[],
     //  装饰路线，绿色
         decoratorLine:null,
         controlLayer:''
@@ -341,23 +341,26 @@ export default {
       // 纯数组数据存入vuex，方便后期调用
       this.storeOriginLine(this.multiLine)
       this.layerSet.lineSet = L.layerGroup().addTo(mapLeaf)
+      let colorSet = ['#00bd01','#008080','#BDB76B','#DAA520','#FF7F50','#BC8F8F','#48D1CC','#87CEFA','#9400D3']
       // 把路线存入vuex，从vuex取得唯一地图函数
-      this.pathLine.originLine=L.polyline(this.multiLine, {weight: 8, color: '#00bd01'}).addTo(this.layerSet.lineSet)
-      mapLeaf.fitBounds(this.pathLine.originLine.getBounds())
-      L.polylineDecorator(this.pathLine.originLine, {
-        patterns: [
-          {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
-              pixelSize: 5,
-              headAngle: 75,
-              polygon: false,
-              pathOptions: {
-                stroke: true,
-                weight: 2,
-                color: '#ffffff'
-              }
-            })}
-        ]
-      }).addTo(this.layerSet.lineSet)
+      for (let i=0;i<this.multiLine.length;i++){
+        this.pathLine.originLine[i]=L.polyline(this.multiLine[i], {weight: 8, color: colorSet[i]}).addTo(this.layerSet.lineSet)
+        mapLeaf.fitBounds(this.pathLine.originLine[i].getBounds())
+        L.polylineDecorator(this.pathLine.originLine[i], {
+          patterns: [
+            {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
+                pixelSize: 5,
+                headAngle: 75,
+                polygon: false,
+                pathOptions: {
+                  stroke: true,
+                  weight: 2,
+                  color: '#ffffff'
+                }
+              })}
+          ]
+        }).addTo(this.layerSet.lineSet)
+      }
     },
     updateMarker(){
       if (this.depotLocations.length !==0 && markers.length===0){
@@ -383,22 +386,26 @@ export default {
       console.log("路线完成")
       this.layerSet.lineSet = L.layerGroup().addTo(mapLeaf)
       // 把路线存入vuex，从vuex取得唯一地图函数
-      this.pathLine.originLine=L.polyline(decorateLine, {weight: 8, color: '#00bd01'}).addTo(this.layerSet.lineSet)
-      mapLeaf.fitBounds(this.pathLine.originLine.getBounds())
-      L.polylineDecorator(this.pathLine.originLine, {
-        patterns: [
-          {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
-              pixelSize: 5,
-              headAngle: 75,
-              polygon: false,
-              pathOptions: {
-                stroke: true,
-                weight: 2,
-                color: '#ffffff'
-              }
-            })}
-        ]
-      }).addTo(this.layerSet.lineSet)
+      let colorSet = ['#00bd01','#008080','#BDB76B','#DAA520','#FF7F50','#BC8F8F','#48D1CC','#87CEFA','#9400D3']
+      for (let i=0;i<decorateLine.length;i++){
+
+        this.pathLine.originLine[i]=L.polyline(decorateLine[i], {weight: 8, color: colorSet[i]}).addTo(this.layerSet.lineSet)
+        mapLeaf.fitBounds(this.pathLine.originLine[i].getBounds())
+        L.polylineDecorator(this.pathLine.originLine[i], {
+          patterns: [
+            {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
+                pixelSize: 5,
+                headAngle: 75,
+                polygon: false,
+                pathOptions: {
+                  stroke: true,
+                  weight: 2,
+                  color: '#ffffff'
+                }
+              })}
+          ]
+        }).addTo(this.layerSet.lineSet)
+      }
     }
   },
   computed:{
