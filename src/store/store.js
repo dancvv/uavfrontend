@@ -22,6 +22,7 @@ export default new vuex.Store({
         uavPlanningRoutes:{
             drawMultiLine:'',
             routeMapLocation:'',
+            // 数组路线
             originLine:[],
         },
         // 存储规划值
@@ -31,6 +32,7 @@ export default new vuex.Store({
         },
         // 存储路线的leaflet状态
         leafletLine:{
+            // 原始路线
             originLine:'',
             decoratorLine:'',
             layer:'',

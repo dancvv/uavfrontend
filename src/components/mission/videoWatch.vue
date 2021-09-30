@@ -85,7 +85,8 @@ export default {
     this.dp = new DPlayer({
       container: document.getElementById('dplayer'),
       video: {
-        url: 'http://172.19.187.52:8080/live/stream.flv',
+        // url: 'http://172.19.187.52:8080/live/stream.flv',
+        url: 'http://172.19.187.52:8080/live/phone.flv',
         // url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
         type: 'customFlv',
         customType: {

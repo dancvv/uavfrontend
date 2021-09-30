@@ -34,6 +34,7 @@
 import {mapMutations,mapState} from "vuex";
 import L from "leaflet"
 import qs from "qs";
+import "leaflet-polylinedecorator"
 let markers=[]
 let LeafIcon = L.Icon.extend({
   options: {
@@ -203,9 +204,11 @@ export default {
       this.uavRoutesMapSetting('')
 
       // 清除路线
-      this.layerSet.lineSet.clearLayers()
-      console.log(this.leafletLine.decoratorLine)
-      this.storeDecoratorLine('')
+      if (this.layerSet.lineSet!==''){
+        this.layerSet.lineSet.clearLayers()
+        console.log(this.leafletLine.decoratorLine)
+        this.storeDecoratorLine('')
+      }
 
       const {data: res} = await this.$http.get('compute/delete')
       console.log(res)
@@ -316,7 +319,7 @@ export default {
     drawLine() {
       // 已经有规划结果，无论如何都不会调用
       console.log("palnm")
-      console.log(this.multiLine)
+      console.log(this.multiLine.length)
       if (this.multiLine.length!==0){
         this.$message.error("不会调用")
         return;
@@ -363,20 +366,21 @@ export default {
         this.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
         for (let i = 0;i<this.depotLocations.length; i++){
           let titleString='用户'+(markers.length+1)
-          markers[i]=L.marker((this.depotLocations[i]),{icon:depotIcon,title:titleString}).addTo(this.layerSet.markerSet)
+          markers[i]=L.marker((this.depotLocations[i]),{icon:depotIcon,title:titleString,zIndexOffset:0}).addTo(this.layerSet.markerSet)
         }
-        console.log("this is not 0")
       } else{
-        console.log("this is 0")
+        return
       }
     },
     updateLine(){
       const mapLeaf = this.leafletMap
       let decorateLine = this.uavPlanningRoutes.originLine
-      console.log(this.uavPlanningRoutes.originLine)
+      console.log("更新路线")
+      console.log(decorateLine)
       if (decorateLine.length === 0 ){
         return
       }
+      console.log("路线完成")
       this.layerSet.lineSet = L.layerGroup().addTo(mapLeaf)
       // 把路线存入vuex，从vuex取得唯一地图函数
       this.pathLine.originLine=L.polyline(decorateLine, {weight: 8, color: '#00bd01'}).addTo(this.layerSet.lineSet)

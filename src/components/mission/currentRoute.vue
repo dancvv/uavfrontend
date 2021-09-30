@@ -11,7 +11,7 @@
     <el-divider></el-divider>
     <div id="objBox" v-show="mapRoute.length!==0">
       <h4>无人机的优化数值</h4>
-      <p>总长度 {{objValue/10}} m</p>
+      <p>总长度 {{objValue/100}} m</p>
       <p v-for="(route,index) in routeValue" :key="index">无人机 {{index+1}} 的路线长度： {{route/10}} m</p>
     </div>
     <h4 style="font-family: 'Microsoft YaHei UI '; color: red; display: block; align-content: center;" v-if="mapRoute.length===0">没有无人机执行任务或者没有规划路线</h4>

@@ -121,7 +121,7 @@ export default {
     this.initData()
   },
   methods:{
-    ...mapMutations(['changeLocations','changeVehicles','storeObjectiveValue','storeLineResults','uavRoutesMapSetting']),
+    ...mapMutations(['changeLocations','changeVehicles','storeObjectiveValue','storeLineResults','uavRoutesMapSetting','storeOriginLine']),
     async initData() {
       this.vehicleSetting=this.vehiclePlan
       const {data: res} = await this.$http.get('compute/list')
@@ -259,7 +259,14 @@ export default {
         }
         mapLocation.set(Number(key),routeList)
       }
-      console.log(mapLocation)
+      console.log("map数据"+mapLocation)
+      // 将Map数据转换为array数组
+      let multiLine=[]
+      for (let i = 0; i < mapLocation.size; i++) {
+        multiLine.push(mapLocation.get(i))
+      }
+      // 纯数组数据存入vuex，方便后期调用
+      this.storeOriginLine(multiLine)
       // 存入vuex状态管理
       this.uavRoutesMapSetting(mapLocation)
 

@@ -7,7 +7,6 @@
     </el-radio-group>
     <map-component></map-component>
     <mission-start></mission-start>
-    <multi-polyline></multi-polyline>
 
     <div id="map"></div>
   </div>
@@ -19,11 +18,10 @@ import 'leaflet/dist/leaflet.css'
 import MapComponent from "@/components/homemap/mapComponent";
 import {mapMutations} from "vuex";
 import MissionStart from "@/components/homemap/missionStart";
-import MultiPolyline from "@/components/homemap/multiPolyline";
 let map=null
 export default {
   name: "leaflet",
-  components: {MultiPolyline, MissionStart, MapComponent},
+  components: { MissionStart, MapComponent},
   data(){
     return{
       // map:''

@@ -1,6 +1,6 @@
 <template>
 <div id="mission-group">
-  <el-button type="success" @click="startUav">无人机起飞</el-button>
+  <el-button type="success" @click="startUav">路线演示</el-button>
   <el-button type="primary" @click="position">+</el-button>
 </div>
 </template>
@@ -9,6 +9,7 @@
 import {mapState} from "vuex";
 import L from 'leaflet'
 // 导入marker动画插件
+import "../../assets/jsplugin/AnimatedMarker"
 import 'leaflet.animatedmarker/src/AnimatedMarker'
 let UavIcon = L.Icon.extend({
   options: {
@@ -27,7 +28,7 @@ export default {
       mapLeaf:null,
       // 测试数据
       data:null,
-      animateMarker:null,
+      animate:[],
     }
   },
   computed:{
@@ -37,22 +38,27 @@ export default {
   methods:{
     startUav(){
       const mapLeaf=this.leafletMap
-      console.log(this.uavPlanningRoutes.routeMapLocation.get(0))
-      let uav0=this.uavPlanningRoutes.routeMapLocation.get(0)
+      console.log(this.uavPlanningRoutes.originLine)
+      let uav0=this.uavPlanningRoutes.originLine[0]
       for (let i=0;i<uav0.length;i++){
         delete uav0[i].id
       }
       this.data=uav0[0]
       console.log(uav0)
       // console.log(this.leafletLine.getLatLngs())
-
-      this.animateMarker=L.animatedMarker(this.leafletLine.getLatLngs(),{icon:uavIcon,interval:3000}).addTo(mapLeaf)
+      for (let i=0;i<this.uavPlanningRoutes.originLine.length;i++){
+        this.animate[i]=L.animatedMarker(this.uavPlanningRoutes.originLine[i],{icon:uavIcon,interval:3000,zIndexOffset:1}).addTo(mapLeaf)
+        console.log(i)
+        let string = "无人机 "+i+" 的路线"
+        this.animate[i].bindTooltip(string).openTooltip()
+      }
+      // this.animate=L.animatedMarker(uav0,{icon:uavIcon,interval:3000}).addTo(mapLeaf)
 
 
     },
   //  改变方向
     position(){
-      this.animateMarker.start()
+      this.animate.start()
       // this.data.lat=this.data.lat+0.0001
       // this.data.lng=this.data.lng+0.0001
       // // 实现实时定位的方法，不停的设置无人机经纬度坐标
