@@ -12,7 +12,11 @@
       <el-table :data="videoData" :highlight-current-row="true">
         <el-table-column type="index" label="序号" width="100px" align="center"></el-table-column>
         <el-table-column prop="uavId" label="无人机编号" min-width="100px"></el-table-column>
-        <el-table-column prop="image" label="视频流" min-width="200px"></el-table-column>
+        <el-table-column prop="image" label="视频流" min-width="200px">
+          <template slot-scope="scope">
+            <el-input class="input" v-model="scope.row.image" size="mini" clearable></el-input>
+          </template>
+        </el-table-column>
         <el-table-column prop="manage" label="管理" width="200px">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" @click="previewUav">预览</el-button>
@@ -86,7 +90,7 @@ export default {
       container: document.getElementById('dplayer'),
       video: {
         // url: 'http://172.19.187.52:8080/live/stream.flv',
-        url: 'http://172.19.187.52:8080/live/phone.flv',
+        url: 'http://49.233.56.74:8080/live/stream.flv',
         // url: 'https://api.dogecloud.com/player/get.mp4?vcode=5ac682e6f8231991&userId=17&ext=.mp4',
         type: 'customFlv',
         customType: {
@@ -149,5 +153,8 @@ export default {
   margin-top: 20px;
   margin-left: 10%;
   width: 82%;
+}
+.input{
+  width:300px
 }
 </style>
