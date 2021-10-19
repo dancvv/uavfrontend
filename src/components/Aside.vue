@@ -53,6 +53,10 @@ export default {
       //菜单数据
       asideMenu:[
         // {id:'100',path:'/leaflet',name:'首页',order:1,icon:'el-icon-user'},
+        {id:'100',path:'/uav',name: '无人机实例',order: 1,icon:'el-icon-s-promotion',
+          children: [
+            {id:'101',path:'/instance',name:'动作指令',order: '101',}
+          ]},
         {id:'200',path:'/manage',name:'飞行参数设置',order:1,icon:'el-icon-s-cooperation',
           children:[
             {id:'201',path:'/location',name:'批量上传位置',order:2},
