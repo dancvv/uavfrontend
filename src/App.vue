@@ -58,7 +58,7 @@ export default {
       //定义这个that=this，可以让变量定型，让变量活动域局限于that中
       let that=this;
       if ("WebSocket" in window){
-        that.ws=new WebSocket("ws://localhost:8085/myws" );
+        that.ws=new WebSocket("ws://49.233.56.74:8085/myws" );
         that.global.setWs(that.ws)
         that.ws.onopen=()=>{
           console.log("websocket链接成功")
