@@ -20,6 +20,7 @@ Vue.prototype.$http=axios;
 //访问地址
 axios.defaults.baseURL='http://49.233.56.74:8085/'
 // axios.defaults.baseUrl='http://localhost:8085/'
+import Mock from './mock/mock'
 
 //导入qs文件
 import qs from 'qs'
@@ -50,10 +51,15 @@ Vue.use(ElementUI);
 
 Vue.config.productionTip = false
 
+//引入mock
+// import mock from './mock'
+
+
 new Vue({
   //注册router文件
   router,
   //vuex
   store,
+  Mock,
   render: h => h(App),
 }).$mount('#app')

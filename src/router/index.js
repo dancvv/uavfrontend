@@ -22,6 +22,7 @@ Vue.use(VueRouter)
 
 
 export default new VueRouter({
+    mode:'history',
     routes:[
         //重定向home页
         {path:'/',redirect:'/home'},
