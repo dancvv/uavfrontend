@@ -67,7 +67,7 @@ export default {
       layerSet:{
         markerSet:'',
         lineSet:'',
-      },      
+      },
       markerLength:'',
       reset:false,
       // 无人机任务参数设置

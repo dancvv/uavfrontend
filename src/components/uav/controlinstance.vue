@@ -28,6 +28,7 @@
         <div>
           <h3 class="header">动作指令</h3>
         </div>
+        <el-button class="button-test">ajax</el-button>
       </el-card>
     </el-col>
   </el-row>

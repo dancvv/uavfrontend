@@ -18,8 +18,8 @@ export default {
 
   mounted() {
     //初始化websocket方法
-    this.linkTest()
-    this.createSocket()
+    // this.linkTest()
+    // this.createSocket()
   },
   methods:{
     async linkTest() {
