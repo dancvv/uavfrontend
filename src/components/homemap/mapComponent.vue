@@ -50,12 +50,14 @@ export default {
       // map:''
       center: [ 39.082324815761126,121.81149363525782],
       //展示卡片
-      showCard:false,
+      showCard:true,
     //  开始编辑地图
       poly:{
         paths:[],
         edit:false
       },
+      // 用户的标识符
+      titleString:[],
       // 是否展示编辑界面
       cardVisible:false,
       markerEdit:{
@@ -68,6 +70,7 @@ export default {
         markerSet:'',
         lineSet:'',
       },
+      // 图标长度
       markerLength:'',
       reset:false,
       // 无人机任务参数设置
@@ -123,33 +126,37 @@ export default {
       this.showCard=!this.showCard
     },
     placePoint(){
+      let that = this
       let depotIcon=new LeafIcon({iconUrl: '/leaflet/mobile.png'})
-      this.poly.edit=!this.poly.edit
-      const mapLeaf=this.leafletMap
+      that.poly.edit=!that.poly.edit
+      const mapClickLocation = new Map()
+      const mapLeaf=that.leafletMap
       // 添加至layergroup,实现群体控制
-      this.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
+      that.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
       mapLeaf.on('click',(e)=>{
-        if (!this.poly.edit){
+        if (!that.poly.edit){
           return
         }
       // 按照顺序加入各个点
-        this.poly.paths.push(e.latlng)
-        // console.log(this.poly.paths)
-        let titleString='用户'+(markers.length+1)
+        // console.log(that.poly.paths)
+        that.poly.paths.push(e.latlng)
+        console.log("marker的长度"+markers.length)
+        this.titleString[markers.length]='user'+(markers.length)
+        mapClickLocation.set(this.titleString[markers.length],e.latlng)
         //根据点击位置放置一个图标
-        markers[markers.length]=L.marker((e.latlng),{icon:depotIcon,title:titleString}).addTo(this.layerSet.markerSet)
+        markers[markers.length]=L.marker((e.latlng),{icon:depotIcon,title:that.titleString[markers.length]}).addTo(that.layerSet.markerSet)
         let markerLength = markers.length - 1;
         // 单击图标实现弹框编辑
         markers[markerLength].on('click',(e)=>{
           // 记录当前点击的序号，存入vuex
-          this.recordLocate(markerLength)
-          this.cardVisible=!this.cardVisible
-          this.markerEdit.number=markerLength+1
-          this.markerEdit.lat=e.latlng.lat
-          this.markerEdit.lng=e.latlng.lng
+          that.recordLocate(markerLength)
+          that.cardVisible=!that.cardVisible
+          that.markerEdit.number=markerLength
+          that.markerEdit.lat=e.latlng.lat
+          that.markerEdit.lng=e.latlng.lng
         })
       });
-
+      console.log(that.poly.paths)
     },
     locationInput(){
       this.cardVisible=!this.cardVisible
@@ -172,7 +179,7 @@ export default {
       // 参数存储至全局状态 vuex
       this.changeVehicles(this.vehiclesSetting)
       console.log(this.poly.paths)
-      const {data: res} = await this.$http.post('compute/depotData', this.poly.paths)
+      const {data: res} = await this.$http.post('compute/uploadData', this.poly.paths)
       console.log(res)
       if (res.status === 200) {
         this.$message.success(res.msg)

@@ -32,18 +32,23 @@
     <el-table class="table-group" height="370px" :data="locations" highlight-current-row size="small">
       <el-table-column type="selection" width="100px" ></el-table-column>
       <el-table-column type="index" label="序号" width="100" ></el-table-column>
+      <el-table-column label="用户" width="100" >
+        <template v-slot=scope>
+          <span>{{scope.row.mobileid}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="纬度(Lat)" width="200" property="lat" >
-        <template slot-scope="scope">
+        <template v-slot=scope>
           <el-input ref="editInput" v-model="scope.row.lat" placeholder="请输入纬度坐标" size="small"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="经度(Lng)" width="200" property="lng" >
-        <template slot-scope="scope">
+        <template v-slot=scope>
           <el-input ref="editInput" v-model="scope.row.lng" placeholder="请输入经度坐标" size="small"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150" property="lng">
-        <template slot-scope="scope">
+        <template v-slot=scope>
           <el-button type="danger" size="mini" @click="rowDelete(scope.row)" >删除</el-button>
         </template>
       </el-table-column>
@@ -167,7 +172,7 @@ export default {
           this.$http.get('compute/delete').then().catch(function (err) {
             console.log(err)
           })
-          const {data: res} = await this.$http.post('compute/depotData', this.locations)
+          const {data: res} = await this.$http.post('compute/uploadData', this.locations)
           console.log(res)
           if (res.status === 200) {
             // 确认提交数据

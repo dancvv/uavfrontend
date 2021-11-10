@@ -18,13 +18,13 @@ export default {
 
   mounted() {
     //初始化websocket方法
-    // this.linkTest()
-    // this.createSocket()
+    this.linkTest()
+    this.createSocket()
   },
   methods:{
     async linkTest() {
       let that = this
-      this.$http.get('/test').then(function (res) {
+      that.$http.get('/test').then(function (res) {
         console.log(res)
         if (res.data.status===200){
           console.log(res.data.msg)
@@ -58,7 +58,8 @@ export default {
       //定义这个that=this，可以让变量定型，让变量活动域局限于that中
       let that=this;
       if ("WebSocket" in window){
-        that.ws=new WebSocket("ws://49.233.56.74:8085/myws" );
+        // that.ws=new WebSocket("ws://49.233.56.74:8085/myws" );
+        that.ws = new WebSocket("ws://localhost:8085/myws");
         that.global.setWs(that.ws)
         that.ws.onopen=()=>{
           console.log("websocket链接成功")
