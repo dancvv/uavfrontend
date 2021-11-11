@@ -21,7 +21,8 @@
   </el-tabs>
   <el-card id="card-box" v-show="cardVisible">
     <h3>当前设备设置</h3>
-    <span>设备编号：</span><el-input size="mini" v-model="markerEdit.number">{{markerEdit.number}}</el-input><br>
+    <span>序号：</span><el-input size="mini" v-model="markerEdit.number">{{markerEdit.number}}</el-input><br>
+    <span>用户：</span><el-input size="mini" v-model="markerEdit.number">{{markerEdit.mobileid}}</el-input><br>
     <span>经度(lat)：</span><el-input v-model="markerEdit.lat" size="mini" width="40px">{{markerEdit.lat}}</el-input><br>
     <span>纬度(lng)：</span><el-input v-model="markerEdit.lng" size="mini" width="40px">{{markerEdit.lng}}</el-input><br>
     <el-button class="el-button" @click="cardVisible = false" size="mini">取 消</el-button>
@@ -62,9 +63,11 @@ export default {
       cardVisible:false,
       markerEdit:{
         number:'',
+        mobileid:'',
         lat:'',
         lng:''
       },
+
       // markerSet:new L.layerGroup()
       layerSet:{
         markerSet:'',
@@ -119,6 +122,7 @@ export default {
     initVariable(){
       // 无人机任务参数设置 从vuex获取状态
       this.vehiclesSetting=this.vehiclePlan
+      markers = []
       // 添加至layergroup,实现群体控制
       // this.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
     },
@@ -126,23 +130,24 @@ export default {
       this.showCard=!this.showCard
     },
     placePoint(){
+      // 存在初始化后值加1
+      // markers = []
       let that = this
       let depotIcon=new LeafIcon({iconUrl: '/leaflet/mobile.png'})
       that.poly.edit=!that.poly.edit
       const mapClickLocation = new Map()
       const mapLeaf=that.leafletMap
-      // 添加至layergroup,实现群体控制
+      // 添加至layer group,实现群体控制
       that.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
       mapLeaf.on('click',(e)=>{
         if (!that.poly.edit){
           return
         }
       // 按照顺序加入各个点
-        // console.log(that.poly.paths)
         that.poly.paths.push(e.latlng)
-        console.log("marker的长度"+markers.length)
-        this.titleString[markers.length]='user'+(markers.length)
-        mapClickLocation.set(this.titleString[markers.length],e.latlng)
+        that.titleString[markers.length]='user'+(markers.length)
+        console.log(that.titleString[markers.length])
+        mapClickLocation.set(that.titleString[markers.length],e.latlng)
         //根据点击位置放置一个图标
         markers[markers.length]=L.marker((e.latlng),{icon:depotIcon,title:that.titleString[markers.length]}).addTo(that.layerSet.markerSet)
         let markerLength = markers.length - 1;
@@ -152,6 +157,8 @@ export default {
           that.recordLocate(markerLength)
           that.cardVisible=!that.cardVisible
           that.markerEdit.number=markerLength
+          console.log(that.titleString[markers.length])
+          that.markerEdit.mobileid=that.titleString[markers.length]
           that.markerEdit.lat=e.latlng.lat
           that.markerEdit.lng=e.latlng.lng
         })
@@ -375,7 +382,7 @@ export default {
         let depotIcon=new LeafIcon({iconUrl: '/leaflet/mobile.png'})
         this.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
         for (let i = 0;i<this.depotLocations.length; i++){
-          let titleString='用户'+(markers.length+1)
+          let titleString='用户'+(markers.length)
           markers[i]=L.marker((this.depotLocations[i]),{icon:depotIcon,title:titleString,zIndexOffset:0}).addTo(this.layerSet.markerSet)
         }
       } else{
