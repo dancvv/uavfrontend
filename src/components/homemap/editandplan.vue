@@ -24,6 +24,7 @@
     <el-form size="mini">
       <el-form-item label="序号">{{markerEdit.number}}</el-form-item>
       <el-form-item label="用户">{{markerEdit.mobileid}}</el-form-item>
+      <el-form-item label="创建时间">{{markerEdit.createTime}}</el-form-item>
       <el-form-item label="经度(Lat)">
         <el-col :span="16">
           <el-input v-model="markerEdit.lat">{{markerEdit.lat}}</el-input>
@@ -69,6 +70,11 @@ export default {
         useredit:false,
         depotedit:false
       },
+      // 用户信息和用户位置信息
+      uploadinfo:{
+        userinfo:[],
+        locationinfo:[]
+      },
       // 用户的标识符
       titleString:[],
       // 是否展示编辑界面
@@ -76,6 +82,7 @@ export default {
       markerEdit:{
         number:'',
         mobileid:'',
+        createTime:'',
         lat:'',
         lng:''
       },
@@ -150,23 +157,16 @@ export default {
       that.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
       let uavIcon=new LeafIcon({iconUrl: '/leaflet/mobile.png'})
       that.poly.useredit=!that.poly.useredit
-      const mapClickLocation = new Map()
       mapLeaf.on('click',(e)=>{
         if (!that.poly.useredit){
           return
         }
       // 按照顺序加入各个点
-        let locationString = {}
-        // that.poly.paths.push(e.latlng)
         that.titleString[markers.length]="user "+(markers.length)
-        let userid="user "+(markers.length)
-        locationString.mobileid=userid
-        locationString.lat=e.latlng.lat
-        locationString.lng=e.latlng.lng
-        // console.log(locationString)
-        that.poly.paths.push(locationString)
-        mapClickLocation.set(that.titleString[markers.length],e.latlng)
-        // console.log(mapClickLocation)
+        let userid="user "+markers.length
+        console.log(e)
+        let createStamp = new Date()
+        this.inputUserLocation(userid,createStamp,e)
         //根据点击位置放置一个图标
         markers[markers.length]=L.marker((e.latlng),{icon:uavIcon,title:that.titleString[markers.length]}).addTo(that.layerSet.markerSet)
         let markerLength = markers.length - 1;
@@ -177,6 +177,7 @@ export default {
           that.cardVisible=!that.cardVisible
           that.markerEdit.number=markerLength
           that.markerEdit.mobileid=userid
+          that.markerEdit.createTime=createStamp
           that.markerEdit.lat=e.latlng.lat
           that.markerEdit.lng=e.latlng.lng
         })
@@ -193,6 +194,9 @@ export default {
         if(!that.poly.depotedit){
           return
         }
+        let userid = "depot 0"
+        let createStamp = new Date()
+        this.inputUserLocation(userid,createStamp,e)
         depotMarker = L.marker((e.latlng),{icon:depotIcon,title:"仓储位置"}).addTo(that.layerSet.depotSet)
         if(depotMarker!==null){
           that.poly.depotedit = true
@@ -205,6 +209,32 @@ export default {
         })
       })
     },
+    inputUserLocation(userid,createStamp,e){
+      let that =this
+      let userString = {}
+      let locationString = {
+        userid:'',
+        serviceTime:'',
+        status:'',
+        geoPoint:{
+          type:'',
+          coordinates:[]
+        }
+      }
+      userString.mobileId=userid
+      userString.serviceStatus=false
+      userString.createTime=createStamp
+      // 上传用户信息
+      that.uploadinfo.userinfo.push(userString)
+      locationString.userid=userid
+      locationString.serviceTime=createStamp
+      locationString.status=false
+      locationString.geoPoint.coordinates[0]=e.latlng.lat
+      locationString.geoPoint.coordinates[1]=e.latlng.lng 
+      locationString.geoPoint.type="Point"
+      // 上传位置信息
+      that.uploadinfo.locationinfo.push(locationString)
+    },
     updateMarker(){},
     resetMarker(){
       markers=[]
@@ -213,26 +243,32 @@ export default {
     //上传数据到数据库
     async uploadData() {
       // 上传前先删掉本地结果
-      this.$http.get('compute/delete').then((e)=>{
-        console.log(e)
-      }).catch((err)=>{
-        console.log(err)
-      })
       if (this.vehiclesSetting.vehicleNumber===''||this.vehiclesSetting.depot===''){
         return this.$message.warning("必须输入无人机任务参数")
       }
       // 改变状态，上传完成完成前改变卡片显示状态
-      this.poly.useredit=!this.poly.useredit
+      console.log("jklfds")
+      // this.poly.useredit=!this.poly.useredit
       // 存储各个设备的GPS经纬度数据
       this.changeLocations(this.poly.paths)
       // 参数存储至全局状态 vuex
       this.changeVehicles(this.vehiclesSetting)
-      const {data: res} = await this.$http.post('compute/uploadData', this.poly.paths)
-      if (res.status === 200) {
-        this.$message.success(res.msg)
-      } else {
-        this.$message.error(res.msg)
-      }
+      // const {data: res} = await this.$http.post('compute/uploadData', this.poly.paths)
+      // console.log(this.uploadinfo.userinfo)
+      const {data: resuser} = await this.$http.post('mobile/savemany', this.uploadinfo.userinfo)
+      console.log("--------------")
+      console.log(this.uploadinfo.locationinfo)
+      const {data:reslocate} = await this.$http.post('mobile/manylocations',this.uploadinfo.locationinfo)
+      console.log(resuser)
+      console.log(reslocate)
+      // console.log(reslocate)
+      // if (resuser.status === 200) {
+      //   this.$message.success(resuser.msg)
+      // } else {
+      //   this.$message.error(resuser.msg)
+      //   this.$message.error(reslocate.msg)
+      // }
+
       // 改变编辑状态和取消显示卡片
       // this.showCard=!this.showCard
     },

@@ -20,6 +20,7 @@ import {mapMutations} from "vuex";
 import MissionStart from "@/components/homemap/missionStart";
 import Editandplan from "@/components/homemap/editandplan";
 let map=null
+let layers = null
 export default {
   name: "leaflet",
   components: {Editandplan, MissionStart },
@@ -36,7 +37,7 @@ export default {
   methods:{
     ...mapMutations(['initleaflet']),
     initMap() {
-      map = L.map("map", {
+      map = this.$map.newMap("map",{
         minZoom: 0,
         maxZoom: 20,
         center: [ 39.082324815761126,121.81149363525782],
@@ -45,28 +46,26 @@ export default {
         attributionControl: false,
         //坐标系选择
         crs: L.CRS.EPSG3857
-      });
+      })
       L.control.zoom({position:'topright'}).addTo(map)
       L.control.attribution({
         position:'bottomright',
         prefix:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'}).addTo(map)
       //载入地图
       this.initleaflet(map)
-      // this.map = map;//data上需要挂载
-      // window.map = map;
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+      layers = this.$map.createLayers(map,'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',{
         // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        maxZoom: 20,
-        id: this.mapId,
-        tileSize: 512,
-        zoomOffset: -1,
-        accessToken: 'pk.eyJ1IjoidHJhbnNjZW5kdHJlZSIsImEiOiJja3N6eHRiMzkxeXNzMm90Y2Rhd2JmbjNqIn0.bCRv7xB55jHSDwEF5y5DcA'
-      }).addTo(map);
-
+          maxZoom: 20,
+          id: this.mapId,
+          tileSize: 512,
+          zoomOffset: -1,
+          accessToken: 'pk.eyJ1IjoidHJhbnNjZW5kdHJlZSIsImEiOiJja3N6eHRiMzkxeXNzMm90Y2Rhd2JmbjNqIn0.bCRv7xB55jHSDwEF5y5DcA'
+      })
     },
     changeStyle(){
       console.log(this.mapId)
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+      map.removeLayer(layers)
+      this.$map.changeLayers(map,'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',{
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 20,
         id: this.mapId,
@@ -74,7 +73,7 @@ export default {
         // zoomOffset 注释掉会出大问题
         zoomOffset: -1,
         accessToken: 'pk.eyJ1IjoidHJhbnNjZW5kdHJlZSIsImEiOiJja3N6eHRiMzkxeXNzMm90Y2Rhd2JmbjNqIn0.bCRv7xB55jHSDwEF5y5DcA'
-      }).addTo(map);
+      })
     }
   }
 }
