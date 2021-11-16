@@ -29,14 +29,14 @@ Vue.prototype.$qs=qs
 import store from './store/store'
 
 //leaflet地图
-import L from "leaflet"
-import "leaflet/dist/leaflet.css";
+// import L from "leaflet"
+// import "leaflet/dist/leaflet.css";
 // leaflet组件
 import map from "./mapComponent/map"
 Vue.prototype.$map = map
 // 设置图片默认访问路径
 
-Vue.use(L)
+// Vue.use(L)
 
 // dplayer视频播放
 // import DPlayer from 'dplayer';

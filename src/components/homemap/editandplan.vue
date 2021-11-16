@@ -5,6 +5,8 @@
     <el-tab-pane label="任务设置" name="missionManage">
       <el-button type="primary" class="mapgroup" size="mini" @click="placePoint">{{poly.useredit?'停止绘制':'开始绘制'}}</el-button>
       <el-button type="success" @click="placeDepot" size="mini">{{!poly.depotedit?'放置无人机仓库位置':'放置完成'}}</el-button><br>
+      <el-button type="primary" size="mini" @click="resetMarker">重置</el-button>
+      <el-button type="primary" size="mini" @click="uploadData">上传数据</el-button>
       <el-button type="primary" class="mapgroup" size="mini" >地理围栏</el-button>
       <el-button type="primary" class="mapgroup" size="mini" @click="updateMarker">Test</el-button>
       <div class="editBox" v-show="poly.useredit">
@@ -47,8 +49,8 @@ import {mapMutations,mapState} from "vuex";
 import L from "leaflet"
 import "leaflet-polylinedecorator"
 let markers=[]
-let mapLeaf = ''
-let depotMarker = ''
+let mapLeaf = null
+let depotMarker = null
 let LeafIcon = L.Icon.extend({
   options: {
     iconSize:     [36, 36],
@@ -125,6 +127,7 @@ export default {
     // this.clearBackend()
   },
   mounted() {
+    this.initVariable()
 
     // this.drawLine()
   },
@@ -141,6 +144,8 @@ export default {
       // 无人机任务参数设置 从vuex获取状态
       this.vehiclesSetting=this.vehiclePlan
       markers = []
+      // 初始化地图
+      mapLeaf=this.leafletMap
       // 添加至layergroup,实现群体控制
       // this.layerSet.markerSet = L.layerGroup().addTo(mapLeaf)
 
@@ -187,19 +192,26 @@ export default {
     placeDepot(){
       let that = this
       that.poly.depotedit = !that.poly.depotedit
+      if (depotMarker!==null){
+        console.log(depotMarker)
+        that.poly.depotedit = !that.poly.depotedit
+        return
+      }
+      mapLeaf=this.leafletMap
       let depotIcon = new LeafIcon({iconUrl:'/leaflet/depot.svg'})
-      const mapLeaf = that.leafletMap
       that.layerSet.depotSet = L.layerGroup().addTo(mapLeaf)
       mapLeaf.on('click',(e)=>{
+        console.log("__________")
         if(!that.poly.depotedit){
           return
         }
         let userid = "depot 0"
         let createStamp = new Date()
         this.inputUserLocation(userid,createStamp,e)
-        depotMarker = L.marker((e.latlng),{icon:depotIcon,title:"仓储位置"}).addTo(that.layerSet.depotSet)
+        depotMarker = L.marker((e.latlng),{icon:depotIcon,title:"仓储位置"}).addTo(that.layerSet.markerSet)
+        console.log("==========")
         if(depotMarker!==null){
-          that.poly.depotedit = true
+          that.poly.depotedit = false
           console.log(that.poly.depotedit)
           this.$message.success("放置完成")
         }
@@ -230,7 +242,7 @@ export default {
       locationString.serviceTime=createStamp
       locationString.status=false
       locationString.geoPoint.coordinates[0]=e.latlng.lat
-      locationString.geoPoint.coordinates[1]=e.latlng.lng 
+      locationString.geoPoint.coordinates[1]=e.latlng.lng
       locationString.geoPoint.type="Point"
       // 上传位置信息
       that.uploadinfo.locationinfo.push(locationString)
@@ -238,12 +250,14 @@ export default {
     updateMarker(){},
     resetMarker(){
       markers=[]
+      depotMarker=null
       this.layerSet.markerSet.clearLayers()
+      this.layerSet.depotSet.clearLayers()
     },
     //上传数据到数据库
     async uploadData() {
       // 上传前先删掉本地结果
-      if (this.vehiclesSetting.vehicleNumber===''||this.vehiclesSetting.depot===''){
+      if (this.vehiclesSetting.vehicleNumber===''){
         return this.$message.warning("必须输入无人机任务参数")
       }
       // 改变状态，上传完成完成前改变卡片显示状态
@@ -256,9 +270,7 @@ export default {
       // const {data: res} = await this.$http.post('compute/uploadData', this.poly.paths)
       // console.log(this.uploadinfo.userinfo)
       const {data: resuser} = await this.$http.post('mobile/savemany', this.uploadinfo.userinfo)
-      console.log("--------------")
-      console.log(this.uploadinfo.locationinfo)
-      const {data:reslocate} = await this.$http.post('mobile/manylocations',this.uploadinfo.locationinfo)
+      const {data: reslocate} = await this.$http.post('mobile/manylocations',this.uploadinfo.locationinfo)
       console.log(resuser)
       console.log(reslocate)
       // console.log(reslocate)
@@ -278,6 +290,10 @@ export default {
     editConfirm(){}
   },
   computed:{
+    // initmapVariable() {
+    //   mapLeaf=this.leafletMap
+    //   return mapLeaf
+    // },
     ...mapState(['leafletMap','leafMarker','markersLocate','depotLocations','vehiclePlan','uavPlanningRoutes','leafletLine'])
   }
 }

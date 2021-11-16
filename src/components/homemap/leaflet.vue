@@ -6,7 +6,7 @@
       <el-radio-button label='mapbox/outdoors-v10' size="mini" >户外地图</el-radio-button>
     </el-radio-group>
 <!--    <map-component></map-component>-->
-    <editandplan></editandplan>
+<!--    <editandplan></editandplan>-->
     <mission-start></mission-start>
 
     <div id="map"></div>
@@ -18,12 +18,11 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import {mapMutations} from "vuex";
 import MissionStart from "@/components/homemap/missionStart";
-import Editandplan from "@/components/homemap/editandplan";
 let map=null
 let layers = null
 export default {
   name: "leaflet",
-  components: {Editandplan, MissionStart },
+  components: { MissionStart },
   data(){
     return{
       // map:''
@@ -51,7 +50,7 @@ export default {
       L.control.attribution({
         position:'bottomright',
         prefix:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'}).addTo(map)
-      //载入地图
+      //载入地图，使用vuex保存状态
       this.initleaflet(map)
       layers = this.$map.createLayers(map,'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',{
         // attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -63,7 +62,6 @@ export default {
       })
     },
     changeStyle(){
-      console.log(this.mapId)
       map.removeLayer(layers)
       this.$map.changeLayers(map,'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',{
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',

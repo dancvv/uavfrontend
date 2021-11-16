@@ -1,5 +1,7 @@
+import "leaflet/dist/leaflet.css"
 import L from "leaflet"
 
+//创建map容器，
 const newMap = (domId,Option) => {
     return L.map(domId, Option)
 }
