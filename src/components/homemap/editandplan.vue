@@ -273,6 +273,7 @@ export default {
       const {data: reslocate} = await this.$http.post('mobile/manylocations',this.uploadinfo.locationinfo)
       console.log(resuser)
       console.log(reslocate)
+
       // console.log(reslocate)
       // if (resuser.status === 200) {
       //   this.$message.success(resuser.msg)

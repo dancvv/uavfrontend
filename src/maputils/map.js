@@ -1,5 +1,7 @@
 import "leaflet/dist/leaflet.css"
 import L from "leaflet"
+import icon from "leaflet/dist/images/marker-icon.png";
+import iconShadow from "leaflet/dist/images/marker-shadow.png";
 
 //创建map容器，
 const newMap = (domId,Option) => {
@@ -18,23 +20,22 @@ const changeLayers = async (map, url, option) => {
     return changeMapLayers
 }
 
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
+
 //创建图标
-const createIcon = () => {
-    return L.Icon.extend({
-        options:{
-            iconSize:     [36, 36],
-            shadowSize:   [0, 0],
-            iconAnchor:   [18, 30],
-        }
-    });
-}
+const createIcon = (options) => {
+    return L.icon(options);
+  };
+
 
 //创建marker对象
-
-const createMarker = (map,coordinates,options) => {
-    let marker = L.marker(coordinates,options)
-    marker.addTo(map)
-    return marker;
+const createMarker = (coordinates,options) => {
+    return L.marker(coordinates, options);
 }
 
 

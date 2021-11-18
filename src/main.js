@@ -32,8 +32,8 @@ import store from './store/store'
 // import L from "leaflet"
 // import "leaflet/dist/leaflet.css";
 // leaflet组件
-import map from "./mapComponent/map"
-Vue.prototype.$map = map
+import maputils from "./maputils"
+Vue.prototype.$maputils = maputils
 // 设置图片默认访问路径
 
 // Vue.use(L)
@@ -52,6 +52,9 @@ Vue.prototype.$message=Message
 Vue.use(ElementUI);
 
 Vue.config.productionTip = false
+
+import UUID from "uuid-js"
+Vue.use(UUID)
 
 
 new Vue({

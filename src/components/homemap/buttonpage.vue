@@ -4,7 +4,9 @@
   <el-tabs class="card-box" v-model="activeTab" type="border-card" v-show="showCard">
     <el-tab-pane label="任务设置" name="missionManage">
       <el-button type="primary" size="mini" @click="placeUserPoint">{{!editFtButton.placeUserPoint ?'用户位置初始化':'完成'}}</el-button>
-      <el-button type="primary" size="mini" @click="$emit('placeDepot')">起始位置初始化</el-button>
+      <el-button type="primary" size="mini" @click="placeDepotPoint">{{!editFtButton.placeDepotPoint ?'起始位置初始化':'完成'}}</el-button>
+      <el-button type="primary" size="mini" @click="resetAll">重置</el-button>
+      <el-button type="primary" size="mini" @click="pushAll">确认提交</el-button>
     </el-tab-pane>
     <el-tab-pane label="路线规划" name="uncertain">
 
@@ -34,7 +36,16 @@ export default {
     },
     placeUserPoint(){
       this.$emit('placeUser')
-    }
+    },
+    placeDepotPoint(){
+      this.$emit('placeDepot')
+    },
+    resetAll(){
+      this.$emit("resetAllMarker")
+    },
+    pushAll(){
+      this.$emit("pushAll")
+    },
   }
 }
 </script>
@@ -61,7 +72,7 @@ export default {
   margin-bottom: 10px;
 }
 .el-button{
-  margin-top: 0px;
+  margin-bottom: 10px;
 }
 .inputSetting{
   margin-bottom: 10px;
