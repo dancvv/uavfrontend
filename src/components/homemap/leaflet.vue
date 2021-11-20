@@ -7,7 +7,7 @@
     </el-radio-group>
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
-    <buttonpage :editFtButton="editFtButton" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
+    <buttonpage :editFtButton="editFtButton" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
     <mission-start></mission-start>
     <div id="map"></div>
   </div>
@@ -20,6 +20,7 @@ import {mapMutations} from "vuex";
 import MissionStart from "@/components/homemap/missionStart";
 import buttonpage from "@/components/homemap/buttonpage";
 import UUID from "uuid-js"
+import qs from "qs";
 let map=null
 let layerGroup={
   userlayer:null,
@@ -36,7 +37,9 @@ export default {
       mapId:'mapbox/streets-v11',
       editFtButton:{
         placeUserPoint:false,
-        placeDepotPoint:false
+        placeDepotPoint:false,
+        uploadStatus:false,
+        vehicleNumber:0,
       },
       layersSet:{
         markerSet:null,
@@ -125,7 +128,7 @@ export default {
       })
       if (!this.editFtButton.placeUserPoint){
         console.log("off")
-        map.off()
+        map.off('click')
       }
     },
     addDepotMarker(){
@@ -160,7 +163,7 @@ export default {
         this.$message.warning("仓库已经放置过了")
         this.editFtButton.placeDepotPoint=!this.editFtButton.placeDepotPoint
         console.log(this.editFtButton.placeDepotPoint)
-        map.off()
+        map.off('click')
       }
       console.log(this.markers.depot)
     },
@@ -176,6 +179,7 @@ export default {
         layerGroup.userlayer.remove()
         layerGroup.userlayer=null
       }
+      this.editFtButton.uploadStatus=false
       this.markers.users.length=0
       this.markers.users=[]
       this.markers.depot=null
@@ -201,6 +205,7 @@ export default {
       // 上传用户信息
       that.uploadinfo.userinfo.push(userString)
       locationString.userid=userid
+      locationString.uuid=this.uploadinfo.uuid
       locationString.serviceTime=createStamp
       locationString.status=false
       locationString.geoPoint.coordinates[0]=e.latlng.lat
@@ -210,17 +215,39 @@ export default {
       that.uploadinfo.locationinfo.push(locationString)
     },
     async uploadAll() {
+      if (this.uploadinfo.locationinfo.length === 0 || this.uploadinfo.userinfo.length === 0){
+        this.$message.error("提交不完整")
+        return
+      }
+      if (this.editFtButton.uploadStatus){
+        this.$message.warning("请勿重复提交")
+        return
+      }
       const {data: resuser} = await this.$http.post('mobile/savemany', this.uploadinfo.userinfo)
       const {data: reslocate} = await this.$http.post('mobile/manylocations', this.uploadinfo.locationinfo)
       if (resuser.status===200 && reslocate.status===200){
         this.$message.success("推送成功")
+        this.editFtButton.uploadStatus=!this.editFtButton.uploadStatus
       }else {
         this.$message.error("推送失败")
       }
       console.log(reslocate)
       console.log(resuser)
     },
-
+    async planRoute() {
+      const {data: res} = await this.$http.get('/mobile/findlastuuid')
+      console.log(res)
+      if (res.status !== 200){
+        this.$message.error("当前不存在任何用户")
+        return
+      }
+      let uuid = res.results
+      console.log(uuid)
+      const {data:resLocation} =await this.$http.post('compute/saveAllLocation', qs.stringify({uuid:uuid}))
+      console.log(resLocation)
+      const {data:resPlan} =await this.$http.post('compute/findStaticRoutes',qs.stringify({vehicleNum:this.editFtButton.vehicleNumber}))
+      console.log(resPlan)
+    }
   }
 }
 </script>

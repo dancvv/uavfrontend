@@ -4,12 +4,15 @@
   <el-tabs class="card-box" v-model="activeTab" type="border-card" v-show="showCard">
     <el-tab-pane label="任务设置" name="missionManage">
       <el-button type="primary" size="mini" @click="placeUserPoint">{{!editFtButton.placeUserPoint ?'用户位置初始化':'完成'}}</el-button>
-      <el-button type="primary" size="mini" @click="placeDepotPoint">{{!editFtButton.placeDepotPoint ?'起始位置初始化':'完成'}}</el-button>
+      <el-button type="primary" size="mini" @click="placeDepotPoint">{{!editFtButton.placeDepotPoint ?'起始位置初始化':'完成'}}</el-button><br>
       <el-button type="primary" size="mini" @click="resetAll">重置</el-button>
-      <el-button type="primary" size="mini" @click="pushAll">确认提交</el-button>
+      <el-button type="primary" size="mini" @click="pushAll">{{ !editFtButton.uploadStatus?'确认提交':'已提交' }}</el-button>
     </el-tab-pane>
     <el-tab-pane label="路线规划" name="uncertain">
-
+      <el-form ref="uavpane" >
+        <el-form-item label="无人机数量：" label-width="100px"><div class="inputBox"><el-input type="primary" size="mini" placeholder="至少大于1" v-model="editFtButton.vehicleNumber"></el-input></div></el-form-item>
+        <el-form-item><el-button @click="planRoute">路线规划</el-button></el-form-item>
+      </el-form>
     </el-tab-pane>
   </el-tabs>
 
@@ -32,7 +35,7 @@ export default {
   },
   methods:{
     showEdit(){
-      this.showCard=!this.showCard
+      this.showCard=!this.showCardz
     },
     placeUserPoint(){
       this.$emit('placeUser')
@@ -45,6 +48,9 @@ export default {
     },
     pushAll(){
       this.$emit("pushAll")
+    },
+    planRoute(){
+      this.$emit("planRoute")
     },
   }
 }
@@ -83,6 +89,10 @@ export default {
   display: block;
   flex-wrap: wrap;
   align-content: center;
+}
+.inputBox{
+  width: 80px;
+  /*margin-right: 60px;*/
 }
 
 </style>
