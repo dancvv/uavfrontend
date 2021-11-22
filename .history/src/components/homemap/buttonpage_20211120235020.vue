@@ -11,8 +11,7 @@
     <el-tab-pane label="路线规划" name="uncertain">
       <el-form ref="uavpane" >
         <el-form-item label="无人机数量：" label-width="100px"><div class="inputBox"><el-input type="primary" size="mini" placeholder="至少大于1" v-model="editFtButton.vehicleNumber"></el-input></div></el-form-item>
-        <el-form-item><el-button type="success" size="mini" @click="planRoute">路线规划</el-button></el-form-item>
-        <el-form-item><el-button type="success" size="mini" @click="drawLine">路线轨迹</el-button></el-form-item>
+        <el-form-item><el-button type="success" siz="mini" @click="planRoute">路线规划</el-button></el-form-item>
       </el-form>
     </el-tab-pane>
   </el-tabs>
@@ -52,9 +51,6 @@ export default {
     },
     planRoute(){
       this.$emit("planRoute")
-    },
-    drawLine(){
-      this.$emit("drawLine")
     },
   }
 }

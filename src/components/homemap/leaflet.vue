@@ -7,7 +7,7 @@
     </el-radio-group>
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
-    <buttonpage :editFtButton="editFtButton" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
+    <buttonpage :editFtButton="editFtButton" @drawLine="drawPathLine" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
     <mission-start></mission-start>
     <div id="map"></div>
   </div>
@@ -39,13 +39,15 @@ export default {
         placeUserPoint:false,
         placeDepotPoint:false,
         uploadStatus:false,
-        vehicleNumber:0,
+        vehicleNumber:null,
       },
       layersSet:{
         markerSet:null,
       },
-      markerSet:{
-        userLength:0
+      lineInfo:{
+        userLength:0,
+        backendLine:[],
+        pathline:[],
       },
       markers:{
         users:[],
@@ -118,11 +120,11 @@ export default {
           console.log("status:  "+this.editFtButton.placeUserPoint)
           return
         }
-        let userStr = "user "+this.markerSet.userLength
+        let userStr = "user "+this.lineInfo.userLength
         let createStamp = new Date()
         this.inputUserLocation(userStr,createStamp,e)
-        this.markers.users[this.markerSet.userLength]=this.$maputils.map.createMarker(e.latlng,{icon:uavIcon,title:userStr})
-        this.markerSet.userLength+=1
+        this.markers.users[this.lineInfo.userLength]=this.$maputils.map.createMarker(e.latlng,{icon:uavIcon,title:userStr})
+        this.lineInfo.userLength+=1
         layerGroup.userlayer = L.layerGroup(this.markers.users)
         layerGroup.userlayer.addTo(map)
       })
@@ -235,6 +237,10 @@ export default {
       console.log(resuser)
     },
     async planRoute() {
+      if (this.editFtButton.vehicleNumber === null){
+        this.$message.warning("必须提供无人机数量")
+        return
+      }
       const {data: res} = await this.$http.get('/mobile/findlastuuid')
       console.log(res)
       if (res.status !== 200){
@@ -242,11 +248,20 @@ export default {
         return
       }
       let uuid = res.results
-      console.log(uuid)
       const {data:resLocation} =await this.$http.post('compute/saveAllLocation', qs.stringify({uuid:uuid}))
       console.log(resLocation)
       const {data:resPlan} =await this.$http.post('compute/findStaticRoutes',qs.stringify({vehicleNum:this.editFtButton.vehicleNumber}))
-      console.log(resPlan)
+      if (resPlan.status !== 200){
+        this.$message.error(resPlan.msg)
+      }else {
+        this.$message.success(resPlan.msg)
+        this.lineInfo.backendLine = resPlan.results
+        console.log(this.lineInfo.backendLine)
+        // console.log(resPlan)
+      }
+    },
+    drawPathLine(){
+      this.lineInfo.backendLine.length
     }
   }
 }
