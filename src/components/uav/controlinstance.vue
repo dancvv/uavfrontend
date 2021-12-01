@@ -35,8 +35,8 @@
     <el-col :span="11">
       <el-card class="cardstop">
         <h3 class="header">停止</h3>
-        <el-button size="medium" type="warning">停止任务</el-button><span style="color: darkgray">停止所有执行中的任务</span><br>
-        <el-button size="medium" type="danger">着陆</el-button><span style="color: darkgray">无人机在当前位置着陆</span>
+        <el-button size="medium" type="warning">停止任务</el-button><span style="color: darkgray">   停止所有执行中的任务</span><br>
+        <el-button size="medium" type="danger">着陆</el-button><span style="color: darkgray">   无人机在当前位置着陆</span>
       </el-card>
     </el-col>
 

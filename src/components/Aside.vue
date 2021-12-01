@@ -1,36 +1,40 @@
 <template>
-<div>
-<!--  头部-->
-  <Header/>
-<!--  侧边栏-->
-  <el-aside width="180px">
-    <el-menu text-color="#666" active-text-color="#409eff" :router="true"
-             unique-opened :collapse="isCollapse" default-active="mapview" :collapse-transition="false">
-<!--      <el-menu-item index="mapview">-->
-<!--        <i class="el-icon-user"></i>-->
-<!--        <span slot="title">首页</span>-->
-<!--      </el-menu-item>-->
-<!--      <el-menu-item index="mapboxgl">-->
-<!--        <i class="el-icon-user"></i>-->
-<!--        <span slot="title">MAPBOX</span>-->
-<!--      </el-menu-item>-->
-      <el-menu-item index="leaflet">
-        <i class="el-icon-map-location"></i>
-        <span slot="title">LEAFLET</span>
-      </el-menu-item>
-      <el-submenu :index="item.path" v-for="item in asideMenu" :key="item.id">
-        <template slot="title">
-          <i :class="item.icon"></i>
-          <span slot="title">{{item.name}}</span>
-        </template>
-        <!--            二级菜单-->
-        <el-menu-item :index="subItem.path" v-for="subItem in item.children" :key="subItem.id">
-          <span slot="title">{{subItem.name}}</span>
+  <div>
+    <!--  头部-->
+    <Header/>
+    <!--  侧边栏-->
+    <el-aside width="180px">
+      <el-menu text-color="#666" active-text-color="#409eff" :router="true"
+               unique-opened :collapse="isCollapse" default-active="mapview" :collapse-transition="false">
+        <!--      <el-menu-item index="mapview">-->
+        <!--        <i class="el-icon-user"></i>-->
+        <!--        <span slot="title">首页</span>-->
+        <!--      </el-menu-item>-->
+        <!--      <el-menu-item index="mapboxgl">-->
+        <!--        <i class="el-icon-user"></i>-->
+        <!--        <span slot="title">MAPBOX</span>-->
+        <!--      </el-menu-item>-->
+        <el-menu-item index="leaflet">
+          <i class="el-icon-map-location"></i>
+          <span slot="title">可视化路线管理</span>
         </el-menu-item>
-      </el-submenu>
-    </el-menu>
-  </el-aside>
-</div>
+        <el-menu-item index="uavdetail">
+          <i class="el-icon-s-platform"></i>
+          <span slot="title">无人机控制</span>
+        </el-menu-item>
+        <el-submenu :index="item.path" v-for="item in asideMenu" :key="item.id">
+          <template slot="title">
+            <i :class="item.icon"></i>
+            <span slot="title">{{item.name}}</span>
+          </template>
+          <!--            二级菜单-->
+          <el-menu-item :index="subItem.path" v-for="subItem in item.children" :key="subItem.id">
+            <span slot="title">{{subItem.name}}</span>
+          </el-menu-item>
+        </el-submenu>
+      </el-menu>
+    </el-aside>
+  </div>
 </template>
 
 <script>
@@ -53,10 +57,6 @@ export default {
       //菜单数据
       asideMenu:[
         // {id:'100',path:'/leaflet',name:'首页',order:1,icon:'el-icon-user'},
-        {id:'100',path:'/uav',name: '无人机实例',order: 1,icon:'el-icon-s-promotion',
-          children: [
-            {id:'101',path:'/instance',name:'动作指令',order: '101',}
-          ]},
         {id:'200',path:'/manage',name:'飞行参数设置',order:1,icon:'el-icon-s-cooperation',
           children:[
             {id:'201',path:'/location',name:'批量上传位置',order:2},
@@ -68,12 +68,16 @@ export default {
             {id:'302',path:'/video',name:'实时画面',order:2},
             {id:'303',path:'/edit',name:'路线更改',order:2},
           ]},
-        {id:'400',path:'/status',name:'飞行器状态',order:1,icon:'el-icon-s-order',
+        {id:'400',path:'/status',name:'数据分析',order:1,icon:'el-icon-s-order',
           children: [
             {id:401,path:'/device',name:'设备管理',order:2}
           ]},
         {id:'500',path:'/setting',name:'设置',order:1,icon:'el-icon-s-data',
-          children: [{id:'501',path:'/webSocket',name:'webSocket'}]},
+          children: [
+            {id:'501',path:'/lad',name:'无人机参数设置'},
+            {id:'501',path:'/laa',name:'用户设置'},
+            {id:'501',path:'/版本信息',name:'版本信息'},
+          ]},
       ]
     }
   },

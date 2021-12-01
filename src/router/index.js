@@ -34,7 +34,7 @@ export default new VueRouter({
             {path: '/geofence',component: geofence},
             {path: '/current',component: currentRoute},
             {path: '/video',component: videoWatch},
-            {path: '/instance',component: controlinstance}
+            {path: '/uavdetail',component: controlinstance}
 
         ]},
         {path:'/setting',component:home,

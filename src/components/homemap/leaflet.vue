@@ -255,13 +255,25 @@ export default {
         this.$message.error(resPlan.msg)
       }else {
         this.$message.success(resPlan.msg)
-        this.lineInfo.backendLine = resPlan.results
-        console.log(this.lineInfo.backendLine)
+        /*
+        转换为数组类型
+         */
+        this.lineInfo.backendLine = Object.values(resPlan.results)
+        // console.log(this.lineInfo.backendLine)
         // console.log(resPlan)
       }
     },
     drawPathLine(){
-      this.lineInfo.backendLine.length
+      for(let i = 0;i<this.lineInfo.backendLine.length-1;i++){
+        let locationArray = []
+        for (let j=0;j<this.lineInfo.backendLine[i].length;j++){
+          locationArray.push(this.lineInfo.backendLine[i][j])
+        }
+        console.log(this.lineInfo.backendLine[i][0])
+        // console.log(locationArray)
+        // console.log(this.lineInfo.backendLine[0])
+      }
+
     }
   }
 }

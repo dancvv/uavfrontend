@@ -1,12 +1,13 @@
 <template>
-<div>
-  <div class="header-icon">
-    <img src="../assets/icon/uavIcon.svg" alt="None">
-  </div>
-  <span class="header-title" @click="backTo">
-          <p id="headName">无人机管理系统</p>
+  <div>
+    <div class="header-icon">
+      <img src="../assets/icon/uavIcon.svg" alt="None">
+    </div>
+    <span class="header-title" @click="backTo">
+          <p class="headName">实时信息处理与</p>
+          <p class="headName">态势感知平台</p>
   </span>
-</div>
+  </div>
 </template>
 
 <script>
@@ -31,7 +32,7 @@ export default {
   text-align: center;
   margin-top: 30px;
 }
-#headName{
+.headName{
   font-family: 'Microsoft YaHei';
   font-size: 20px;
   font-style: revert;
