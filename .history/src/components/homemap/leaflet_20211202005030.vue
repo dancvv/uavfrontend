@@ -145,7 +145,7 @@ export default {
       }
       if (this.markers.depot===null) {
         let depotIcon = this.$maputils.map.createIcon({
-          iconUrl: require("../../assets/icon/depot.png"),
+          iconUrl: require("../../assets/icon/depot.svg"),
           iconSize: [36, 36]
         })
         map.on('click', (e) => {
@@ -162,13 +162,13 @@ export default {
           if (this.markers.depot!==null){
             this.editFtButton.placeDepotPoint=!this.editFtButton.placeDepotPoint
             console.log(this.editFtButton.placeDepotPoint)
-            map.off('click')
+            map.off()
           }
         })
       }else {
         this.$message.warning("仓库已经放置过了")
         this.editFtButton.placeDepotPoint=!this.editFtButton.placeDepotPoint
-        console.log(this.editFtButton.placeDepotPoint+"状态")
+        console.log(this.editFtButton.placeDepotPoint)
         map.off('click')
       }
       console.log(this.markers.depot)
@@ -283,8 +283,9 @@ export default {
       let colorPathSet = ['#00bd01','#008080','#BDB76B','#DAA520','#FF7F50','#BC8F8F','#48D1CC','#87CEFA','#9400D3']
       layerGroup.linelayer = L.layerGroup().addTo(map)
       for (let i=0;i<this.lineInfo.pathline.length;i++){
-        this.lineInfo.drawlineState[i] = L.polyline(this.lineInfo.pathline[i],{weight: 8, color: colorPathSet[i]}).addTo(map)
-        L.layerGroup([this.lineInfo.drawlineState[i]]).addLayer(layerGroup.linelayer)
+        this.lineInfo.drawlineState[i] = L.polyline(this.lineInfo.pathline[i],{weight: 8, color: colorPathSet[i]})
+        L.layerGroup([this.lineInfo.drawlineState[i]]).addLayer(layerGroup.linelayer).addTo(map)
+        // map.fitBounds(this.lineInfo.drawlineState[i].getBounds())
         L.polylineDecorator(this.lineInfo.drawlineState[i], {
           patterns: [
             {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
@@ -300,7 +301,8 @@ export default {
           ]
         }).addTo(layerGroup.linelayer)
       }
-      // L.polyline(this.lineInfo.pathline,{weight:8,colorPathSet}).addTo(map)
+
+
     }
   }
 }

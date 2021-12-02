@@ -75,8 +75,8 @@ export default {
         {id:'500',path:'/setting',name:'设置',order:1,icon:'el-icon-s-data',
           children: [
             {id:'501',path:'/lad',name:'无人机参数设置'},
-            {id:'501',path:'/laa',name:'用户设置'},
-            {id:'501',path:'/版本信息',name:'版本信息'},
+            {id:'502',path:'/laa',name:'用户设置'},
+            {id:'503',path:'/版本信息',name:'版本信息'},
           ]},
       ]
     }

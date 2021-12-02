@@ -157,8 +157,8 @@ export default {
           let createStamp = new Date()
           this.inputUserLocation(depotStr,createStamp,e)
           this.markers.depot = this.$maputils.map.createMarker(e.latlng, {icon: depotIcon, title: depotStr})
-          layerGroup.depotlayer = L.layerGroup([this.markers.depot])
-          layerGroup.depotlayer.addTo(map)
+          // layerGroup.depotlayer = L.layerGroup([this.markers.depot])
+          // layerGroup.depotlayer.addTo(map)
           if (this.markers.depot!==null){
             this.editFtButton.placeDepotPoint=!this.editFtButton.placeDepotPoint
             console.log(this.editFtButton.placeDepotPoint)
@@ -282,25 +282,25 @@ export default {
       }
       let colorPathSet = ['#00bd01','#008080','#BDB76B','#DAA520','#FF7F50','#BC8F8F','#48D1CC','#87CEFA','#9400D3']
       layerGroup.linelayer = L.layerGroup().addTo(map)
-      for (let i=0;i<this.lineInfo.pathline.length;i++){
-        this.lineInfo.drawlineState[i] = L.polyline(this.lineInfo.pathline[i],{weight: 8, color: colorPathSet[i]}).addTo(map)
-        L.layerGroup([this.lineInfo.drawlineState[i]]).addLayer(layerGroup.linelayer)
-        L.polylineDecorator(this.lineInfo.drawlineState[i], {
-          patterns: [
-            {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
-                pixelSize: 5,
-                headAngle: 75,
-                polygon: false,
-                pathOptions: {
-                  stroke: true,
-                  weight: 2,
-                  color: '#ffffff'
-                }
-              })}
-          ]
-        }).addTo(layerGroup.linelayer)
-      }
-      // L.polyline(this.lineInfo.pathline,{weight:8,colorPathSet}).addTo(map)
+      // for (let i=0;i<this.lineInfo.pathline.length;i++){
+      //   this.lineInfo.drawlineState[i] = L.polyline(this.lineInfo.pathline[i],{weight: 8, color: colorPathSet[i]}).addTo(map)
+        // L.layerGroup([this.lineInfo.drawlineState[i]]).addLayer(layerGroup.linelayer)
+        // L.polylineDecorator(this.lineInfo.drawlineState[i], {
+        //   patterns: [
+        //     {offset: 0, repeat: 20, symbol: L.Symbol.arrowHead({
+        //         pixelSize: 5,
+        //         headAngle: 75,
+        //         polygon: false,
+        //         pathOptions: {
+        //           stroke: true,
+        //           weight: 2,
+        //           color: '#ffffff'
+        //         }
+        //       })}
+        //   ]
+        // }).addTo(layerGroup.linelayer)
+      // }
+      L.polyline(this.lineInfo.pathline,{weight:8,colorPathSet}).addTo(map)
     }
   }
 }
