@@ -1,7 +1,7 @@
 <template>
 <div id="mission-group">
-  <el-button type="success" @click="startUav">路线演示</el-button>
-  <el-button type="primary" @click="position">+</el-button>
+  <el-button type="success" @click="animateTraj">路线演示</el-button>
+  <el-button type="primary" @click="positions">+</el-button>
 </div>
 </template>
 
@@ -19,9 +19,11 @@ let UavIcon = L.Icon.extend({
   }
 });
 let uavIcon=new UavIcon({iconUrl: '/leaflet/uav48.svg'})
+// let newLatlngs = [routeLine.getLatLngs()[0]]
 // let uavmar=null
 export default {
   name: "missionStart",
+  props:["lineInfo"],
   data(){
     return{
       // 全局地图
@@ -36,7 +38,7 @@ export default {
   },
 
   methods:{
-    startUav(){
+    animate2(){
       const mapLeaf=this.leafletMap
       console.log(this.uavPlanningRoutes.originLine)
       let uav0=this.uavPlanningRoutes.originLine[0]
@@ -53,19 +55,28 @@ export default {
         this.animate[i].bindTooltip(string).openTooltip()
       }
       // this.animate=L.animatedMarker(uav0,{icon:uavIcon,interval:3000}).addTo(mapLeaf)
-
-
     },
+    animateTraj(){
+      // let uavFlyIcon = this.$maputils.map.createIcon({
+      //   iconUrl:require("../../assets/icon/uav48.svg"),
+      //   iconSize: [36,36]
+      // })
+      this.$emit("animateMarkers")
+      // console.log(this.lineInfo.pathline)
+      // for (let i=0;i<this.lineInfo.pathline.length;i++){
+      //   this.animate[i]=L.animatedMarker(this.lineInfo.pathline[i],{
+      //     icon:uavFlyIcon,
+      //     playCall: this.updateRealLine
+      //   }).addTo(map)
+      },
+      positions(){}
+    },
+    // updateRealLine(latlng){
+    //   // newLatlngs.push(latlng)
+    //   // realRouteLine.setLatLngs(newLatlngs)
+    // },
   //  改变方向
-    position(){
-      this.animate.start()
-      // this.data.lat=this.data.lat+0.0001
-      // this.data.lng=this.data.lng+0.0001
-      // // 实现实时定位的方法，不停的设置无人机经纬度坐标
-      // uavmar.setLatLng(this.data)
-      // console.log(this.data)
-    }
-  }
+  // }
 }
 </script>
 

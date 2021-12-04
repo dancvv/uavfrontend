@@ -8,7 +8,7 @@
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
     <buttonpage :editFtButton="editFtButton" @drawLine="drawPathLine" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
-    <mission-start></mission-start>
+    <mission-start :lineInfo="lineInfo" @animateMarkers="animateUAV"></mission-start>
     <div id="map"></div>
   </div>
 </template>
@@ -56,6 +56,7 @@ export default {
       markers:{
         users:[],
         depot:null,
+        uav:[]
       },
       // 用户信息和用户位置信息
       uploadinfo:{
@@ -190,10 +191,12 @@ export default {
         layerGroup.linelayer=null
       }
       this.editFtButton.uploadStatus=false
+      // 两个路线数组置空
+      this.lineInfo.pathline=[]
+      this.lineInfo.backendLine=[]
       this.markers.users.length=0
       this.markers.users=[]
       this.markers.depot=null
-      map.off()
     },
     // 输入参数中间函数
     inputUserLocation(userid,createStamp,e){
@@ -301,6 +304,43 @@ export default {
         }).addTo(layerGroup.linelayer)
       }
       // L.polyline(this.lineInfo.pathline,{weight:8,colorPathSet}).addTo(map)
+    },
+    animateUAV(){
+      // var routeLine = L.polyline(latlngs, {
+      //   weight: 8
+      // }).addTo(map);
+      // 实时轨迹线
+      // var realRouteLine = L.polyline([], {
+      //   weight: 8,
+      //   color: '#FF9900'
+      // }).addTo(map);
+      let uavFlyIcon = this.$maputils.map.createIcon({
+        iconUrl:require("../../assets/icon/uav48.svg"),
+        iconSize: [36,36]
+      })
+      // console.log(this.lineInfo.pathline)
+      console.log(this.lineInfo.drawlineState[0].getLatLngs())
+      let ani = L.animatedMarker(this.lineInfo.drawlineState[0].getLatLngs(),{
+        speedList: 5,
+        interval:2000,
+        icon:uavFlyIcon,
+      }).addTo(map)
+      ani.start();
+      // 动态marker
+      // for (let i=0;i<this.lineInfo.drawlineState.length;i++){
+      //   this.markers.uav[i] = L.animatedMarker(this.lineInfo.drawlineState[i], {
+      //     interval: 200, // 默认为100mm
+      //     icon: uavFlyIcon,
+      //   }).addTo(map)
+        // var newLatlngs = [routeLine.getLatLngs()[0]]
+      //   // const newLatLngs = [this.lineInfo.drawlineState.getLatLngs()]
+      // }
+      // this.markers.uav[0].start()
+    },
+    // 绘制已行走轨迹线（橙色那条）
+    updateRealLine() {
+      // newLatlngs.push(latlng)
+      // realRouteLine.setLatLngs(newLatlngs)
     }
   }
 }
