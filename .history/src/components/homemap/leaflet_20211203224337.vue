@@ -42,7 +42,6 @@ export default {
         placeDepotPoint:false,
         uploadStatus:false,
         vehicleNumber:null,
-        uuid:null,
       },
       layersSet:{
         markerSet:null,
@@ -53,7 +52,6 @@ export default {
         pathline:[],
         // 存储路线的状态
         drawlineState:[],
-        animateState:[]
       },
       markers:{
         users:[],
@@ -254,31 +252,16 @@ export default {
         this.$message.warning("必须提供无人机数量")
         return
       }
-      let uuid = null
-      console.log(this.editFtButton.uuid)
-      if (this.editFtButton.uuid !== null){
-        const {data:existuuid} = await this.$http.post('mobile/existuuid',qs.stringify({uuid:this.editFtButton.uuid}))
-        // 返回的是字符串
-        if (existuuid.status === '200'){
-          uuid = this.editFtButton.uuid
-        }else {
-          const {data: res} = await this.$http.get('/mobile/findlastuuid')
-          if (res.status !== 200){
-            this.$message.error("当前不存在任何用户")
-            return
-          }
-          uuid = res.results
-        }
-      }else {
-        const {data: res} = await this.$http.get('/mobile/findlastuuid')
-        if (res.status !== 200){
-          this.$message.error("当前不存在任何用户")
-          return
-        }
-        uuid = res.results
+      const {data: res} = await this.$http.get('/mobile/findlastuuid')
+      console.log(res)
+      if (res.status !== 200){
+        this.$message.error("当前不存在任何用户")
+        return
       }
+      let uuid = res.results
       const {data:resLocation} =await this.$http.post('compute/saveAllLocation', qs.stringify({uuid:uuid}))
       console.log(resLocation)
+      console.log("wurenji shuliang "+this.editFtButton.vehicleNumber)
       const {data:resPlan} =await this.$http.post('compute/findStaticRoutes',qs.stringify({vehicleNum:this.editFtButton.vehicleNumber}))
       if (resPlan.status !== 200){
         this.$message.error(resPlan.msg)
@@ -318,19 +301,33 @@ export default {
                 }
               })}
           ]
-        }).addTo(layerGroup.linelayer)
+        }).addTo(layerGroup.linelayer)git
       }
       // L.polyline(this.lineInfo.pathline,{weight:8,colorPathSet}).addTo(map)
     },
     animateUAV(){
+      // var routeLine = L.polyline(latlngs, {
+      //   weight: 8
+      // }).addTo(map);
+      // 实时轨迹线
+      // var realRouteLine = L.polyline([], {
+      //   weight: 8,
+      //   color: '#FF9900'
+      // }).addTo(map);
+      let uavFlyIcon = this.$maputils.map.createIcon({
+        iconUrl:require("../../assets/icon/uav48.svg"),
+        iconSize: [36,36]
+      })
+      // 动态marker
       for (let i=0;i<this.lineInfo.drawlineState.length;i++){
-        this.lineInfo.animateState[i] = L.animatedMarker(this.lineInfo.drawlineState[i],{
-          distance:300,
-          interval:2000,
-        });
-        map.addLayer(this.lineInfo.animateState[i])
+        this.markers.uav[i] = L.animatedMarker(this.lineInfo.drawlineState[i], {
+          interval: 200, // 默认为100mm
+          icon: uavFlyIcon,
+        }).addTo(map)
+        // var newLatlngs = [routeLine.getLatLngs()[0]]
+        // const newLatLngs = [this.lineInfo.drawlineState.getLatLngs()]
       }
-      this.lineInfo.animateState.start()
+      this.markers.uav[0].start()
     },
     // 绘制已行走轨迹线（橙色那条）
     updateRealLine() {
