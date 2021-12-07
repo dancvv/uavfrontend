@@ -8,7 +8,7 @@
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
     <buttonpage :editFtButton="editFtButton" @drawLine="drawPathLine" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
-    <mission-start :lineInfo="lineInfo" @animateMarkers="animateUAV"></mission-start>
+    <mission-start :lineInfo="lineInfo" :map="map" @animateMarkers="animateUAV"></mission-start>
     <div id="map"></div>
   </div>
 </template>
@@ -338,7 +338,7 @@ export default {
       }
     },
     animateUAV(){
-      for (let uavIndex=0;uavIndex<this.lineInfo.marker.length;uavIndex++){
+      for (let uavIndex=0;uavIndex<marker.length;uavIndex++){
         this.lineInfo.marker[uavIndex].start()
       }
     },

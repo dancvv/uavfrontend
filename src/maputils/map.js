@@ -1,7 +1,6 @@
 import "leaflet/dist/leaflet.css"
 import L from "leaflet"
-import icon from "leaflet/dist/images/marker-icon.png";
-import iconShadow from "leaflet/dist/images/marker-shadow.png";
+import flyingUAV from "../assets/icon/uav48.svg"
 
 //创建map容器，
 const newMap = (domId,Option) => {
@@ -21,8 +20,8 @@ const changeLayers = async (map, url, option) => {
 }
 
 let DefaultIcon = L.icon({
-  iconUrl: icon,
-  shadowUrl: iconShadow
+    iconUrl: flyingUAV,
+    iconSize: [48, 48]
 });
 L.Marker.prototype.options.icon = DefaultIcon;
 

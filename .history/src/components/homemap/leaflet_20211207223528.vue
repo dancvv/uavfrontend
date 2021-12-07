@@ -8,7 +8,7 @@
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
     <buttonpage :editFtButton="editFtButton" @drawLine="drawPathLine" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
-    <mission-start :lineInfo="lineInfo" @animateMarkers="animateUAV"></mission-start>
+    <mission-start :lineInfo="lineInfo" :map="map" @animateMarkers="animateUAV"></mission-start>
     <div id="map"></div>
   </div>
 </template>
@@ -334,12 +334,12 @@ export default {
           flyingSpeed[j] = 1000;
         }
         this.lineInfo.marker[i] = L.Marker.movingMarker(this.lineInfo.pathline[i],flyingSpeed).addTo(map);
-        this.lineInfo.marker[i].bindPopup("无人机<b>"+i+"</b>的路线").openPopup()
+        marker[i].bindPopup("无人机<b>"+i+"</b>的路线").openPopup()
       }
     },
     animateUAV(){
-      for (let uavIndex=0;uavIndex<this.lineInfo.marker.length;uavIndex++){
-        this.lineInfo.marker[uavIndex].start()
+      for (let uavIndex=0;uavIndex<marker.length;uavIndex++){
+        marker[uavIndex].start()
       }
     },
     // 绘制已行走轨迹线（橙色那条）

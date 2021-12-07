@@ -8,7 +8,7 @@
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
     <buttonpage :editFtButton="editFtButton" @drawLine="drawPathLine" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
-    <mission-start :lineInfo="lineInfo" @animateMarkers="animateUAV"></mission-start>
+    <mission-start :lineInfo="lineInfo" :map="map" @animateMarkers="animateUAV"></mission-start>
     <div id="map"></div>
   </div>
 </template>

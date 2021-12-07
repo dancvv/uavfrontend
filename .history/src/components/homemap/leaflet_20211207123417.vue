@@ -21,7 +21,6 @@ import MissionStart from "@/components/homemap/missionStart";
 import buttonpage from "@/components/homemap/buttonpage";
 import UUID from "uuid-js"
 import qs from "qs";
-import "../../assets/jsplugin/MovingMarker"
 import "leaflet-polylinedecorator"
 let map=null
 let layerGroup={
@@ -54,7 +53,7 @@ export default {
         pathline:[],
         // 存储路线的状态
         drawlineState:[],
-        marker:[]
+        animateState:[]
       },
       markers:{
         users:[],
@@ -321,26 +320,17 @@ export default {
           ]
         }).addTo(layerGroup.linelayer)
       }
-      // 绘制飞行无人机
-      this.drawUAV()
       // L.polyline(this.lineInfo.pathline,{weight:8,colorPathSet}).addTo(map)
     },
-    drawUAV(){
-      this.lineInfo.marker = new Array(this.lineInfo.pathline.length)
-      for(let i=0;i<this.lineInfo.pathline.length;i++){
-        // let flyingSpeed = [];
-        let flyingSpeed =new Array(this.lineInfo.pathline[i].length)
-        for (let j=0;j<this.lineInfo.pathline[i].length;j++){
-          flyingSpeed[j] = 1000;
-        }
-        this.lineInfo.marker[i] = L.Marker.movingMarker(this.lineInfo.pathline[i],flyingSpeed).addTo(map);
-        this.lineInfo.marker[i].bindPopup("无人机<b>"+i+"</b>的路线").openPopup()
-      }
-    },
     animateUAV(){
-      for (let uavIndex=0;uavIndex<this.lineInfo.marker.length;uavIndex++){
-        this.lineInfo.marker[uavIndex].start()
+      for (let i=0;i<this.lineInfo.drawlineState.length;i++){
+        this.lineInfo.animateState[i] = L.animatedMarker(this.lineInfo.drawlineState[i],{
+          distance:300,
+          interval:2000,
+        });
+        map.addLayer(this.lineInfo.animateState[i])
       }
+      this.lineInfo.animateState.start()
     },
     // 绘制已行走轨迹线（橙色那条）
     updateRealLine() {

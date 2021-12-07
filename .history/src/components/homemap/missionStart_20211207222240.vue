@@ -66,19 +66,19 @@ export default {
         },
         animateTraj() {
             this.$emit("animateMarkers")
-            // let marker = new Array(this.lineInfo.pathline.length)
-            // for (let i = 0; i < this.lineInfo.pathline.length; i++) {
-            //     // let flyingSpeed = [];
-            //     let flyingSpeed = new Array(this.lineInfo.pathline[i].length)
-            //     for (let j = 0; j < this.lineInfo.pathline[i].length; j++) {
-            //         flyingSpeed[j] = 1000;
-            //     }
-            //     marker[i] = L.Marker.movingMarker(this.lineInfo.pathline[i], flyingSpeed).addTo(this.map);
-            //     marker[i].bindPopup("无人机<b>" + i + "</b>的路线").openPopup()
-            // }
-            // for (let uavIndex = 0; uavIndex < marker.length; uavIndex++) {
-            //     marker[uavIndex].start()
-            // }
+            let marker = new Array(this.lineInfo.pathline.length)
+            for (let i = 0; i < this.lineInfo.pathline.length; i++) {
+                // let flyingSpeed = [];
+                let flyingSpeed = new Array(this.lineInfo.pathline[i].length)
+                for (let j = 0; j < this.lineInfo.pathline[i].length; j++) {
+                    flyingSpeed[j] = 1000;
+                }
+                marker[i] = L.Marker.movingMarker(this.lineInfo.pathline[i], flyingSpeed).addTo(this.map);
+                marker[i].bindPopup("无人机<b>" + i + "</b>的路线").openPopup()
+            }
+            for (let uavIndex = 0; uavIndex < marker.length; uavIndex++) {
+                marker[uavIndex].start()
+            }
         },
         positions() {}
     },
