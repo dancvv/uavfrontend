@@ -97,7 +97,7 @@ export default {
     this.initMap()
   },
   methods:{
-    ...mapMutations(['initleaflet']),
+    ...mapMutations(['initleaflet','storeUavRouteInfo']),
     initMap() {
       //载入地图，使用vuex保存状态
       this.uploadinfo.uuid=UUID.create(4).hex
@@ -279,8 +279,10 @@ export default {
         uuid = res.results
       }
       const {data:resLocation} =await this.$http.post('compute/saveAllLocation', qs.stringify({uuid:uuid}))
+      console.log("保存用户")
       console.log(resLocation)
       const {data:resPlan} =await this.$http.post('compute/findStaticRoutes',qs.stringify({vehicleNum:this.editFtButton.vehicleNumber}))
+      console.log(resPlan)
       if (resPlan.status !== 200){
         this.$message.error(resPlan.msg)
       }else {
@@ -289,6 +291,8 @@ export default {
         转换为数组类型
          */
         this.lineInfo.backendLine = Object.values(resPlan.results)
+        // vuex状态管理路线信息
+        this.storeUavRouteInfo(resPlan.results)
         console.log(this.lineInfo.backendLine)
         console.log(resPlan)
       }
@@ -323,7 +327,6 @@ export default {
       }
       // 绘制飞行无人机
       this.drawUAV()
-      // L.polyline(this.lineInfo.pathline,{weight:8,colorPathSet}).addTo(map)
     },
     drawUAV(){
       this.lineInfo.marker = new Array(this.lineInfo.pathline.length)

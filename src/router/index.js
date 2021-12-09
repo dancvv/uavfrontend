@@ -2,13 +2,13 @@ import Vue from "vue"
 import home from "../components/home";
 import webSocket from "@/components/test/webSocket";
 import VueRouter from "vue-router";
-import BodyContent from "@/components/BodyContent";
 import leaflet from "@/components/homemap/leaflet";
 import locationTable from "@/components/location/locationTable";
 import geofence from "@/components/location/geofence";
 import currentRoute from "@/components/mission/currentRoute";
 import videoWatch from "@/components/mission/videoWatch";
 import controlinstance from "@/components/uav/controlinstance";
+import welcomepage from "@/components/welcomepage";
 
 
 //处理push操作的重复点击问题
@@ -29,7 +29,7 @@ export default new VueRouter({
         {path:'/home',component:home,redirect:'/welcomepage',
         children:[
             {path:'/leaflet',component:leaflet},
-            {path:'/welcomepage',component:BodyContent},
+            {path:'/welcomepage',component:welcomepage},
             {path:'/location',component: locationTable},
             {path: '/geofence',component: geofence},
             {path: '/current',component: currentRoute},

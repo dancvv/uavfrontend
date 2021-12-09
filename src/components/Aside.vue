@@ -59,7 +59,7 @@ export default {
         // {id:'100',path:'/leaflet',name:'首页',order:1,icon:'el-icon-user'},
         {id:'200',path:'/manage',name:'飞行参数设置',order:1,icon:'el-icon-s-cooperation',
           children:[
-            {id:'201',path:'/location',name:'批量上传位置',order:2},
+            {id:'201',path:'/location',name:'任务位置信息',order:2},
             {id:'202',path:'/geofence',name:'地理围栏',order:2},
           ]},
         {id:'300',path:'/mission',name:'任务执行',order:1,icon:'el-icon-s-goods',

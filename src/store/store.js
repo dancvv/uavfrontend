@@ -14,6 +14,8 @@ export default new vuex.Store({
         // 服务点所在位置
         depotLocations:[{lat:'',lng:''}],
         vehiclePlan:{vehicleNumber:'', depot:''},
+        // 无人机的路线规划信息
+        uavRouteInfo:{},
         fenceParam:{
             points:[{lat:'',lng:''}],
             fenceType:''
@@ -41,6 +43,9 @@ export default new vuex.Store({
     mutations:{
         initleaflet(state,payload){
             state.leafletMap=payload;
+        },
+        storeUavRouteInfo(state,payload){
+            state.uavRouteInfo=payload;
         },
         initmarker(state,payload){
             state.leafMarker=payload

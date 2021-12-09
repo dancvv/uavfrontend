@@ -4,7 +4,7 @@
   <el-breadcrumb class="breadcrumb" separator="/">
     <el-breadcrumb-item :to="{ path: '/welcomepage' }">首页</el-breadcrumb-item>
     <el-breadcrumb-item>飞行器位置</el-breadcrumb-item>
-    <el-breadcrumb-item>批量上传坐标</el-breadcrumb-item>
+    <el-breadcrumb-item>批量修改坐标</el-breadcrumb-item>
   </el-breadcrumb>
   <el-card class="boxCard">
     <h3>无人机任务参数设置</h3>
@@ -18,8 +18,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="仓库位置" prop="depot">
-              <el-input v-model="vehicleSetting.depot" placeholder="无人机起飞和返航的位置" size="small"></el-input>
+            <el-form-item label="任务执行批次" prop="uuid">
+              <el-input v-model="vehicleSetting.uuid" placeholder="任务执行的批次" size="small"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -30,9 +30,9 @@
     <h3>输入任务坐标信息</h3>
     <el-divider></el-divider>
     <el-table class="table-group" height="370px" :data="locations" highlight-current-row size="small">
-      <el-table-column type="selection" width="100px" ></el-table-column>
-      <el-table-column type="index" label="序号" width="100" ></el-table-column>
-      <el-table-column label="用户" width="100" >
+      <el-table-column type="selection" width="50px" ></el-table-column>
+      <el-table-column type="index" label="序号" width="60px" ></el-table-column>
+      <el-table-column label="用户" width="100px" property="mobileid">
         <template v-slot=scope>
           <span>{{scope.row.mobileid}}</span>
         </template>
@@ -65,11 +65,14 @@
     </el-dialog>
     <el-button class="buttonGroup" type="primary" @click="addNewRow" size="mini">添加</el-button>
     <el-button class="buttonGroup" type="danger" @click="deleteAll" size="mini">删除选中项</el-button>
+    <el-button class="buttonGroup" type="primary" @click="resetAll" size="mini">恢复</el-button>
   </el-card>
   <div id="resultSetting">
     <el-button type="primary" @click="dialogResetVisible=true" size="mini">重置</el-button>
-    <el-button type="success" @click="upload" size="mini">提交</el-button>
-    <el-button type="primary" @click="planSolution" size="mini">规划</el-button>
+    <el-button type="success" @click="modifyLocation" size="mini">确认修改</el-button>
+    <el-button type="primary" @click="getPlanRoutes" size="mini">规划</el-button>
+  </div>
+  <div>
     <el-dialog
         title="提示"
         :visible.sync="dialogResetVisible"
@@ -78,6 +81,16 @@
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogResetVisible = false" size="mini">取 消</el-button>
         <el-button type="primary" @click="resetTable" size="mini">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+        title="提示"
+        :visible.sync="showCardTab.confirmModify"
+        width="30%">
+      <span>确认修改坐标参数</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="showCardTab.confirmModify = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="confirmModify" size="mini">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -95,9 +108,12 @@ export default {
     return{
       // 提交数据验证
       uploadTrue:'',
+      showCardTab:{
+        confirmModify:false,
+      },
       // 路线坐标数据
       locations:[
-          {lat:'',lng:''}
+          {mobileid:'',lat:'',lng:''}
       ],
       // 弹出提示框
       dialogVisible:false,
@@ -106,16 +122,14 @@ export default {
       dialogResetVisible:false,
     //  无人机参数设置
       vehicleSetting:{
-        vehicleNumber:1,
-        depot:1,
+        vehicleNumber:null,
+        depot:null,
+        uuid:null,
       },
       rules:{
         vehicleNumber:[
           {required:true,message:'请输入执行任务的无人机数量',trigger:'blur'},
         ],
-        depot:[
-          {required:true,message:'请输入仓库位置',trigger:'blur'}
-        ]
       }
     }
   },
@@ -126,12 +140,12 @@ export default {
     this.initData()
   },
   methods:{
-    ...mapMutations(['changeLocations','changeVehicles','storeObjectiveValue','storeLineResults','uavRoutesMapSetting','storeOriginLine']),
+    ...mapMutations(['storeUavRouteInfo','changeLocations','changeVehicles','storeObjectiveValue','storeLineResults','uavRoutesMapSetting','storeOriginLine']),
     async initData() {
       this.vehicleSetting=this.vehiclePlan
       const {data: res} = await this.$http.get('compute/list')
       if(res.data.length===0){
-        this.locations=[{lat:'',lng:''}]
+        this.locations=[{mobileid:'',lat:'',lng:''}]
       }else {
         this.locations=res.data
         console.log(res)
@@ -149,7 +163,7 @@ export default {
       let lastIndex = this.locations.length-1
       console.log(lastIndex)
       if(this.locations[lastIndex].lat!==''&&this.locations[lastIndex].lng!==''){
-        this.locations.push({lat:'',lng:''})
+        this.locations.push({mobileid:'',lat:'',lng:''})
       }else {
         this.$message.info("坐标数据不能为空")
       }
@@ -162,7 +176,7 @@ export default {
     },
     async upload() {
       console.log("upload")
-      this.$refs.settingRuleRef.validate(async valid => {
+      await this.$refs.settingRuleRef.validate(async valid => {
         if (valid === true) {
           // 数据改变，将其存入vuex
           this.changeLocations(this.locations)
@@ -176,21 +190,44 @@ export default {
           console.log(res)
           if (res.status === 200) {
             // 确认提交数据
-            this.uploadTrue=200
+            this.uploadTrue = 200
             this.$message.success(res.msg)
           } else {
             // 确认提交数据验证失败
-            this.uploadTrue=404
+            this.uploadTrue = 404
             this.$message.error(res.msg)
           }
-        }else {
+        } else {
           this.$message.error("参数输入不能为空")
         }
       })
-
     },
-    currentChange(){
-      console.log("currentChange")
+    modifyLocation() {
+      this.showCardTab.confirmModify=!this.showCardTab.confirmModify
+    },
+    async confirmModify() {
+      this.showCardTab.confirmModify=!this.showCardTab.confirmModify
+      const {data: resLocation} = await this.$http.post('compute/saveLocations', this.locations)
+      this.$message.success(resLocation)
+    },
+    getPlanRoutes(){
+      this.$refs.settingRuleRef.validate(async valid => {
+        if (valid === true) {
+          const {data:resPlan} =await this.$http.post('compute/findStaticRoutes',qs.stringify({vehicleNum:this.vehicleSetting.vehicleNumber}))
+          if (resPlan.status!==200){
+            this.$message.error(resPlan.msg)
+          }else {
+            console.log(resPlan.results)
+            this.storeUavRouteInfo(resPlan.results)
+            this.$message.success(resPlan.msg)
+          }
+        } else {
+          this.$message.error("参数输入不能为空")
+        }
+      })
+    },
+    resetAll(){
+      this.initData()
     },
     handleDeleteClose(){
       console.log("close")
@@ -204,7 +241,7 @@ export default {
     resetTable(){
       this.dialogResetVisible=!this.dialogResetVisible
       // 重置后端所有数据
-      this.$http.get('compute/delete').then().catch(function (err) {
+      this.$http.get('compute/deleteALL').then().catch(function (err) {
         console.log(err)
       })
       this.locations=[{lat:'',lng:''}]
@@ -291,6 +328,12 @@ export default {
 }
 .buttonGroup{
   margin-top: 10px;
+}
+.table-group{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 #resultSetting{
   margin-top: 20px;
