@@ -18,7 +18,7 @@
     <div class="table-box" id="routeBox" v-for="(item,i) in printAllValues" :key="item.id">
       <h4 style="margin-top: 30px">无人机 {{i+1}} 的任务执行顺序</h4>
       <h5 style="font-family: 'Microsoft YaHei UI'; color: red" v-if="item.length<=2">当前无人机不执行任务</h5>
-      <el-table  :data="item" max-height="650" style="width:700px" :highlight-current-row="true">
+      <el-table class="table-box"  :data="item" max-height="650" style="width:700px" :highlight-current-row="true">
         <el-table-column type="index" label="顺序" width="50"></el-table-column>
         <el-table-column prop="mobileid" label="用户站点" width="100"></el-table-column>
         <el-table-column prop="location[0]" label="经度(Lat)" width="200"></el-table-column>
