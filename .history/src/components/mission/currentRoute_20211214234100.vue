@@ -75,12 +75,11 @@ export default {
       console.log(this.printAllValues)
     },
     statisticEchart(){
-      let statisticChart = this.$echarts.init(document.getElementById('statistic'))
+      let statisticChart(){}
     }
   },
   mounted() {
-    this.init();
-    this.statisticEchart();
+    this.init()
   }
 }
 </script>

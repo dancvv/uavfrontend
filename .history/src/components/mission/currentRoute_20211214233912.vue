@@ -74,13 +74,9 @@ export default {
       }
       console.log(this.printAllValues)
     },
-    statisticEchart(){
-      let statisticChart = this.$echarts.init(document.getElementById('statistic'))
-    }
   },
   mounted() {
-    this.init();
-    this.statisticEchart();
+    this.init()
   }
 }
 </script>

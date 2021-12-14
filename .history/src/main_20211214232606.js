@@ -56,9 +56,7 @@ Vue.config.productionTip = false
 import UUID from "uuid-js"
 Vue.use(UUID)
 
-// echarts
-import echarts from "echarts";
-Vue.prototype.$echarts = echarts;
+// 
 
 new Vue({
   //注册router文件

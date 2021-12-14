@@ -57,7 +57,7 @@ import UUID from "uuid-js"
 Vue.use(UUID)
 
 // echarts
-import echarts from "echarts";
+import * as echarts from "echarts";
 Vue.prototype.$echarts = echarts;
 
 new Vue({

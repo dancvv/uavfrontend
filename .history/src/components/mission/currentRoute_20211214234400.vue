@@ -79,8 +79,7 @@ export default {
     }
   },
   mounted() {
-    this.init();
-    this.statisticEchart();
+    this.init()
   }
 }
 </script>

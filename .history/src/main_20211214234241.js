@@ -58,7 +58,7 @@ Vue.use(UUID)
 
 // echarts
 import echarts from "echarts";
-Vue.prototype.$echarts = echarts;
+Vue.prototype.$e
 
 new Vue({
   //注册router文件

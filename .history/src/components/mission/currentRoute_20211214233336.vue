@@ -9,7 +9,9 @@
   <el-card class="card-box">
     <h3>无人机当前优化路线</h3>
     <el-divider></el-divider>
-    <div style="width:100px; height:100px" id="statistic"></div>
+    <div style="width:100px">
+
+    </div>
     <div id="objBox" v-show="uavRoutes.length!==0">
       <h4 style="font-size: 20px">无人机的优化数值</h4>
       <p>路线未优化前总长度: {{objValue/100}} m</p>
@@ -74,13 +76,9 @@ export default {
       }
       console.log(this.printAllValues)
     },
-    statisticEchart(){
-      let statisticChart = this.$echarts.init(document.getElementById('statistic'))
-    }
   },
   mounted() {
-    this.init();
-    this.statisticEchart();
+    this.init()
   }
 }
 </script>
