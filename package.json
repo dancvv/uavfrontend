@@ -9,6 +9,7 @@
   },
   "main": "background.js",
   "dependencies": {
+    "@jiaminghi/data-view": "^2.10.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dplayer": "^1.26.0",

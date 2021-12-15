@@ -60,6 +60,11 @@ Vue.use(UUID)
 import echarts from "echarts";
 Vue.prototype.$echarts = echarts;
 
+// 引入数据大屏项目
+// 将自动注册所有组件为全局组件
+import dataV from '@jiaminghi/data-view'
+Vue.use(dataV)
+
 new Vue({
   //注册router文件
   router,
