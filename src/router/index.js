@@ -9,6 +9,7 @@ import currentRoute from "@/components/mission/currentRoute";
 import videoWatch from "@/components/mission/videoWatch";
 import controlinstance from "@/components/uav/controlinstance";
 import welcomepage from "@/components/welcomepage";
+import editroute from "@/components/mission/editroute";
 
 
 //处理push操作的重复点击问题
@@ -34,7 +35,8 @@ export default new VueRouter({
             {path: '/geofence',component: geofence},
             {path: '/current',component: currentRoute},
             {path: '/video',component: videoWatch},
-            {path: '/uavdetail',component: controlinstance}
+            {path: '/uavdetail',component: controlinstance},
+            {path: '/edit',component: editroute},
 
         ]},
         {path:'/setting',component:home,

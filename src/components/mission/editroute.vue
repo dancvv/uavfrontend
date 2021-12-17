@@ -1,7 +1,7 @@
 <template>
-<di>
-  <div class=""></div>
-</di>
+<div>
+  <div class="echart"></div>
+</div>
 </template>
 
 <script>

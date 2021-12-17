@@ -29,25 +29,25 @@
   <el-card class="boxCard">
     <h3>输入任务坐标信息</h3>
     <el-divider></el-divider>
-    <el-table class="table-group" height="370px" :data="locations" highlight-current-row size="small">
+    <el-table class="table-group" height="370px" :data="locations" highlight-current-row>
       <el-table-column type="selection" width="50px" ></el-table-column>
-      <el-table-column type="index" label="序号" width="60px" ></el-table-column>
+      <el-table-column type="index" label="序号" width="80px" ></el-table-column>
       <el-table-column label="用户" width="100px" property="mobileid">
         <template v-slot=scope>
           <span>{{scope.row.mobileid}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="纬度(Lat)" width="200" property="lat" >
+      <el-table-column label="纬度(Lat)" property="lat" >
         <template v-slot=scope>
-          <el-input ref="editInput" v-model="scope.row.lat" placeholder="请输入纬度坐标" size="small"></el-input>
+          <el-input ref="editInput" v-model="scope.row.lat" placeholder="请输入纬度坐标"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="经度(Lng)" width="200" property="lng" >
+      <el-table-column label="经度(Lng)" property="lng" >
         <template v-slot=scope>
-          <el-input ref="editInput" v-model="scope.row.lng" placeholder="请输入经度坐标" size="small"></el-input>
+          <el-input ref="editInput" v-model="scope.row.lng" placeholder="请输入经度坐标"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150" property="lng">
+      <el-table-column label="操作" property="lng">
         <template v-slot=scope>
           <el-button type="danger" size="mini" @click="rowDelete(scope.row)" >删除</el-button>
         </template>
@@ -330,10 +330,11 @@ export default {
   margin-top: 10px;
 }
 .table-group{
-  display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  margin-top: 20px;
+  margin-left: 10%;
+  width: 80%;
 }
 #resultSetting{
   margin-top: 20px;

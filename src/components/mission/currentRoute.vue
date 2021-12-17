@@ -16,14 +16,14 @@
       <p v-for="(route,index) in routeValue" :key="index">无人机 {{index+1}} 的路线长度： {{route/10}} m</p>
     </div>
     <h4 style="font-family: 'Microsoft YaHei UI '; color: red; display: block; align-content: center;" v-if="printAllValues.length===0">没有无人机执行任务或者没有规划路线</h4>
-    <div class="table-box" id="routeBox" v-for="(item,i) in printAllValues" :key="item.id">
-      <h4 style="margin-top: 30px">无人机 {{i+1}} 的任务执行顺序</h4>
+    <div v-for="(item,i) in printAllValues" :key="item.id">
+      <h4 class="table-box" style="margin-top: 30px">无人机 {{i+1}} 的任务执行顺序</h4>
       <h5 style="font-family: 'Microsoft YaHei UI'; color: red" v-if="item.length<=2">当前无人机不执行任务</h5>
-      <el-table class="table-box"  :data="item" max-height="650" style="width:700px" :highlight-current-row="true">
-        <el-table-column type="index" label="顺序" width="50"></el-table-column>
-        <el-table-column prop="mobileid" label="用户站点" width="100"></el-table-column>
-        <el-table-column prop="location[0]" label="经度(Lat)" width="200"></el-table-column>
-        <el-table-column prop="location[1]" label="纬度(Lng)" width="200"></el-table-column>
+      <el-table :data="item" max-height="650" :highlight-current-row="true">
+        <el-table-column type="index" label="顺序" width="100"></el-table-column>
+        <el-table-column prop="mobileid" label="用户站点"></el-table-column>
+        <el-table-column prop="location[0]" label="经度(Lat)"></el-table-column>
+        <el-table-column prop="location[1]" label="纬度(Lng)"></el-table-column>
       </el-table>
     </div>
   </el-card>
@@ -118,9 +118,6 @@ export default {
   align-content: center;
 }
 .table-box{
-  /*position: absolute;*/
-  /*align-content: center;*/
-  /*margin-left: 10%;*/
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,5 +129,12 @@ export default {
   align-items: center;
   flex-direction: column;
   /*margin-left: 30%;*/
+}
+.el-table{
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: 10%;
+  width: 80%;
 }
 </style>
