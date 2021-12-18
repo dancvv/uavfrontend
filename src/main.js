@@ -60,6 +60,10 @@ Vue.use(UUID)
 import echarts from "echarts";
 Vue.prototype.$echarts = echarts;
 
+// 引入AntV
+// import G2 from '@antv/g2';
+// import G2 from '@antv/g2';          //引入G2
+// Vue.use(G2)
 // 引入数据大屏项目
 // 将自动注册所有组件为全局组件
 import dataV from '@jiaminghi/data-view'

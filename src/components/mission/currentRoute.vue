@@ -9,13 +9,12 @@
   <el-card class="card-box">
     <h3>无人机当前优化路线</h3>
     <el-divider></el-divider>
-    <div style="width:100px; height:100px" id="statistic"></div>
     <div id="objBox" v-show="uavRoutes.length!==0">
       <h4 style="font-size: 20px">无人机的优化数值</h4>
       <p>路线未优化前总长度: {{objValue/100}} m</p>
       <p v-for="(route,index) in routeValue" :key="index">无人机 {{index+1}} 的路线长度： {{route/10}} m</p>
     </div>
-    <h4 style="font-family: 'Microsoft YaHei UI '; color: red; display: block; align-content: center;" v-if="printAllValues.length===0">没有无人机执行任务或者没有规划路线</h4>
+    <h4 id="emptyRTHead" v-if="printAllValues.length===0">没有无人机执行任务或者没有规划路线</h4>
     <div v-for="(item,i) in printAllValues" :key="item.id">
       <h4 class="table-box" style="margin-top: 30px">无人机 {{i+1}} 的任务执行顺序</h4>
       <h5 style="font-family: 'Microsoft YaHei UI'; color: red" v-if="item.length<=2">当前无人机不执行任务</h5>
@@ -74,33 +73,9 @@ export default {
       }
       console.log(this.printAllValues)
     },
-    statisticEchart(){
-      let statisticChart = this.$echarts.init(document.getElementById('statistic'))
-      // this.$echarts.init()
-      let option = {
-        title: {
-          text: 'ECharts 入门示例'
-        },
-        tooltip: {},
-        legend: {
-          data:['销量']
-        },
-        xAxis: {
-          data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-        },
-        yAxis: {},
-        series: [{
-          name: '销量',
-          type: 'bar',
-          data: [5, 20, 36, 10, 10, 20]
-        }]
-      }
-      statisticChart.setOption(option)
-    }
   },
   mounted() {
     this.init();
-    // this.statisticEchart();
   }
 }
 </script>
@@ -136,5 +111,12 @@ export default {
   margin-top: 20px;
   margin-left: 10%;
   width: 80%;
+}
+#emptyRTHead{
+  font-family: 'Microsoft YaHei UI ';
+  color: red;
+  justify-content: center;
+  align-content: center;
+  display: flex;
 }
 </style>
