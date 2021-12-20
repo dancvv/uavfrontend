@@ -3,16 +3,19 @@
     <div class="header-icon">
       <img src="../assets/icon/uavIcon.svg" alt="None">
     </div>
-    <span class="header-title" @click="backTo">
-          <p class="headName">实时信息处理与</p>
-          <p class="headName">态势感知平台</p>
-  </span>
+    <div v-show="!isAsideCollapse">
+      <span class="header-title" @click="backTo">
+            <p class="headName">实时信息处理与</p>
+            <p class="headName">态势感知平台</p>
+        </span>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "Header",
+  props: ['isAsideCollapse'],
   methods:{
     backTo(){
       this.$router.push('/welcomepage')
@@ -37,6 +40,7 @@ export default {
   font-size: 20px;
   font-style: revert;
   font-weight: bolder;
+  margin: 5px;
   color: rgba(45, 45, 45, 0.99);
   cursor: pointer
 }

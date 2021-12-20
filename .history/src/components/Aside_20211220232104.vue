@@ -3,6 +3,7 @@
     <!--  头部-->
     <Header :isAsideCollapse="isAsideCollapse"/>
     <!--  侧边栏-->
+
     <el-aside :width=" isAsideCollapse ? '64px' : '200px'">
       <el-menu class="el-menu-vertical-demo"
                text-color="#666"

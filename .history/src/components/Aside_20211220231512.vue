@@ -3,9 +3,10 @@
     <!--  头部-->
     <Header :isAsideCollapse="isAsideCollapse"/>
     <!--  侧边栏-->
+
     <el-aside :width=" isAsideCollapse ? '64px' : '200px'">
-      <el-menu class="el-menu-vertical-demo"
-               text-color="#666"
+      <el-menu 
+                text-color="#666"
                active-text-color="#409eff"
                :router="true"
                unique-opened
@@ -96,16 +97,9 @@ export default {
   background-color: #ffffff;
   font-size: 15px;
 }
-
 .el-menu-item{
   font-size: 13px;
-  min-width: 64px;
 }
-
-.el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-  }
 
 .el-aside{
   background-color:#ffffff;
