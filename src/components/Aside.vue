@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--  头部-->
-    <Header :isAsideCollapse="isAsideCollapse"/>
+<!--    <Header :isAsideCollapse="isAsideCollapse"/>-->
     <!--  侧边栏-->
     <el-aside :width=" isAsideCollapse ? '64px' : '200px'">
       <el-menu class="el-menu-vertical-demo"
@@ -12,7 +12,10 @@
                :collapse="isAsideCollapse"
                default-active="welcomepage"
                :collapse-transition="false">
-        <div class="toggle-button" @click="toggleCollapse">切换|||</div>
+        <div class="toggle-button" @click="toggleCollapse">
+          <i class="el-icon-s-unfold" v-show="isAsideCollapse"></i>
+          <i class="el-icon-s-fold" v-show="!isAsideCollapse"></i>
+        </div>
         <el-menu-item index="leaflet">
           <i class="el-icon-map-location"></i>
           <span slot="title">可视化路线管理</span>
@@ -37,11 +40,8 @@
 </template>
 
 <script>
-
-import Header from "@/components/Header";
 export default {
   name: "Aside",
-  components: {Header},
   data(){
     return{
       //判断是否合并
@@ -119,7 +119,7 @@ export default {
   cursor: pointer;
 }
 .el-menu-item{
-  min-width: 180px;
+  min-width: 64px;
 }
 
 ::v-deep.el-submenu.is-active > .el-submenu__title {

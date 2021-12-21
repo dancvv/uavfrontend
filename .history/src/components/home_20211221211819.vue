@@ -5,7 +5,7 @@
     <div class="header-icon">
       <img src="../assets/icon/uavIcon.svg" width="45px" alt="None">
     </div>
-    <p>
+    <p class="header-text">
       实时信息处理与态势感知平台
     </p>
   </el-header>
@@ -49,14 +49,13 @@ export default {
   margin-top: 30px;
 }
 .el-header{
-    background-color: #F0F2F5;
-    display: flex;
-    align-items: center;
-    font-size: 16px;
-    justify-content: flex-start
+  background-color: #F0F2F5;
+  display: flex;
+  color: white;
+  align-items: center;
+  font-size: 16px;
+  justify-content: flex-start;
 }
-
-
 .header-title{
   padding: 10px;
   display: inline;

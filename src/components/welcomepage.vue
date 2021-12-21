@@ -1,6 +1,5 @@
 <template>
   <div class="main">
-<!--    <div class="main"></div>-->
     <div class="homestyle">
       <h1 style="font-size: 26px">欢迎进入实时信息处理与态势感知平台</h1>
       <p style="font-size: 20px">平台可以实现路线规划，数据管理，任务下发等功能</p>
@@ -15,10 +14,7 @@ export default {
 </script>
 
 <style scoped>
-/*.div{*/
-/*  text-align: center;*/
-/*  justify-content: center;*/
-/*}*/
+
 .homestyle{
 
   position: absolute;

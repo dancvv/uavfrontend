@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header-icon">
-      <img src="../assets/icon/uavIcon.svg" alt="None">
+      <img src="../assets/icon/uavIcon.svg" width="45px" alt="None">
     </div>
     <div v-show="!isAsideCollapse">
       <span class="header-title" @click="backTo">
