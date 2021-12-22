@@ -32,7 +32,6 @@
 
 <script>
 import {mapState} from "vuex";
-import {Chart} from "@antv/g2";
 
 export default {
   name: "currentRoute",
@@ -45,7 +44,6 @@ export default {
       serial:0,
       objectiveValue:'',
       routeDistance:''
-      
     }
   },
   computed:{
@@ -75,14 +73,6 @@ export default {
         this.printAllValues[i]=this.uavRoutes[i]
       }
       console.log(this.printAllValues)
-    },
-    statisticChart(){
-      const chart = new Chart({       // 创建一个图表
-        container: "main",      // 容器是上面那个div
-        autoFit: true,              // 自适应
-        height: 300                 // 高度
-      });
-      chart.data()
     },
   },
   mounted() {

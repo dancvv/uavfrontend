@@ -38,11 +38,10 @@
 <script>
 export default {
   name: "Aside",
-  props: ['isAsideCollapse'],
   data(){
     return{
       //判断是否合并
-      // isAsideCollapse:false,
+      isAsideCollapse:false,
       iconObj:{
         100: 'el-icon-map-location',
         200: 'el-icon-s-cooperation',
@@ -78,7 +77,9 @@ export default {
     }
   },
   methods:{
-    
+    toggleCollapse(){
+      this.isAsideCollapse=!this.isAsideCollapse
+    },
 
   }
 }

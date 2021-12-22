@@ -8,7 +8,7 @@
     <p class="header-title" @click="backTo">
       实时信息处理与态势感知平台
     </p>
-    <div class="header-title" @click="toggleCollapse">
+    <div class="toggle-button" @click="toggleCollapse">
           <i class="el-icon-s-unfold" v-show="isAsideCollapse"></i>
           <i class="el-icon-s-fold" v-show="!isAsideCollapse"></i>
     </div>
@@ -58,7 +58,7 @@ export default {
   margin-top: 30px;
 }
 .el-header{
-    background-color: #ffffff;
+    background-color: #F0F2F5;
     display: flex;
     align-items: center;
     font-size: 16px;

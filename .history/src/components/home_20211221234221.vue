@@ -58,7 +58,7 @@ export default {
   margin-top: 30px;
 }
 .el-header{
-    background-color: #ffffff;
+    background-color: #F0F2F5;
     display: flex;
     align-items: center;
     font-size: 16px;

@@ -5,16 +5,12 @@
     <div class="header-icon">
       <img src="../assets/icon/uavIcon.svg" width="45px" style="margin-bottom:10px" alt="None">
     </div>
-    <p class="header-title" @click="backTo">
+    <p style="margin-left:5px" @click="backTo">
       实时信息处理与态势感知平台
     </p>
-    <div class="header-title" @click="toggleCollapse">
-          <i class="el-icon-s-unfold" v-show="isAsideCollapse"></i>
-          <i class="el-icon-s-fold" v-show="!isAsideCollapse"></i>
-    </div>
   </el-header>
   <el-container>
-    <Aside :isAsideCollapse="isAsideCollapse"/>
+    <Aside/>
     <el-main>
       <router-view></router-view>
     </el-main>
@@ -33,7 +29,6 @@ export default {
     return{
     //  默认激活路径
       activePath:'',
-      isAsideCollapse:false,
     }
   },
   created() {
@@ -42,10 +37,8 @@ export default {
   methods:{
     backTo(){
       this.$router.push('/welcomepage')
-    },
-    toggleCollapse(){
-      this.isAsideCollapse=!this.isAsideCollapse
-    },
+    }
+
   }
 }
 </script>
@@ -58,7 +51,7 @@ export default {
   margin-top: 30px;
 }
 .el-header{
-    background-color: #ffffff;
+    background-color: #F0F2F5;
     display: flex;
     align-items: center;
     font-size: 16px;
@@ -67,9 +60,9 @@ export default {
 
 
 .header-title{
-  cursor: pointer;
-  margin-left: 5px;
-
+  padding: 10px;
+  display: inline;
+  text-align: center;
 }
 .el-main{
   background-color: #F0F2F5;

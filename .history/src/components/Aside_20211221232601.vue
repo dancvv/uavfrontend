@@ -78,7 +78,9 @@ export default {
     }
   },
   methods:{
-    
+    toggleCollapse(){
+      this.isAsideCollapse=!this.isAsideCollapse
+    },
 
   }
 }

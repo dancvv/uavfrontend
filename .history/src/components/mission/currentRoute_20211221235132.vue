@@ -9,7 +9,7 @@
   <el-card class="card-box">
     <h3>无人机当前优化路线</h3>
     <el-divider></el-divider>
-    <div id="statistic"></div>
+    
     <div id="objBox" v-show="uavRoutes.length!==0">
       <h4 style="font-size: 20px">无人机的优化数值</h4>
       <p>路线未优化前总长度: {{objValue/100}} m</p>
@@ -32,7 +32,6 @@
 
 <script>
 import {mapState} from "vuex";
-import {Chart} from "@antv/g2";
 
 export default {
   name: "currentRoute",
@@ -45,7 +44,6 @@ export default {
       serial:0,
       objectiveValue:'',
       routeDistance:''
-      
     }
   },
   computed:{
@@ -75,14 +73,6 @@ export default {
         this.printAllValues[i]=this.uavRoutes[i]
       }
       console.log(this.printAllValues)
-    },
-    statisticChart(){
-      const chart = new Chart({       // 创建一个图表
-        container: "main",      // 容器是上面那个div
-        autoFit: true,              // 自适应
-        height: 300                 // 高度
-      });
-      chart.data()
     },
   },
   mounted() {
