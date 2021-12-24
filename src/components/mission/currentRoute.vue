@@ -33,6 +33,7 @@
 <script>
 import {mapState} from "vuex";
 import {Chart} from "@antv/g2";
+import DataSet from '@antv/data-set';
 
 export default {
   name: "currentRoute",
@@ -44,8 +45,8 @@ export default {
       uavOptimal:'',
       serial:0,
       objectiveValue:'',
-      routeDistance:''
-      
+      routeDistance:'',
+      statiscData:{}
     }
   },
   computed:{
@@ -54,7 +55,6 @@ export default {
       return this.uavOptimal.slice(1)
     },
     objValue(){
-      // console.log(this.uavRouteInfo.length)
       if(this.uavRouteInfo.length!==null){
         return this.uavOptimal[0]
       }else{
@@ -74,19 +74,31 @@ export default {
       for (let i=0;i<this.uavRoutes.length-1;i++){
         this.printAllValues[i]=this.uavRoutes[i]
       }
+
       console.log(this.printAllValues)
     },
     statisticChart(){
       const chart = new Chart({       // 创建一个图表
-        container: "main",      // 容器是上面那个div
+        container: "statistic",      // 容器是上面那个div
         autoFit: true,              // 自适应
         height: 300                 // 高度
       });
-      chart.data()
+      for (let i=0;i<this.uavOptimal.length;i++){
+        this.statiscData.uavId[i]="uav "+i
+        this.statiscData.routeValue[i]=this.uavOptimal[i]
+      }
+      const ds = new DataSet();
+      const dv = ds.createView().source(this.statiscData)
+      dv.transform({
+        type:'fold',
+        fields:[]
+      })
+      chart.data(this.statiscData)
     },
   },
   mounted() {
     this.init();
+    // this.statisticChart()
   }
 }
 </script>

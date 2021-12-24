@@ -10,7 +10,8 @@ import videoWatch from "@/components/mission/videoWatch";
 import controlinstance from "@/components/uav/controlinstance";
 import welcomepage from "@/components/welcomepage";
 import editroute from "@/components/mission/editroute";
-
+import whole from "@/components/common/Whole";
+// import index from "@/components/page/test1/index"
 
 //处理push操作的重复点击问题
 const originalPush=VueRouter.prototype.push
@@ -27,7 +28,11 @@ export default new VueRouter({
     routes:[
         //重定向home页
         {path:'/',redirect:'/home'},
-        {path:'/home',component:home,redirect:'/welcomepage',
+        {path:'/home',component:whole,
+            children:[
+                {path: '/home',component: welcomepage}
+            ]},
+        {path:'/home2',component:home,redirect:'/welcomepage',
         children:[
             {path:'/leaflet',component:leaflet},
             {path:'/welcomepage',component:welcomepage},
