@@ -3,25 +3,6 @@
       <el-card>
         <div slot="header">
             <Icon type="md-aperture" size="30" color="#2e71ea"/><span class="clearfix">今日头条</span>
-            <Dropdown style="margin-left:50px;">
-                <a href="javascript:void(0)">
-                  <span>切换媒体</span><Icon size="20" type="ios-arrow-down" />
-                </a>
-                <DropdownMenu slot="list">
-                  <DropdownItem>今日头条</DropdownItem>
-                  <DropdownItem>广点通</DropdownItem>
-                  <DropdownItem>快手</DropdownItem>
-                </DropdownMenu>
-            </Dropdown>
-
-            <Form ref="searchForm" :model="searchForm" inline class="search-form">
-            <FormItem prop="date">
-                    <span>日期</span>
-                    <el-select v-model="searchForm.date" filterable placeholder="请选择日期">
-                      <el-option v-for="i in dateSelectList" :value="i">{{i}}</el-option>
-                    </el-select>
-            </FormItem>
-            </Form>
 
             <el-button class="programmaticBatchBtn">
                 <span><img src="../assets/img/mg-icon-intelligence.gif">
@@ -110,180 +91,21 @@
       <el-card style="margin-top:30px;">
           <div slot="header">
             <span class="clearfix">效果总览</span>
-            <Form ref="searchForm" :model="searchForm" inline class="search-form-2">
-              <el-row :gutter="50">
-                <el-col :span="6">
-                <FormItem prop="mediaAccount">
-                    <span>媒体账号</span>
-                    <el-select v-model="searchForm.mediaAccount" filterable placeholder="请选择媒体账号">
-                      <el-option value="全部媒体账号">全部媒体账号</el-option>
-                      <el-option v-for="i in mediaAccountList" :value="i">{{i}}</el-option>
-                    </el-select>
-                </FormItem>
-                </el-col>
-
-                <el-col :span="6">
-                <FormItem prop="application">
-                    <span>应用</span>
-                    <el-select v-model="searchForm.application" filterable placeholder="请选择应用">
-                      <el-option v-for="i in applicationList" :value="i">{{i}}</el-option>
-                    </el-select>
-                </FormItem>
-                </el-col>
-
-                <el-col :span="6">
-                <FormItem prop="mediaType">
-                    <span>媒体</span>
-                    <el-select v-model="searchForm.mediaType" filterable placeholder="请选择媒体">
-                      <el-option v-for="i in mediaTypeList" :value="i">{{i}}</el-option>
-                    </el-select>
-                </FormItem>
-                </el-col>
-
-                <el-col :span="6">
-                <FormItem prop="date2">
-                    <span>日期</span>
-                    <el-select v-model="searchForm.date2" filterable placeholder="请选择日期">
-                      <el-option v-for="i in dateSelectList" :value="i">{{i}}</el-option>
-                    </el-select>
-                </FormItem>
-                </el-col>
-            </el-row>
-            </Form>
         </div>
         <div>
             <LineECharts></LineECharts>
         </div>
       </el-card>
 
-      <el-row :gutter="20">
-        <el-col :span="12">
-        <el-card style="margin-top:30px;">
-            <div slot="header">
-                <span class="clearfix">TOP广告</span>
-
-                <Form ref="searchFormTop" :model="searchFormTop" inline class="search-form-2">
-                <el-row :gutter="10">
-                    <el-col :span="8">
-                    <FormItem prop="applicationTop">
-                        <el-select v-model="searchFormTop.applicationTop" filterable placeholder="请选择应用">
-                        <el-option value="全部应用">全部应用</el-option>  
-                        <el-option v-for="i in applicationList" :value="i">{{i}}</el-option>
-                        </el-select>
-                    </FormItem>
-                    </el-col>
-
-                    <el-col :span="8">
-                    <FormItem prop="mediaTypeTop">
-                        <el-select v-model="searchFormTop.mediaTypeTop" filterable placeholder="请选择媒体">
-                        <el-option v-for="i in mediaTypeList" :value="i">{{i}}</el-option>
-                        </el-select>
-                    </FormItem>
-                    </el-col>
-
-                    <el-col :span="8">
-                    <FormItem prop="dateTop">
-                        <el-select v-model="searchFormTop.dateTop" filterable placeholder="请选择日期">
-                        <el-option v-for="i in dateSelectList" :value="i">{{i}}</el-option>
-                        </el-select>
-                    </FormItem>
-                    </el-col>
-                </el-row>
-                </Form>
-            </div>
-            <div>
-                <Grid api="" 
-                @currentPage="currentPage"
-                @pageSize="pageSize"
-                :event-bus="searchEventBus" 
-                :search-params="searchFormTop">
-                <Table
-                    height="300"
-                    slot="table"
-                    slot-scope="{loading, data}"
-                    :loading="loading"
-                    border
-                    :columns="columnTopAd"
-                    :data="data"
-                    sortable="custom"
-                    @on-sort-change="changeSort"
-                    @on-selection-change="selectionChange"
-                ></Table>
-                </Grid>
-                <div slot="footer" style="float:right;margin:10px 10px;">
-                    <el-button type="text" size="20">查看详情<i class="el-icon-d-arrow-right"></i></el-button>
-                </div>
-            </div>
-        </el-card>
-        </el-col>
-
-        <el-col :span="12">
-        <el-card style="margin-top:30px;">
-            <div slot="header">
-                <span class="clearfix">TOP创意</span>
-                <Form ref="searchFormTop" :model="searchFormTop" inline class="search-form-2">
-                <el-row :gutter="10">
-                    <el-col :span="8">
-                    <FormItem prop="applicationTop2">
-                        <el-select v-model="searchFormTop.applicationTop2" filterable placeholder="请选择应用">
-                        <el-option value="全部应用">全部应用</el-option>  
-                        <el-option v-for="i in applicationList" :value="i">{{i}}</el-option>
-                        </el-select>
-                    </FormItem>
-                    </el-col>
-
-                    <el-col :span="8">
-                    <FormItem prop="mediaTypeTop2">
-                        <el-select v-model="searchFormTop.mediaTypeTop2" filterable placeholder="请选择媒体">
-                        <el-option v-for="i in mediaTypeList" :value="i">{{i}}</el-option>
-                        </el-select>
-                    </FormItem>
-                    </el-col>
-
-                    <el-col :span="8">
-                    <FormItem prop="dateTop2">
-                        <el-select v-model="searchFormTop.dateTop2" filterable placeholder="请选择日期">
-                        <el-option v-for="i in dateSelectList" :value="i">{{i}}</el-option>
-                        </el-select>
-                    </FormItem>
-                    </el-col>
-                </el-row>
-                </Form>
-            </div>
-            <div>
-                <Grid api="" 
-                @currentPage="currentPage"
-                @pageSize="pageSize"
-                :event-bus="searchEventBus" 
-                :search-params="searchFormTop">
-                <Table
-                    height="300"
-                    slot="table"
-                    slot-scope="{loading, data}"
-                    :loading="loading"
-                    border
-                    :columns="columnTopIdea"
-                    :data="data"
-                    sortable="custom"
-                    @on-sort-change="changeSort"
-                    @on-selection-change="selectionChange"
-                ></Table>
-                </Grid>
-                <div class="blankContent">
-                </div>
-            </div>
-        </el-card>
-        </el-col>
-      </el-row>
 
 </div>
 </template>
 
 <script>
 import Vue from 'vue';
-import { fetchData } from '../api/index';
-import _ from "lodash";
-import Grid from '../components/common/Grid';
+// import { fetchData } from '../api/index';
+// import _ from "lodash";
+// import Grid from '../components/common/Grid';
 import LineECharts from '@/components/dashboard/LineECharts';
 export default {
     name: 'dashboard',
@@ -299,7 +121,7 @@ export default {
             mediaAccountList: ['媒体账号1','媒体账号2','媒体账号3','媒体账号4'],    // 媒体账号列表
             applicationList: ['应用1','应用2','应用3','应用4','应用5'],    // 应用列表
             mediaTypeList: ['今日头条','广点通','快手'],     // 媒体类型列表
-            
+
             searchForm:{     // 今日头条和效果总览的查询参数
                 date: "",
                 date2: "",
@@ -353,12 +175,10 @@ export default {
         };
     },
     components: {
-        Vue,
-        Grid,
         LineECharts
     },
     created() {
-        
+
     },
     computed: {
         role() {

@@ -1,17 +1,8 @@
 import Vue from "vue"
-import home from "../components/home";
-import webSocket from "@/components/test/webSocket";
 import VueRouter from "vue-router";
-import leaflet from "@/components/homemap/leaflet";
-import locationTable from "@/components/location/locationTable";
-import geofence from "@/components/location/geofence";
-import currentRoute from "@/components/mission/currentRoute";
-import videoWatch from "@/components/mission/videoWatch";
-import controlinstance from "@/components/uav/controlinstance";
-import welcomepage from "@/components/welcomepage";
-import editroute from "@/components/mission/editroute";
 import whole from "@/components/common/Whole";
-// import index from "@/components/page/test1/index"
+import welcomepage from "@/components/welcomepage";
+import Home from "@/components/page/Home";
 
 //处理push操作的重复点击问题
 const originalPush=VueRouter.prototype.push
@@ -27,27 +18,41 @@ export default new VueRouter({
     mode:'history',
     routes:[
         //重定向home页
-        {path:'/',redirect:'/home'},
-        {path:'/home',component:whole,
+        {path:'/',redirect:'/welcome'},
+        {path:'/',component:whole,
             children:[
-                {path: '/home',component: welcomepage}
+                {path: '/welcome',component: welcomepage},
+                {
+                    path:'/home',component:Home
+                },
+                {
+                    path:'/multiuav',
+                    component:()=>import('@/components/page/multiuav/uavindex'),
+                    redirect:'/multiuav/leaflet',
+                    children:[
+                        {
+                            path:'/leaflet',
+                            component:()=>import('@/components/page/multiuav/homemap/leaflet'),
+                        }
+                    ]
+                }
             ]},
-        {path:'/home2',component:home,redirect:'/welcomepage',
-        children:[
-            {path:'/leaflet',component:leaflet},
-            {path:'/welcomepage',component:welcomepage},
-            {path:'/location',component: locationTable},
-            {path: '/geofence',component: geofence},
-            {path: '/current',component: currentRoute},
-            {path: '/video',component: videoWatch},
-            {path: '/uavdetail',component: controlinstance},
-            {path: '/edit',component: editroute},
+        // {path:'/home2',component:home,redirect:'/welcomepage',
+        // children:[
+        //     {path:'/leaflet',component:leaflet},
+        //     {path:'/welcomepage',component:welcomepage},
+        //     {path:'/location',component: locationTable},
+        //     {path: '/geofence',component: geofence},
+        //     {path: '/current',component: currentRoute},
+        //     {path: '/video',component: videoWatch},
+        //     {path: '/uavdetail',component: controlinstance},
+        //     {path: '/edit',component: editroute},
 
-        ]},
-        {path:'/setting',component:home,
-            children:[
-                {path:'/webSocket',component:webSocket}
-            ]},
+        // ]},
+        // {path:'/setting',component:home,
+        //     children:[
+        //         {path:'/webSocket',component:webSocket}
+        //     ]},
 
     ]
 })

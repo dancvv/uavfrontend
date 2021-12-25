@@ -17,8 +17,8 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import {mapMutations} from "vuex";
-import MissionStart from "@/components/homemap/missionStart";
-import buttonpage from "@/components/homemap/buttonpage";
+import MissionStart from "@/components/page/multiuav/homemap/missionStart";
+import buttonpage from "@/components/page/multiuav/homemap/buttonpage";
 import UUID from "uuid-js"
 import qs from "qs";
 import "../../assets/jsplugin/MovingMarker"
@@ -327,7 +327,7 @@ export default {
 
     },
     animateUAV(){
-      
+
       for (let uavIndex=0;uavIndex<marker.length;uavIndex++){
         marker[uavIndex].start()
       }

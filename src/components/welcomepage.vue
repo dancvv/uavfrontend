@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-    <div class="homestyle">
-      <h1 style="font-size: 26px">欢迎进入实时信息处理与态势感知平台</h1>
-      <p style="font-size: 20px">平台可以实现路线规划，数据管理，任务下发等功能</p>
-    </div>
+      <div class="homestyle">
+        <h1 style="font-size: 26px">欢迎进入实时信息处理与态势感知平台</h1>
+        <p style="font-size: 20px">平台可以实现路线规划，数据管理，任务下发等功能</p>
+      </div>
   </div>
 </template>
 
@@ -14,35 +14,19 @@ export default {
 </script>
 
 <style scoped>
-
 .homestyle{
-
-  position: absolute;
-  top: 36%;
-  left: 42%;
-  margin-top: -20px;
-  margin-left: -20px;
-  /* margin-top: 20%; */
-  /* background-position: 50% 50%; */
-  /* background-repeat: no-repeat; */
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  /*margin-top: 20%;*/
-  /*background-position: 50% 50%;*/
-  /*background-repeat: no-repeat;*/
 }
 .main{
-  /*position:fixed;*/
-  /*top: 0;*/
-  /*left: 0;*/
-  width:100%;
+  /*width:100%;*/
   height:100%;
-  /*min-width: 1000px;*/
-  z-index:-10;
-  zoom: 1;
-  /*background-color: #fff;*/
-  background-size: cover;
-  /*-webkit-background-size: cover;*/
-  /*-o-background-size: cover;*/
+  padding: 0px;
+  margin: 0px;
   background: url("../assets/picture/sky-background.png") no-repeat ;
   background-size: 100%;
 }

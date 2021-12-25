@@ -24,17 +24,30 @@ export default {
   methods:{
     async linkTest() {
       let that = this
+
       that.$http.get('/test').then(function (res) {
         console.log(res)
         if (res.data.status===200){
           console.log(res.data.msg)
-          that.$message.success(res.data.msg)
+          that.$notify({
+            title: '成功',
+            message: res.data.msg,
+            type: 'success'
+          });
         }else{
-          that.$message.error("检查连接")
+          that.$notify.error({
+            title: '检查连接',
+            message: "检查连接"
+          })
+          // that.$message.error("检查连接")
         }
       }).catch(
           function (err){
-            that.$message.error("检查连接")
+            this.$notify.error({
+              title: '检查连接',
+              message: "检查连接"
+            })
+            // that.$message.error("检查连接")
             console.log(err)
           }
       )

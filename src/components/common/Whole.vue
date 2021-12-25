@@ -6,7 +6,7 @@
         <img src="../../assets/icon/uavIcon.svg" width="45px" alt="None">
       </div>
       <div class="text">
-        <p style="margin-left: 10px;margin-top: 7px;cursor: pointer" @click="goHome">实时信息处理与态势感知平台</p>
+        <p style="margin-left: 10px;text-align:center;cursor: pointer" @click="goHome">实时信息处理与态势感知平台</p>
       </div>
     </div>
     <!-- 水平一级菜单 -->
@@ -55,7 +55,7 @@ export default {
     return{
       items:[
         {index:'Home',title:'首页'},
-        {index:'multiroute',title:'多无人机路径规划'},
+        {index:'multiuav',title:'多无人机路径规划'},
         {index:'communityserve',title:'无人机社区服务'},
       ]
     }
@@ -83,7 +83,7 @@ export default {
       }
     },
     goHome(){
-      this.$router.push('/welcomepage')
+      this.$router.push('/welcome')
     }
   }
 }
@@ -100,6 +100,7 @@ export default {
   box-sizing: border-box;
   width: 100%;
   height: 70px;
+  /*height: 7%;*/
   font-size: 18px;
   font-family: "Microsoft YaHei";
   font-style: revert;
@@ -109,6 +110,7 @@ export default {
 .header .logo {
   float: left;
   margin-left: 50px;
+  /* text-align: center; */
   margin-top: 17.5px;
   height: 29px;
   width: 300px;
@@ -160,5 +162,12 @@ export default {
   font-size: 16px;
   margin: 0 15px;
   color: black;
+  padding: 1px;
+}
+
+/* ------------- main样式------------------------------- */
+.el-main{
+  padding: 0px;
+  height: 93%;
 }
 </style>
