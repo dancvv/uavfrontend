@@ -8,6 +8,7 @@
         text-color="#7a8297"
         active-text-color="#2d8cf0"
         router>
+      <el-menu-item index="leafmap">二级丹</el-menu-item>
       <template v-for="item in items">
         <el-menu-item :index="item.index" :key="item.index">
           <!-- 需要图标的在 item 对象中加上属性 icon -->

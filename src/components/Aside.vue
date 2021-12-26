@@ -74,11 +74,11 @@ export default {
             {id:'502',path:'/laa',name:'用户设置'},
             {id:'503',path:'/版本信息',name:'版本信息'},
           ]},
-      ]
+      ],
     }
   },
   methods:{
-    
+
 
   }
 }
