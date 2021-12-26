@@ -28,6 +28,8 @@ export default {
   },
   methods:{
     toIndex(){
+      console.log("sidemenu")
+      console.log(this.$route.path.split('/')[2])
       return this.$route.path.split('/')[2]
     }
   }
@@ -42,13 +44,14 @@ export default {
   left: 0;
   top: 70px;
   bottom: 0;
+  width: 200px;
   overflow-y: scroll;
 }
 .sidebar::-webkit-scrollbar {
   width: 0;
 }
 .sidebar-el-menu {
-  width: 250px;
+  width: 200px;
 }
 .sidebar > ul {
   height: 100%;

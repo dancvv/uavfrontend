@@ -6,12 +6,6 @@ import router from './router'
 //导入全局样式表
 import './assets/style/global.css'
 import App from "@/App";
-
-// element ui 组件配置
-Vue.prototype.$notify=Notification;
-Vue.prototype.$message=Message;
-Vue.use(ElementUI);
-
 //引入websocket全局配置
 import global from "../public/globalWebSocket";
 Vue.prototype.global=global
@@ -51,6 +45,9 @@ Vue.use(VideoPlayer);
 import flvjs from 'flv.js'
 Vue.use(flvjs)
 
+Vue.prototype.$message=Message
+Vue.prototype.$notify=Notification
+Vue.use(ElementUI);
 
 Vue.config.productionTip = false
 

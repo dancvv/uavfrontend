@@ -1,27 +1,26 @@
 <template>
-  <div>
+  <el-container>
     <!--  一级菜单下的二级菜单-->
     <el-aside>
-      <SideMenu :items="items"></SideMenu>
     </el-aside>
 
     <!--  以及二级菜单所对应的页面-->
-    <el-main>
+    <el-main class="el-main-box">
       <router-view></router-view>
     </el-main>
-  </div>
+  </el-container>
 </template>
 
 <script>
-import SideMenu from "@/components/sideMenu/SideMenu";
+// import SideMenu from "@/components/sideMenu/SideMenu";
 export default {
   name: "uavindex",
-  components: {SideMenu},
+  // components: {SideMenu},
   data(){
     return{
       items: [
         {
-          index: 'leafle',
+          index: 'leaflet',
           title: '二级菜单1-1'
         },
         {
@@ -55,5 +54,8 @@ export default {
 </script>
 
 <style scoped>
-
+.el-main-box{
+  margin: 0px;
+  padding: 0px;
+}
 </style>

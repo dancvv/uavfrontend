@@ -168,6 +168,7 @@ export default {
 /* ------------- main样式------------------------------- */
 .el-main{
   padding: 0px;
+  margin: 0px;
   height: 93%;
 }
 </style>
