@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <!-- 系统标题处 -->
     <div class="header">
       <div class="logo">
         <div>
@@ -8,6 +9,10 @@
         <div class="text">
           <p style="margin-left: 10px;text-align:center;cursor: pointer" @click="goHome">实时信息处理与态势感知平台</p>
         </div>
+        <div class="header-title" v-show="isAsideCollapse" @click="toggleCollapse">
+          <i class="el-icon-s-unfold" v-show="isAsideCollapse"></i>
+          <i class="el-icon-s-fold" v-show="!isAsideCollapse"></i>
+    </div>
       </div>
       <!-- 水平一级菜单 -->
       <div style="float:left;">
@@ -53,6 +58,7 @@ export default {
   name: "whole",
   data(){
     return{
+      isAsideCollapse:false,
       items:[
         {index:'Home',title:'首页'},
         {index:'multiuav',title:'多无人机路径规划'},
@@ -84,6 +90,16 @@ export default {
     },
     goHome(){
       this.$router.push('/welcome')
+    },
+    toggleCollapse(){}
+  },
+  watch:{
+    $route(to){
+      if(to.path!=='Home'){
+        this.isAsideCollapse=true
+      }else{
+        this.isAsideCollapse=false
+      }
     }
   }
 }
@@ -113,12 +129,18 @@ export default {
   /* text-align: center; */
   margin-top: 17.5px;
   height: 29px;
-  width: 300px;
+  width: 315px;
   vertical-align: middle;
   display: flex;
   align-items: center;
 }
-
+.header-title{
+  margin-left: 5px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
 /* --------------- 用户头像区域的样式 ---------------- */
 .header-right {
   float: right;
@@ -151,7 +173,7 @@ export default {
 .el-menu.el-menu--horizontal {
   border-bottom: none !important;
   float: left;
-  margin-left: 20px;
+  margin-left: 5px;
 }
 .el-menu--horizontal > .el-menu-item.is-active {
   border-bottom: 2px solid #409eff;

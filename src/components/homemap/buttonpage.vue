@@ -7,7 +7,6 @@
       <el-button type="primary" size="mini" @click="placeDepotPoint">{{!editFtButton.placeDepotPoint ?'起始位置初始化':'完成'}}</el-button><br>
       <el-button type="primary" size="mini" @click="resetAll">重置</el-button>
       <el-button type="primary" size="mini" @click="pushAll">{{ !editFtButton.uploadStatus?'确认提交':'已提交' }}</el-button>
-      <el-button @click="click">click</el-button>
     </el-tab-pane>
     <el-tab-pane label="路线规划" name="uncertain">
       <el-form ref="uavpane" >

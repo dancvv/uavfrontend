@@ -1,11 +1,12 @@
 <template>
   <el-container>
     <!--  一级菜单下的二级菜单-->
-    <el-aside :width=" false ? '64px' : '200px'">
+    <el-aside :width=" isAsideCollapse ? '64px' : '200px'">
       <el-menu class="el-menu-vertical-demo"
                text-color="#666"
                active-text-color="#409eff"
                :router="true"
+               :collapse="isAsideCollapse"
                unique-opened
                default-active="leafmap"
                :collapse-transition="false">
@@ -43,6 +44,7 @@ export default {
   name: "uavindex",
   data(){
     return{
+      isAsideCollapse:false,
       items: [
         {
           index: 'leafmp',
@@ -88,7 +90,8 @@ export default {
           ]},
         {id:'400',path:'status',name:'数据分析',order:1,icon:'el-icon-s-order',
           children: [
-            {id:401,path:'device',name:'设备管理',order:2}
+            {id:401,path:'device',name:'设备管理',order:2},
+            {id:402,path:'socket',name:'WebSocket',order:2}
           ]},
         {id:'500',path:'setting',name:'设置',order:1,icon:'el-icon-s-data',
           children: [

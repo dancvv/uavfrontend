@@ -3,15 +3,16 @@ import VueRouter from "vue-router";
 import welcomepage from "@/components/welcomepage";
 import whole from "@/components/common/Whole";
 import leaflet from "@/components/homemap/leaflet";
+import Home from "@/page/Home"
 
 
-// import home from "../components/home";
-// import webSocket from "@/components/test/webSocket";
-// import locationTable from "@/components/location/locationTable";
-// import geofence from "@/components/location/geofence";
-// import currentRoute from "@/components/mission/currentRoute";
-// import videoWatch from "@/components/mission/videoWatch";
-// import controlinstance from "@/components/uav/controlinstance";
+import home from "../components/home";
+import webSocket from "@/components/test/webSocket";
+import locationTable from "@/components/location/locationTable";
+import geofence from "@/components/location/geofence";
+import currentRoute from "@/components/mission/currentRoute";
+import videoWatch from "@/components/mission/videoWatch";
+import controlinstance from "@/components/uavcontrol/controlinstance";
 
 
 //处理push操作的重复点击问题
@@ -34,7 +35,7 @@ export default new VueRouter({
             children:[
                 {path: '/welcome',component: welcomepage},
                 {
-                    path:'/home',component: leaflet
+                    path:'/home',component: Home
                 },
                 {
                     path:'/multiuav',
@@ -49,6 +50,10 @@ export default new VueRouter({
                             }
                         },
                         {
+                            path:'uavdetail',
+                            component:()=>import('@/components/uavcontrol/controlinstance')
+                        },
+                        {
                             path:'location',
                             component:()=>import('@/components/location/locationTable'),
                             meta:{
@@ -59,27 +64,43 @@ export default new VueRouter({
                             path:'geofence',
                             component:()=>import('@/components/location/geofence')
                         },
+                        {
+                            path:'current',
+                            component:()=>import('@/components/mission/currentRoute')
+                        },
+                        {
+                            path:'video',
+                            component:()=>import('@/components/mission/videoWatch')
+                        },
+                        {
+                            path:'edit',
+                            component:()=>import('@/components/mission/editroute')
+                        },
+                        {
+                            path:'socket',
+                            component:()=>import('@/components/test/webSocket')
+                        }
                     ]
                 }
             ]},
 
 
-        // {path:'/home2',component:home,redirect:'/welcomepage',
-        // children:[
-        //     {path:'/leaflet',component:leaflet},
-        //     {path:'/welcomepage',component:welcomepage},
-        //     {path:'/location',component: locationTable},
-        //     {path: '/geofence',component: geofence},
-        //     {path: '/current',component: currentRoute},
-        //     {path: '/video',component: videoWatch},
-        //     {path: '/uavdetail',component: controlinstance},
-        //     // {path: '/edit',component: editroute},
-        //
-        // ]},
-        // {path:'/setting',component:home,
-        //     children:[
-        //         {path:'/webSocket',component:webSocket}
-        //     ]},
+        {path:'/home2',component:home,redirect:'/welcomepage',
+        children:[
+            {path:'/leaflet',component:leaflet},
+            {path:'/welcomepage',component:welcomepage},
+            {path:'/location',component: locationTable},
+            {path: '/geofence',component: geofence},
+            {path: '/current',component: currentRoute},
+            {path: '/video',component: videoWatch},
+            {path: '/uavdetail',component: controlinstance},
+            // {path: '/edit',component: editroute},
+        
+        ]},
+        {path:'/setting',component:home,
+            children:[
+                {path:'/webSocket',component:webSocket}
+            ]},
 
     ]
 })
