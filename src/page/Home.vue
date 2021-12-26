@@ -1,8 +1,8 @@
 <template>
-<div>
-  <h1>统计页面</h1><br>
-  <el-button @click="open">点击</el-button>
-</div>
+  <div>
+    <h1>统计页面</h1><br>
+    <el-button @click="open">点击</el-button>
+  </div>
 </template>
 
 <script>

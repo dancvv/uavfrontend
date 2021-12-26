@@ -1,51 +1,51 @@
 <template>
   <div class="wrapper">
-  <div class="header">
-    <div class="logo">
-      <div>
-        <img src="../../assets/icon/uavIcon.svg" width="45px" alt="None">
+    <div class="header">
+      <div class="logo">
+        <div>
+          <img src="../../assets/icon/uavIcon.svg" width="45px" alt="None">
+        </div>
+        <div class="text">
+          <p style="margin-left: 10px;text-align:center;cursor: pointer" @click="goHome">实时信息处理与态势感知平台</p>
+        </div>
       </div>
-      <div class="text">
-        <p style="margin-left: 10px;text-align:center;cursor: pointer" @click="goHome">实时信息处理与态势感知平台</p>
+      <!-- 水平一级菜单 -->
+      <div style="float:left;">
+        <el-menu :default-active="toIndex()" mode="horizontal" @select="handleSelect">
+          <template v-for="item in items">
+            <el-menu-item :index="item.index" :key="item.index">
+              <template slot="title">
+                <span slot="title">{{ item.title }}</span>
+              </template>
+            </el-menu-item>
+          </template>
+        </el-menu>
       </div>
-    </div>
-    <!-- 水平一级菜单 -->
-    <div style="float:left;">
-      <el-menu :default-active="toIndex()" mode="horizontal" @select="handleSelect">
-        <template v-for="item in items">
-          <el-menu-item :index="item.index" :key="item.index">
-            <template slot="title">
-              <span slot="title">{{ item.title }}</span>
-            </template>
-          </el-menu-item>
-        </template>
-      </el-menu>
-    </div>
 
-    <div class="header-right">
-      <div class="header-user-con">
-        <!-- 用户头像，根据需要自行修改图片路径 -->
-        <div class="user-avator"><img src="../../assets/img/img.jpg" /></div>
-        <!-- 用户名下拉菜单 -->
-        <el-dropdown class="user-name" trigger="click" @command="handleCommand">
+      <div class="header-right">
+        <div class="header-user-con">
+          <!-- 用户头像，根据需要自行修改图片路径 -->
+          <div class="user-avator"><img src="../../assets/img/img.jpg" /></div>
+          <!-- 用户名下拉菜单 -->
+          <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
                         {{ username }}
                         <i class="el-icon-caret-bottom"></i>
                     </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item disabled>修改密码</el-dropdown-item>
-            <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item disabled>修改密码</el-dropdown-item>
+              <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- 页面左侧二级菜单栏，和主体内容区域部分 -->
-  <el-main>
-    <router-view></router-view>
-  </el-main>
-</div>
+    <!-- 页面左侧二级菜单栏，和主体内容区域部分 -->
+    <el-main>
+      <router-view></router-view>
+    </el-main>
+  </div>
 </template>
 
 <script>

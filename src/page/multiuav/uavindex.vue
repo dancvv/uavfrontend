@@ -1,15 +1,15 @@
 <template>
-<div>
-<!--  一级菜单下的二级菜单-->
-  <el-aside>
-    <SideMenu :items="items"></SideMenu>
-  </el-aside>
+  <div>
+    <!--  一级菜单下的二级菜单-->
+    <el-aside>
+      <SideMenu :items="items"></SideMenu>
+    </el-aside>
 
-<!--  以及二级菜单所对应的页面-->
-  <el-main>
-    <router-view></router-view>
-  </el-main>
-</div>
+    <!--  以及二级菜单所对应的页面-->
+    <el-main>
+      <router-view></router-view>
+    </el-main>
+  </div>
 </template>
 
 <script>
@@ -21,7 +21,7 @@ export default {
     return{
       items: [
         {
-          index: 'leaflet',
+          index: 'leafle',
           title: '二级菜单1-1'
         },
         {
@@ -41,6 +41,14 @@ export default {
           title: '二级菜单1-5'
         }
       ],
+    }
+  },
+  mounted() {
+    this.init()
+  },
+  methods:{
+    init(){
+      console.log("push something")
     }
   }
 }

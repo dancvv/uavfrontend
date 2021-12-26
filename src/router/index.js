@@ -1,9 +1,17 @@
 import Vue from "vue"
+import home from "../components/home";
+import webSocket from "@/components/test/webSocket";
 import VueRouter from "vue-router";
-import whole from "@/components/common/Whole";
+import leaflet from "@/components/homemap/leaflet";
+import locationTable from "@/components/location/locationTable";
+import geofence from "@/components/location/geofence";
+import currentRoute from "@/components/mission/currentRoute";
+import videoWatch from "@/components/mission/videoWatch";
+import controlinstance from "@/components/uav/controlinstance";
 import welcomepage from "@/components/welcomepage";
-import Home from "@/components/page/Home";
-
+import editroute from "@/components/mission/editroute";
+import whole from "@/components/common/Whole";
+import Home from "@/page/Home";
 //处理push操作的重复点击问题
 const originalPush=VueRouter.prototype.push
 VueRouter.prototype.push=function push(location) {
@@ -18,6 +26,7 @@ export default new VueRouter({
     mode:'history',
     routes:[
         //重定向home页
+        //重定向home页
         {path:'/',redirect:'/welcome'},
         {path:'/',component:whole,
             children:[
@@ -27,32 +36,33 @@ export default new VueRouter({
                 },
                 {
                     path:'/multiuav',
-                    component:()=>import('@/components/page/multiuav/uavindex'),
-                    redirect:'/multiuav/leaflet',
+                    component:()=>import('@/page/multiuav/uavindex'),
+                    redirect:'/multiuav/leafle',
                     children:[
                         {
-                            path:'/leaflet',
-                            component:()=>import('@/components/page/multiuav/homemap/leaflet'),
-                        }
-                    ]
+                            path:'multiuav/leafle',
+                            component:()=>import('@/components/homemap/leaflet'),
+                        }]
                 }
             ]},
-        // {path:'/home2',component:home,redirect:'/welcomepage',
-        // children:[
-        //     {path:'/leaflet',component:leaflet},
-        //     {path:'/welcomepage',component:welcomepage},
-        //     {path:'/location',component: locationTable},
-        //     {path: '/geofence',component: geofence},
-        //     {path: '/current',component: currentRoute},
-        //     {path: '/video',component: videoWatch},
-        //     {path: '/uavdetail',component: controlinstance},
-        //     {path: '/edit',component: editroute},
 
-        // ]},
-        // {path:'/setting',component:home,
-        //     children:[
-        //         {path:'/webSocket',component:webSocket}
-        //     ]},
+
+        {path:'/home2',component:home,redirect:'/welcomepage',
+        children:[
+            {path:'/leaflet',component:leaflet},
+            {path:'/welcomepage',component:welcomepage},
+            {path:'/location',component: locationTable},
+            {path: '/geofence',component: geofence},
+            {path: '/current',component: currentRoute},
+            {path: '/video',component: videoWatch},
+            {path: '/uavdetail',component: controlinstance},
+            {path: '/edit',component: editroute},
+
+        ]},
+        {path:'/setting',component:home,
+            children:[
+                {path:'/webSocket',component:webSocket}
+            ]},
 
     ]
 })
