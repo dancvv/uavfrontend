@@ -86,6 +86,10 @@ export default new VueRouter({
                 {
                     path: 'communityserve',
                     component: ()=>import('@/page/uavcommunity/community')
+                },
+                {
+                    path: 'user',
+                    component: ()=>import('@/components/users/profile')
                 }
             ]},
 
