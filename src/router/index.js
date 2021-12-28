@@ -2,17 +2,17 @@ import Vue from "vue"
 import VueRouter from "vue-router";
 import welcomepage from "@/components/welcomepage";
 import whole from "@/components/common/Whole";
-import leaflet from "@/components/homemap/leaflet";
+import leaflet from "@/page/multiuav/homemap/leaflet";
 import Home from "@/page/Home"
 
 
 import home from "../components/home";
-import webSocket from "@/components/test/webSocket";
-import locationTable from "@/components/location/locationTable";
-import geofence from "@/components/location/geofence";
-import currentRoute from "@/components/mission/currentRoute";
-import videoWatch from "@/components/mission/videoWatch";
-import controlinstance from "@/components/uavcontrol/controlinstance";
+import webSocket from "@/page/multiuav/test/webSocket";
+import locationTable from "@/page/multiuav/location/locationTable";
+import geofence from "@/page/multiuav/location/geofence";
+import currentRoute from "@/page/multiuav/mission/currentRoute";
+import videoWatch from "@/page/multiuav/mission/videoWatch";
+import controlinstance from "@/page/multiuav/uavcontrol/controlinstance";
 
 
 //处理push操作的重复点击问题
@@ -31,6 +31,7 @@ export default new VueRouter({
         //重定向home页
         {path:'/',redirect:'/welcome'},
         {path:'/leaf',component:leaflet},
+        {path:'/login',component:()=>import('@/components/users/Login')},
         {path:'/',component:whole,
             children:[
                 {path: '/welcome',component: welcomepage},
@@ -44,43 +45,47 @@ export default new VueRouter({
                     children:[
                         {
                             path:'leafmap',
-                            component:()=>import('@/components/homemap/leaflet'),
+                            component:()=>import('@/page/multiuav/homemap/leaflet'),
                             meta:{
                                 title:'地图界面'
                             }
                         },
                         {
                             path:'uavdetail',
-                            component:()=>import('@/components/uavcontrol/controlinstance')
+                            component:()=>import('@/page/multiuav/uavcontrol/controlinstance')
                         },
                         {
                             path:'location',
-                            component:()=>import('@/components/location/locationTable'),
+                            component:()=>import('@/page/multiuav/location/locationTable'),
                             meta:{
                                 title: '位置编辑'
                             }
                         },
                         {
                             path:'geofence',
-                            component:()=>import('@/components/location/geofence')
+                            component:()=>import('@/page/multiuav/location/geofence')
                         },
                         {
                             path:'current',
-                            component:()=>import('@/components/mission/currentRoute')
+                            component:()=>import('@/page/multiuav/mission/currentRoute')
                         },
                         {
                             path:'video',
-                            component:()=>import('@/components/mission/videoWatch')
+                            component:()=>import('@/page/multiuav/mission/videoWatch')
                         },
                         {
                             path:'edit',
-                            component:()=>import('@/components/mission/editroute')
+                            component:()=>import('@/page/multiuav/mission/editroute')
                         },
                         {
                             path:'socket',
-                            component:()=>import('@/components/test/webSocket')
+                            component:()=>import('@/page/multiuav/test/webSocket')
                         }
                     ]
+                },
+                {
+                    path: 'communityserve',
+                    component: ()=>import('@/page/uavcommunity/community')
                 }
             ]},
 
@@ -95,7 +100,7 @@ export default new VueRouter({
             {path: '/video',component: videoWatch},
             {path: '/uavdetail',component: controlinstance},
             // {path: '/edit',component: editroute},
-        
+
         ]},
         {path:'/setting',component:home,
             children:[

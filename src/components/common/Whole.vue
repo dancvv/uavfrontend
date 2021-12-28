@@ -9,9 +9,9 @@
         <div class="text">
           <p style="margin-left: 10px;text-align:center;cursor: pointer" @click="goHome">实时信息处理与态势感知平台</p>
         </div>
-        <div class="header-title" v-show="isAsideCollapse" @click="toggleCollapse">
-          <i class="el-icon-s-unfold" v-show="isAsideCollapse"></i>
-          <i class="el-icon-s-fold" v-show="!isAsideCollapse"></i>
+        <div class="header-title" v-show="asideControl.isShowControl" @click="toggleCollapse">
+          <i class="el-icon-s-unfold" v-show="asideControl.isAsideCollapse"></i>
+          <i class="el-icon-s-fold" v-show="!asideControl.isAsideCollapse"></i>
     </div>
       </div>
       <!-- 水平一级菜单 -->
@@ -54,11 +54,16 @@
 </template>
 
 <script>
+import {mapMutations} from "vuex";
+
 export default {
   name: "whole",
   data(){
     return{
-      isAsideCollapse:false,
+      asideControl:{
+        isShowControl:false,
+        isAsideCollapse:false,
+      },
       items:[
         {index:'Home',title:'首页'},
         {index:'multiuav',title:'多无人机路径规划'},
@@ -70,9 +75,10 @@ export default {
     username(){
       let username = localStorage.getItem('ms_username')
       return username?username:this.name;
-    }
+    },
   },
   methods:{
+    ...mapMutations(['isShowAside']),
     // 根据路径绑定到对应的一级菜单，防止页面刷新重新跳回第一个
     toIndex(){
       return this.$route.path.split('/')[1]
@@ -91,15 +97,14 @@ export default {
     goHome(){
       this.$router.push('/welcome')
     },
-    toggleCollapse(){}
+    toggleCollapse(){
+      this.asideControl.isAsideCollapse = !this.asideControl.isAsideCollapse
+      this.isShowAside(this.asideControl.isAsideCollapse)
+    }
   },
   watch:{
     $route(to){
-      if(to.path!=='Home'){
-        this.isAsideCollapse=true
-      }else{
-        this.isAsideCollapse=false
-      }
+      this.asideControl.isShowControl = !(to.path === '/Home' || to.path === '/welcome');
     }
   }
 }
@@ -140,6 +145,7 @@ export default {
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 }
 /* --------------- 用户头像区域的样式 ---------------- */
 .header-right {

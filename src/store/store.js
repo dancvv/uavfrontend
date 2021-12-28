@@ -39,6 +39,10 @@ export default new vuex.Store({
             decoratorLine:'',
             layer:'',
         },
+    //    12.28
+        syncstatus:{
+            isAsideCollapse:false,
+        }
     },
     mutations:{
         initleaflet(state,payload){
@@ -86,6 +90,10 @@ export default new vuex.Store({
     //    存储无人机路线数组
         storeOriginLine(state,payload){
             state.uavPlanningRoutes.originLine=payload
+        },
+    //    改变全局aside，是否展示
+        isShowAside(state,payload){
+            state.syncstatus.isAsideCollapse=payload
         }
 
 

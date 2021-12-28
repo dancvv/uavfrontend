@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <!--  一级菜单下的二级菜单-->
-    <el-aside :width=" isAsideCollapse ? '64px' : '200px'">
+    <el-aside :width=" isAsideCollapse ? '62px' : '200px'">
       <el-menu class="el-menu-vertical-demo"
                text-color="#666"
                active-text-color="#409eff"
@@ -40,11 +40,13 @@
 
 <script>
 
+import {mapState} from "vuex";
+
 export default {
   name: "uavindex",
   data(){
     return{
-      isAsideCollapse:false,
+      isCollapse:false,
       items: [
         {
           index: 'leafmp',
@@ -105,6 +107,13 @@ export default {
   mounted() {
     this.init()
   },
+  computed:{
+    ...mapState(['syncstatus']),
+    isAsideCollapse(){
+      // return this.isCollapse = this.syncstatus.isAsideCollapse()
+      return this.syncstatus.isAsideCollapse
+    }
+  },
   methods:{
     init(){
       console.log("push something")
@@ -120,8 +129,20 @@ export default {
 }
 .el-aside{
   height: 100%;
+  background: #ffffff;
+}
+.el-menu--collapse {
+  width: 60px;
 }
 .el-container{
   height: 100%;
+}
+.el-menu{
+  border-right: solid 1px #FFF;
+  list-style: none;
+  position: relative;
+  margin: 0;
+  padding-left: 0;
+  background-color: #FFF;
 }
 </style>
