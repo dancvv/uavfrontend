@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label="年龄" prop="age">
             <el-input-number v-model="form.age" :min="1" :max="100"></el-input-number>
-          </el-form-item>
+          </el-form-item>1
 
           <el-divider content-position="left">详细介绍</el-divider>
           <el-form-item label="技术选择" prop="type">
@@ -146,7 +146,8 @@ export default {
 }
 </script>
 
-<style scoped lang="stylus">
-.profile-wrapper
+<style scoped>
+.profile-wrapper{
   padding: 10px 20px
+}
 </style>
