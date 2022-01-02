@@ -31,7 +31,7 @@ export default new VueRouter({
         //重定向home页
         {path:'/',redirect:'/welcome'},
         {path:'/leaf',component:leaflet},
-        {path:'/login',component:()=>import('@/components/users/Login')},
+        {path:'/login',component:()=>import('@/components/users/index')},
         {path:'/',component:whole,
             children:[
                 {path: '/welcome',component: welcomepage},

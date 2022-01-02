@@ -2,7 +2,7 @@
   <div>
     <h3 class="breadcrumb">当前位置</h3>
     <el-breadcrumb class="breadcrumb" separator="/">
-      <el-breadcrumb-item :to="{ path: '/welcomepage' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/welcome' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>任务执行</el-breadcrumb-item>
       <el-breadcrumb-item>实时画面</el-breadcrumb-item>
     </el-breadcrumb>
