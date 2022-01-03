@@ -2,7 +2,11 @@
     <div class="login-wrap">
 
         <div class="ms-login">
-            <div class="ms-title">欢迎登录</div>
+          <div class="ms-icon">
+            <img src="../../assets/icon/uavIcon.svg" width="85 px" alt="None">
+          </div>
+            <h1 class="ms-title">实时信息处理与态势感知平台</h1>
+          <el-divider></el-divider>
             <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
                 <el-form-item prop="username">
                     <el-input v-model="param.username" placeholder="输入账号">
@@ -16,7 +20,7 @@
                 </el-form-item>
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm()">登录</el-button>
-                    <span>注：账号密码随便填写（ admin 是管理员，其他为普通用户）</span>
+                    <span>注：admin 是管理员，其他为普通用户</span>
                 </div>
             </el-form>
         </div>
@@ -69,29 +73,40 @@ export default {
 
 <style scoped>
 .login-wrap {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: url('../../assets/img/newlogin-bg.jpg');
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #044289 url('../../assets/img/login-bg.svg');
 }
 .ms-title {
-    width: 100%;
-    text-align: center;
-    font-size: 22px;
-    margin: 25px 0px 15px;
+  width: 100%;
+  text-align: center;
+  margin: 25px 0px 15px;
+  display: block;
+  font-size: 1.5em;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
 }
 .ms-login {
     position: relative;
-    width: 450px;
-    height: 335px;
+    width: 500px;
+    height: 450px;
     max-width: 90%;
     margin: 275px auto;
     border-radius: 5px;
     background: white;
     overflow: hidden;
 }
+.ms-icon{
+  display: flex;
+  justify-content: center;
+  margin: 15px;
+}
 .ms-content {
-    padding: 30px 30px;
+    padding: 5px 30px;
 }
 .login-btn {
     margin-top: 10%;
