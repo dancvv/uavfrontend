@@ -6,7 +6,7 @@
           <h3>个人中心</h3>
           <el-divider content-position="left">个人资料</el-divider>
           <el-form-item label="账号" prop="account">
-            <el-input v-model="form.account" disabled></el-input>
+            <el-input v-model="form.account"></el-input>
           </el-form-item>
           <el-form-item label="用户名" prop="name">
             <el-input v-model="form.name"></el-input>
@@ -40,45 +40,25 @@
       </el-col>
       <el-col class="hidden-sm-and-down" :md="8" :lg="8" :xl="8" style="margin-top: 34px">
         <el-divider content-position="left">头像</el-divider>
-        <img :src="avatar" class="image">
-        <br>
-        <el-link :underline="false" type="primary" @click="show = true">修改</el-link>
+        <upload-user-icon></upload-user-icon>
       </el-col>
     </el-row>
-    <!-- <my-upload v-show="show" @crop-success="cropSuccess"></my-upload> -->
-    <my-upload  
-       v-show="show"
- 5     @crop-success="cropSuccess" 
- 6     @crop-upload-success="cropUploadSuccess"
- 7     @crop-upload-fail="cropUploadFail"
- 8     v-model="show" 
- 9     :width="200" 
-10     :height="200" 
-11     img-format="png" 
-12     :size="size"
-13     langType='zh'
-14     :noRotate='false'
-15     field="Avatar1"
-16     url="https://httpbin.org/post"></my-upload>
   </div>
 </template>
 <script>
 import { skills } from '@/common/dicts'
-import { mapGetters, mapActions } from 'vuex'
-import myUpload from 'vue-image-crop-upload'
+import uploadUserIcon from './uploadUserIcon.vue'
 export default {
-  components: {
-    myUpload
-  },
+  components: { uploadUserIcon },
   data() {
     return {
       show: false,
       currentDate: '',
       form: {
-        account: '',
-        name: '',
-        sex: null,
-        age: 1,
+        account: 'flyer1',
+        name: '试飞员1',
+        sex: '男',
+        age: 22,
         type: [],
         desc: ''
       },
@@ -105,17 +85,7 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters([
-      'avatar',
-      'allInfo'
-    ])
-  },
   methods: {
-    ...mapActions([
-      'doUpdateAvatar',
-      'doUpdateUser'
-    ]),
     // 保存
     save() {
       this.$refs['form'].validate(valid => {
@@ -136,22 +106,11 @@ export default {
     },
     // 重置
     reset() {
-      this.form = Object.assign(this.form, this.allInfo)
+      // this.form = Object.assign(this.form, this.allInfo)
     },
     closeDialog() {
       this.show = false
     },
-    cropSuccess(imgDataUrl, field) {
-      console.log(field)
-      // this.form.avatar = imgDataUrl
-      // this.SET_AVATAR(imgDataUrl)
-      const loading = this.$loading({
-        lock: true
-      })
-      this.doUpdateAvatar(imgDataUrl).finally(() => {
-        loading.close()
-      })
-    }
   },
   created() {
     this.skills = skills
