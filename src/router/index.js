@@ -89,7 +89,7 @@ export default new VueRouter({
                 },
                 {
                     path: 'user',
-                    component: ()=>import('@/components/users/center')
+                    component: ()=>import('@/components/users/profile')
                 }
             ]},
 

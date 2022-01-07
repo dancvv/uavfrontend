@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label="年龄" prop="age">
             <el-input-number v-model="form.age" :min="1" :max="100"></el-input-number>
-          </el-form-item>1
+          </el-form-item>
 
           <el-divider content-position="left">详细介绍</el-divider>
           <el-form-item label="技术选择" prop="type">
@@ -45,7 +45,21 @@
         <el-link :underline="false" type="primary" @click="show = true">修改</el-link>
       </el-col>
     </el-row>
-    <my-upload v-model="show" @crop-success="cropSuccess"></my-upload>
+    <!-- <my-upload v-show="show" @crop-success="cropSuccess"></my-upload> -->
+    <my-upload  
+       v-show="show"
+ 5     @crop-success="cropSuccess" 
+ 6     @crop-upload-success="cropUploadSuccess"
+ 7     @crop-upload-fail="cropUploadFail"
+ 8     v-model="show" 
+ 9     :width="200" 
+10     :height="200" 
+11     img-format="png" 
+12     :size="size"
+13     langType='zh'
+14     :noRotate='false'
+15     field="Avatar1"
+16     url="https://httpbin.org/post"></my-upload>
   </div>
 </template>
 <script>
@@ -127,17 +141,17 @@ export default {
     closeDialog() {
       this.show = false
     },
-    // cropSuccess(imgDataUrl, field) {
-    //   console.log(field)
-    //   // this.form.avatar = imgDataUrl
-    //   // this.SET_AVATAR(imgDataUrl)
-    //   const loading = this.$loading({
-    //     lock: true
-    //   })
-    //   this.doUpdateAvatar(imgDataUrl).finally(() => {
-    //     loading.close()
-    //   })
-    // }
+    cropSuccess(imgDataUrl, field) {
+      console.log(field)
+      // this.form.avatar = imgDataUrl
+      // this.SET_AVATAR(imgDataUrl)
+      const loading = this.$loading({
+        lock: true
+      })
+      this.doUpdateAvatar(imgDataUrl).finally(() => {
+        loading.close()
+      })
+    }
   },
   created() {
     this.skills = skills
@@ -146,8 +160,7 @@ export default {
 }
 </script>
 
-<style scoped>
-.profile-wrapper{
+<style scoped lang="stylus">
+.profile-wrapper
   padding: 10px 20px
-}
 </style>

@@ -54,9 +54,9 @@ Vue.config.productionTip = false
 import UUID from "uuid-js"
 Vue.use(UUID)
 
-// echarts
-import echarts from "echarts";
-Vue.prototype.$echarts = echarts;
+// // echarts
+// import echarts from "echarts";
+// Vue.prototype.$echarts = echarts;
 
 // 引入AntV
 // import G2 from '@antv/g2';

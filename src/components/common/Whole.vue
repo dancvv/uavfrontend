@@ -30,7 +30,7 @@
       <div class="header-right">
         <div class="header-user-con">
           <!-- 用户头像，根据需要自行修改图片路径 -->
-          <div class="user-avator"><img src="../../assets/img/img.jpg" /></div>
+          <div class="user-avator"><img src="../../assets/img/avatar.jpeg" /></div>
           <!-- 用户名下拉菜单 -->
           <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
