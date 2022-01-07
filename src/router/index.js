@@ -85,7 +85,14 @@ export default new VueRouter({
                 },
                 {
                     path: 'communityserve',
-                    component: ()=>import('@/page/uavcommunity/community')
+                    component: ()=>import('@/page/uavcommunity/community'),
+                    redirect:'/communityserve/usermap',
+                    children:[
+                        {
+                            path:'usermap',
+                            component:()=>import('@/page/uavcommunity/mapview/usermap')
+                        }
+                    ]
                 },
                 {
                     path: 'user',

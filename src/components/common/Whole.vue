@@ -3,7 +3,7 @@
     <!-- 系统标题处 -->
     <div class="header">
       <div class="logo">
-        <div>
+    <div>
           <img src="../../assets/icon/uavIcon.svg" width="45px" alt="None">
         </div>
         <div class="text">

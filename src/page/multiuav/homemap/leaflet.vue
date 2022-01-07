@@ -75,7 +75,7 @@ export default {
     // this.layersSet.markerSet=L.layerGroup().addTo(map)
   },
   created() {
-    this.initMap()
+    this.initMapUUID()
   },
   methods:{
     ...mapMutations(['initleaflet','storeUavRouteInfo']),
@@ -102,7 +102,7 @@ export default {
         prefix:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'}).addTo(map)
       map.setView([ 39.082324815761126,121.81149363525782],16)
     },
-    initMap() {
+    initMapUUID() {
       //载入地图，使用vuex保存状态
       this.uploadinfo.uuid=UUID.create(4).hex
     },
