@@ -28,10 +28,11 @@ import store from './store/store'
 //leaflet地图
 // import L from "leaflet"
 // import "leaflet/dist/leaflet.css";
-// leaflet组件
+// leaflet组件,组件化使用地图
 import maputils from "./maputils"
 Vue.prototype.$maputils = maputils
-// 设置图片默认访问路径
+import leafleteasybutton from 'leaflet-easybutton'
+Vue.use(leafleteasybutton)
 
 // Vue.use(L)
 

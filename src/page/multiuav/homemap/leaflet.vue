@@ -100,7 +100,23 @@ export default {
       L.control.attribution({
         position:'bottomright',
         prefix:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'}).addTo(map)
-      map.setView([ 39.082324815761126,121.81149363525782],16)
+      this.locateYou();
+    },
+    // 定位函数，显示定位成功与否
+    locateYou(){
+      map.on('locationfound',this.onLocationFound)
+      map.on('locationerror',this.onLocationError)
+      map.locate({setView:true,maxZoom:15})
+    },
+    onLocationFound(e){
+      let radius=e.accuracy/2;
+      let userMarker=L.marker(e.latlng).bindPopup('当前定位精度:'+radius+'m').openPopup()
+      let userCircle=L.circle(e.latlng,radius)
+      let locateGroup=L.layerGroup([userMarker,userCircle])
+      locateGroup.addTo(map)
+    },
+    onLocationError(e){
+      this.$message.error(e.message)
     },
     initMapUUID() {
       //载入地图，使用vuex保存状态

@@ -1,6 +1,6 @@
 import "leaflet/dist/leaflet.css"
 import L from "leaflet"
-import flyingUAV from "../assets/icon/uav48.svg"
+import flyingUAV from "@/assets/icon/uav48.svg"
 
 //创建map容器，
 const newMap = (domId,Option) => {
