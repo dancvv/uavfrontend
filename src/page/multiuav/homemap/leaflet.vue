@@ -23,6 +23,8 @@ import UUID from "uuid-js"
 import qs from "qs";
 import "../../../assets/jsplugin/MovingMarker"
 import "leaflet-polylinedecorator"
+import 'leaflet.locatecontrol'
+import 'leaflet.locatecontrol/dist/L.Control.Locate.css'
 let map=null
 let layerGroup={
   userlayer:null,
@@ -67,11 +69,13 @@ export default {
         userinfo:[],
         locationinfo:[]
       },
+      // 定位gps
+      geoLocate:null,
     }
   },
   mounted() {
-    console.log("leaflet console test")
-    this.mapInitialize()
+    this.mapInitialize();
+    this.geoLocate.start();
     // this.layersSet.markerSet=L.layerGroup().addTo(map)
   },
   created() {
@@ -100,7 +104,8 @@ export default {
       L.control.attribution({
         position:'bottomright',
         prefix:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'}).addTo(map)
-      this.locateYou();
+        //  定位功能，可用
+      this.geoLocate = L.control.locate({position:'bottomright',initialZoomLevel:15}).addTo(map);
     },
     // 定位函数，显示定位成功与否
     locateYou(){

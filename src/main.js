@@ -31,8 +31,6 @@ import store from './store/store'
 // leaflet组件,组件化使用地图
 import maputils from "./maputils"
 Vue.prototype.$maputils = maputils
-import leafleteasybutton from 'leaflet-easybutton'
-Vue.use(leafleteasybutton)
 
 // Vue.use(L)
 

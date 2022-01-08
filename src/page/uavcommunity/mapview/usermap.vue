@@ -14,13 +14,17 @@
 <script>
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import 'leaflet-easybutton'
+import 'leaflet-draw'
+import 'leaflet-draw/dist/leaflet.draw.css'
+import 'leaflet.locatecontrol'
+import 'leaflet.locatecontrol/dist/L.Control.Locate.css'
 let map=null
 let layers = null
 export default {
     data(){
         return{
             mapId:'mapbox/streets-v11',
+            geoLocate:null,
         }
     },
     methods:{
@@ -45,12 +49,22 @@ export default {
       L.control.attribution({
         position:'bottomright',
         prefix:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'}).addTo(map)
-      // 定位功能
-      this.locateYou();
-      L.easyButton('<span class="star">&starf;</span>', function(btn, map){
-          var antarctica = [-77,70];
-          map.setView(antarctica);
-      }).zoom({position:'bottomright'}).addTo( map );
+      // 定位功能，旧版，废弃
+      // this.locateYou();
+      //初始化绘制控件
+      var drawnItems = new L.FeatureGroup();
+          map.addLayer(drawnItems);
+          var drawControl = new L.Control.Draw({
+              edit: {
+                  featureGroup: drawnItems
+              }
+          });
+      map.addControl(drawControl);
+     //  定位功能，可用
+      this.geoLocate = L.control.locate({position:'bottomright',initialZoomLevel:15}).addTo(map);
+    },
+    lc(){
+      
     },
     // 定位函数，显示定位成功与否
     locateYou(){
@@ -84,6 +98,8 @@ export default {
   mounted() {
     // 初始化地图
       this.mapInitialize();
+      // 定位
+      this.geoLocate.start();
     },
 }
 </script>
