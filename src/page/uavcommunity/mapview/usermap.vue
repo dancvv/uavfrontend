@@ -5,6 +5,7 @@
       <el-radio-button label='mapbox/satellite-v9' size="mini" >卫星地图</el-radio-button>
       <el-radio-button label='mapbox/outdoors-v10' size="mini" >户外地图</el-radio-button>
     </el-radio-group>
+    <el-button class="mapStyle2" type="primary" @click="visualMap">可视化</el-button>
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
     <div id="map"></div>
@@ -18,13 +19,23 @@ import 'leaflet-draw'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import 'leaflet.locatecontrol'
 import 'leaflet.locatecontrol/dist/L.Control.Locate.css'
+// 大规模数据展示插件
+import 'leaflet-markers-canvas'
+import 'rbush'
+// import 'leaflet-canvas-marker-xrr2021'
+// import('leaflet-canvas-marker-xrr2021')
+// import 'leaflet-canvas-marker'
+// import '@/assets/jsplugin/leaflet.canvas-markers.js'
 let map=null
 let layers = null
+// let ciLayer = null;
 export default {
     data(){
         return{
             mapId:'mapbox/streets-v11',
             geoLocate:null,
+            // 大规模数据图层
+            // ciLayer:null,
         }
     },
     methods:{
@@ -34,7 +45,6 @@ export default {
         maxZoom: 20,
         zoomControl: false,
         attributionControl: false,
-        //坐标系选择
         crs: L.CRS.EPSG3857
       }).fitWorld();
       layers = this.$maputils.map.createLayers(map,'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',{
@@ -43,6 +53,7 @@ export default {
         id: this.mapId,
         tileSize: 512,
         zoomOffset: -1,
+        // preferCanvas: true,
         accessToken: 'pk.eyJ1IjoidHJhbnNjZW5kdHJlZSIsImEiOiJja3N6eHRiMzkxeXNzMm90Y2Rhd2JmbjNqIn0.bCRv7xB55jHSDwEF5y5DcA'
       })
       L.control.zoom({position:'topright'}).addTo(map)
@@ -52,19 +63,41 @@ export default {
       // 定位功能，旧版，废弃
       // this.locateYou();
       //初始化绘制控件
-      var drawnItems = new L.FeatureGroup();
-          map.addLayer(drawnItems);
-          var drawControl = new L.Control.Draw({
-              edit: {
-                  featureGroup: drawnItems
-              }
-          });
-      map.addControl(drawControl);
+      // var drawnItems = new L.FeatureGroup();
+      //     map.addLayer(drawnItems);
+      //     var drawControl = new L.Control.Draw({
+      //         edit: {
+      //             featureGroup: drawnItems
+      //         }
+      //     });
+      // map.addControl(drawControl);
      //  定位功能，可用
       this.geoLocate = L.control.locate({position:'bottomright',initialZoomLevel:15}).addTo(map);
+      // L.marker([39.060602, 121.801433]).addTo(map);
+      // this.locateYou()
     },
-    lc(){
+    // 大规模数据显示
+    visualMap(){
+      // let mar = L.marker([39.075302,121.901633])
+    // mar.addTo(map)
+        // this.locateYou()
+      console.log('tag', 'fefe')
+      L.marker([39.083118, 121.808749]).addTo(map);
       
+      var markersCanvas = new L.MarkersCanvas();
+      markersCanvas.addTo(map);
+      var markers = [];
+      for (var i = 0; i < 10000; i++) {
+        var marker = L.marker([39.083118 + Math.random() * 1.8, 121.808749 + Math.random() * 3.6],).bindPopup("I Am " + i)
+        markers.push(marker);
+    }
+      markersCanvas.addMarkers(markers);
+      
+    this.$notify.success({
+            title:'Test',
+            message:'test'
+          })
+
     },
     // 定位函数，显示定位成功与否
     locateYou(){
@@ -73,6 +106,7 @@ export default {
       map.locate({setView:true,maxZoom:15})
     },
     onLocationFound(e){
+      console.log(e)
       let radius=e.accuracy/2;
       let userMarker=L.marker(e.latlng).bindPopup('当前定位精度:'+radius+'m').openPopup()
       let userCircle=L.circle(e.latlng,radius)
@@ -82,6 +116,7 @@ export default {
     onLocationError(e){
       this.$message.error(e.message)
     },
+    // 改变地图样式
     changeStyle(){
       map.removeLayer(layers)
       this.$maputils.map.changeLayers(map,'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}',{
@@ -100,6 +135,7 @@ export default {
       this.mapInitialize();
       // 定位
       this.geoLocate.start();
+      this.visualMap();
     },
 }
 </script>
@@ -118,12 +154,18 @@ export default {
 }
 .mapStyle{
   position: absolute;
-  z-index: 0;
+  z-index: 1;
   margin-top: 20px;
   margin-left: 20px;
 }
 .target{
   font-size: 1.5em;
 } 
+.mapStyle2{
+  position: absolute;
+  z-index: 1;
+  margin-top: 60px;
+  margin-left: 20px;
+}
 
 </style>

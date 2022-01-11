@@ -31,7 +31,9 @@ import store from './store/store'
 // leaflet组件,组件化使用地图
 import maputils from "./maputils"
 Vue.prototype.$maputils = maputils
-
+// 地图显示插件
+// import rbush from 'rbush';
+// Vue.use(rbush)
 // Vue.use(L)
 
 // dplayer视频播放
