@@ -5,7 +5,7 @@
       <el-radio-button label='mapbox/satellite-v9' size="mini" >卫星地图</el-radio-button>
       <el-radio-button label='mapbox/outdoors-v10' size="mini" >户外地图</el-radio-button>
     </el-radio-group>
-    <el-button class="mapStyle2" type="primary" @click="visualMap">可视化</el-button>
+    <el-button class="mapStyle2" type="primary" size="mini" @click="visualMap">可视化</el-button>
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
     <div id="map"></div>
@@ -21,7 +21,6 @@ import 'leaflet.locatecontrol'
 import 'leaflet.locatecontrol/dist/L.Control.Locate.css'
 // 大规模数据展示插件
 import 'leaflet-markers-canvas'
-import 'rbush'
 // import 'leaflet-canvas-marker-xrr2021'
 // import('leaflet-canvas-marker-xrr2021')
 // import 'leaflet-canvas-marker'
@@ -34,6 +33,7 @@ export default {
         return{
             mapId:'mapbox/streets-v11',
             geoLocate:null,
+            userLocation:[]
             // 大规模数据图层
             // ciLayer:null,
         }
@@ -76,14 +76,8 @@ export default {
       // L.marker([39.060602, 121.801433]).addTo(map);
       // this.locateYou()
     },
-    // 大规模数据显示
-    visualMap(){
-      // let mar = L.marker([39.075302,121.901633])
-    // mar.addTo(map)
-        // this.locateYou()
-      console.log('tag', 'fefe')
-      L.marker([39.083118, 121.808749]).addTo(map);
-      
+    // 大规模数据显示示例函数
+    visualMapDemo(){
       var markersCanvas = new L.MarkersCanvas();
       markersCanvas.addTo(map);
       var markers = [];
@@ -92,12 +86,34 @@ export default {
         markers.push(marker);
     }
       markersCanvas.addMarkers(markers);
-      
-    this.$notify.success({
+      this.$notify.success({
             title:'Test',
             message:'test'
           })
-
+    },
+    // 数据显示函数
+    visualMap(){
+      this.getUserData()
+      var markersCanvas = new L.MarkersCanvas();
+      markersCanvas.addTo(map);
+      var markers = [];
+      for (var i = 0; i < this.userLocation.length; i++) {
+        console.log(this.userLocation[i])
+        var marker = L.marker([this.userLocation[i].latitude, this.userLocation[i].longitude]).bindPopup("I Am " + this.userLocation[i].UserId)
+        markers.push(marker);
+    }
+      markersCanvas.addMarkers(markers);
+      this.$notify.success({
+            title:'Test',
+            message:'test'
+          })
+    },
+    // 获取数据源
+    async getUserData(){
+      const{data:response}=await this.$http.get('taxiuser/getLocation')
+      for(let i = 0;i<response.length;i++){
+        this.userLocation.push(response[i])
+      }
     },
     // 定位函数，显示定位成功与否
     locateYou(){
@@ -135,7 +151,7 @@ export default {
       this.mapInitialize();
       // 定位
       this.geoLocate.start();
-      this.visualMap();
+      // this.visualMap();
     },
 }
 </script>
