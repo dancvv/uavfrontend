@@ -5,8 +5,8 @@
       <el-radio-button label='mapbox/satellite-v9' size="mini" >卫星地图</el-radio-button>
       <el-radio-button label='mapbox/outdoors-v10' size="mini" >户外地图</el-radio-button>
     </el-radio-group>
-    <el-button class="mapStyle2" type="success" size="mini" @click="visualMap">可视化</el-button>
-        <datepicker></datepicker>
+        <el-button class="mapStyle2" type="success" size="mini" @click="cluterUsers">聚类</el-button>
+
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
     <div id="map"></div>
@@ -23,12 +23,11 @@ import 'leaflet.locatecontrol/dist/L.Control.Locate.css'
 // 大规模数据展示插件
 import 'leaflet-markers-canvas'
 import 'leaflet.markercluster/dist/leaflet.markercluster'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
-import datepicker from './datepicker.vue'
 let map=null
 let layers = null
 export default {
-  components: { datepicker },
     data(){
         return{
             mapId:'mapbox/streets-v11',
@@ -73,44 +72,27 @@ export default {
      //  定位功能，可用
       this.geoLocate = L.control.locate({position:'bottomright',initialZoomLevel:15}).addTo(map);
     },
-    // 大规模数据显示示例函数
-    visualMapDemo(){
-      var markersCanvas = new L.MarkersCanvas();
-      markersCanvas.addTo(map);
-      var markers = [];
-      for (var i = 0; i < 10000; i++) {
-        var marker = L.marker([39.083118 + Math.random() * 1.8, 121.808749 + Math.random() * 3.6],).bindPopup("I Am " + i)
-        markers.push(marker);
-    }
-      markersCanvas.addMarkers(markers);
-      this.$notify.success({
-            title:'查询后端数据库',
-            message:'返回结果成功'
-          })
+    // 聚类方法
+    cluterUsers(){
+        this.getUserData()
+        let markers = L.markerClusterGroup({ 
+            chunkedLoading: true ,
+            zoomToBoundsOnClick:true,
+            showCoverageOnHover: true,
+            maxClusterRadius:50,
+            });
+		
+		for (var i = 0; i < this.userLocation.length; i++) {
+			var a = this.userLocation[i];
+			var title = a.userId;
+			var marker = L.marker(L.latLng(a.latitude, a.longitude), { title: title });
+			marker.bindPopup(title);
+			markers.addLayer(marker);
+		}
+
+		map.addLayer(markers);
     },
-    // 数据显示函数
-    visualMap(){
-      this.getUserData()
-      var markersCanvas = new L.MarkersCanvas();
-      markersCanvas.addTo(map);
-      for (var i = 0; i < this.userLocation.length; i++) {
-        console.log(this.userLocation[i])
-        var marker = L.marker([this.userLocation[i].latitude, this.userLocation[i].longitude]).bindPopup("用户ID： " + this.userLocation[i].userId).on({
-      mouseover() {
-        this.openPopup();
-      },
-      mouseout() {
-        this.closePopup();
-      },})
-        this.canvasMarkers.push(marker);
-    }
-      markersCanvas.addMarkers(this.canvasMarkers);
-      let bounds = markersCanvas.getBounds()
-      // console.log(bounds)
-      map.fitBounds(bounds)
-      
-      
-    },
+
     // 获取数据源
     async getUserData(){
       const{data:response}=await this.$http.get('taxiuser/getLocation')
@@ -161,8 +143,8 @@ export default {
   mounted() {
     // 初始化地图
       this.mapInitialize();
-      // 定位
-      // this.geoLocate.start();
+      // 聚类方法
+      this.cluterUsers();
     },
 }
 </script>
@@ -191,7 +173,7 @@ export default {
 .mapStyle2{
   position: absolute;
   z-index: 1;
-  margin-top: 60px;
+  margin-top: 20px;
   margin-left: 450px;
 }
 .row{

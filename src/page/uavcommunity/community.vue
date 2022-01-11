@@ -12,7 +12,11 @@
                :collapse-transition="false">
         <el-menu-item index="usermap">
           <i class="el-icon-map-location"></i>
-          <span slot="title">社区用户地图</span>
+          <span slot="title">社区用户展示</span>
+        </el-menu-item>
+        <el-menu-item index="clustermap">
+          <i class="el-icon-map-location"></i>
+          <span slot="title">用户聚类</span>
         </el-menu-item>
         <el-submenu :index="item.path" v-for="item in asideMenu" :key="item.id">
           <template slot="title">
@@ -53,33 +57,12 @@ export default {
       //菜单数据
       asideMenu:[
         // {id:'100',path:'/leaflet',name:'首页',order:1,icon:'el-icon-user'},
-        {id:'200',path:'manage',name:'飞行参数设置',order:1,icon:'el-icon-s-cooperation',
+        {id:'200',path:'manage',name:'算法',order:1,icon:'el-icon-s-cooperation',
           children:[
-            {id:'201',path:'demomap',name:'任务位置信息',order:2},
-            {id:'202',path:'geofence',name:'地理围栏',order:2},
-          ]},
-        {id:'300',path:'mission',name:'任务执行',order:1,icon:'el-icon-s-goods',
-          children: [
-            {id:'301',path:'current',name:'当前路线',order:2},
-            {id:'302',path:'video',name:'实时画面',order:2},
-            {id:'303',path:'edit',name:'路线更改',order:2},
-          ]},
-        {id:'400',path:'status',name:'数据分析',order:1,icon:'el-icon-s-order',
-          children: [
-            {id:401,path:'device',name:'设备管理',order:2},
-            {id:402,path:'socket',name:'WebSocket',order:2}
-          ]},
-        {id:'500',path:'setting',name:'设置',order:1,icon:'el-icon-s-data',
-          children: [
-            {id:'501',path:'/lad',name:'无人机参数设置'},
-            {id:'502',path:'/laa',name:'用户设置'},
-            {id:'503',path:'/版本信息',name:'版本信息'},
+            {id:'201',path:'demomap',name:'算法',order:2},
           ]},
       ],
     }
-  },
-  mounted() {
-    this.init()
   },
   computed:{
     ...mapState(['syncstatus']),
@@ -88,11 +71,6 @@ export default {
       return this.syncstatus.isAsideCollapse
     }
   },
-  methods:{
-    init(){
-      console.log("push something")
-    }
-  }
 }
 </script>
 

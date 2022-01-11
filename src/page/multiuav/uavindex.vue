@@ -104,9 +104,7 @@ export default {
       ],
     }
   },
-  mounted() {
-    this.init()
-  },
+  mounted() {},
   computed:{
     ...mapState(['syncstatus']),
     isAsideCollapse(){
@@ -114,11 +112,7 @@ export default {
       return this.syncstatus.isAsideCollapse
     }
   },
-  methods:{
-    init(){
-      console.log("push something")
-    }
-  }
+  methods:{},
 }
 </script>
 

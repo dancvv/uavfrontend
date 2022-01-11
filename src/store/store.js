@@ -41,7 +41,7 @@ export default new vuex.Store({
         },
     //    12.28
         syncstatus:{
-            isAsideCollapse:false,
+            isAsideCollapse:true,
         }
     },
     mutations:{

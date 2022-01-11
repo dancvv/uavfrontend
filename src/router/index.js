@@ -92,6 +92,10 @@ export default new VueRouter({
                             path:'usermap',
                             component:()=>import('@/page/uavcommunity/mapview/usermap')
                         },
+                        {
+                            path: 'clustermap',
+                            component:()=>import('@/page/uavcommunity/mapview/clustermap')
+                        },
                     ]
                 },
                 {

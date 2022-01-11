@@ -63,7 +63,7 @@ export default {
     return{
       asideControl:{
         isShowControl:false,
-        isAsideCollapse:false,
+        isAsideCollapse:true,
       },
       items:[
         {index:'Home',title:'首页'},

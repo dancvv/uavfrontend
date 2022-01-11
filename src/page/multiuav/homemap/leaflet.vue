@@ -85,7 +85,7 @@ export default {
     ...mapMutations(['initleaflet','storeUavRouteInfo']),
     mapInitialize(){
       map = this.$maputils.map.newMap("map",{
-        minZoom: 0,
+        minZoom: 1,
         maxZoom: 20,
         zoomControl: false,
         attributionControl: false,
