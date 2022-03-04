@@ -6,6 +6,7 @@
       <el-radio-button label='mapbox/outdoors-v10' size="mini" >户外地图</el-radio-button>
     </el-radio-group>
     <el-button class="mapStyle2" type="success" size="mini" @click="visualMap">可视化</el-button>
+    <el-button class="mapStyle2" style="margin-top: 60px; margin-left: 520px;" type="success" size="mini" @click="getClusterLocation">聚类方法</el-button>
         <datepicker></datepicker>
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
@@ -33,9 +34,18 @@ export default {
         return{
             mapId:'mapbox/streets-v11',
             geoLocate:null,
+            // 原始信息
             userLocation:[],
             canvasMarkers: [],
+            // 聚类点
+            clusterLocation:[]
         }
+    },
+    mounted() {
+    // 初始化地图
+      this.mapInitialize();
+      // 定位
+      this.geoLocate.start();
     },
     methods:{
      mapInitialize(){
@@ -157,13 +167,37 @@ export default {
     },
     clusterMarker(){
     },
-  },
-  mounted() {
-    // 初始化地图
-      this.mapInitialize();
-      // 定位
-      // this.geoLocate.start();
+    async getClusterLocation(){
+      const {data : res} = await this.$http.get('cluster/findall')
+      this.clusterLocation = res
+      console.log(res)
+      this.$notify.success({
+        title:'聚类结果',
+        message:'聚类成功，'+'聚类中心'+res.length+'个'
+      })
+      this.ClusterShow()
     },
+    ClusterShow(){
+      // this.getUserData()
+      var markersCanvas = new L.MarkersCanvas();
+      markersCanvas.addTo(map);
+      for (var i = 0; i < this.clusterLocation.length; i++) {
+        console.log(this.clusterLocation[i])
+        var marker = L.marker([this.clusterLocation[i].lat, this.clusterLocation[i].lng]).bindPopup("用户ID： " + this.userLocation[i].id).on({
+          mouseover() {
+            this.openPopup();
+          },
+          mouseout() {
+            this.closePopup();
+          },})
+        this.canvasMarkers.push(marker);
+    }
+      markersCanvas.addMarkers(this.canvasMarkers);
+      let bounds = markersCanvas.getBounds()
+      // console.log(bounds)
+      map.fitBounds(bounds)
+    }
+  },
 }
 </script>
 

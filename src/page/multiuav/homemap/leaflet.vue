@@ -145,7 +145,7 @@ export default {
       if (this.editFtButton.placeDepotPoint){
         this.editFtButton.placeDepotPoint=!this.editFtButton.placeDepotPoint
       }
-      let uavIcon = this.$maputils.map.createIcon({
+      let userIcon = this.$maputils.map.createIcon({
         iconUrl: require("../../../assets/icon/mobile.png"),
         iconSize: [36, 36]})
       map.on('click',(e)=>{
@@ -156,7 +156,7 @@ export default {
         let userStr = "user "+this.lineInfo.userLength
         let createStamp = new Date()
         this.inputUserLocation(userStr,createStamp,e)
-        this.markers.users[this.lineInfo.userLength]=this.$maputils.map.createMarker(e.latlng,{icon:uavIcon,title:userStr})
+        this.markers.users[this.lineInfo.userLength]=this.$maputils.map.createMarker(e.latlng,{icon:userIcon,title:userStr})
         this.lineInfo.userLength+=1
         layerGroup.userlayer = L.layerGroup(this.markers.users)
         layerGroup.userlayer.addTo(map)
@@ -354,6 +354,9 @@ export default {
       this.drawUAV()
     },
     drawUAV(){
+      let uavIcon = this.$maputils.map.createIcon({
+        iconUrl: require("../../../assets/icon/uav48.svg"),
+        iconSize: [36, 36]})
       this.lineInfo.marker = new Array(this.lineInfo.pathline.length)
       for(let i=0;i<this.lineInfo.pathline.length;i++){
         // let flyingSpeed = [];
@@ -361,8 +364,8 @@ export default {
         for (let j=0;j<this.lineInfo.pathline[i].length;j++){
           flyingSpeed[j] = 1000;
         }
-        this.lineInfo.marker[i] = L.Marker.movingMarker(this.lineInfo.pathline[i],flyingSpeed).addTo(map);
-        this.lineInfo.marker[i].bindPopup("无人机<b>"+i+"</b>的路线").openPopup()
+        this.lineInfo.marker[i] = L.Marker.movingMarker(this.lineInfo.pathline[i],flyingSpeed,{icon:uavIcon}).addTo(map);
+        this.lineInfo.marker[i].bindPopup("无人机<b>"+i+"</b>的路线",{autoClose:false,closeOnClick: false}).openPopup();
       }
     },
     animateUAV(){
