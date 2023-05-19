@@ -75,7 +75,7 @@ export default {
   },
   mounted() {
     this.mapInitialize();
-    this.geoLocate.start();
+    // this.geoLocate.start();
     // this.layersSet.markerSet=L.layerGroup().addTo(map)
   },
   created() {
@@ -277,6 +277,39 @@ export default {
       console.log(resuser)
     },
     async planRoute() {
+      let depots = await this.$http.get('mobile/findAll')
+      if (this.markers.depot === null) {
+      let userIcon = this.$maputils.map.createIcon({
+        iconUrl: require("../../../assets/icon/mobile.png"),
+        iconSize: [36, 36]})
+        for (let i = 0; i < depots.data.length; i++) {
+          // mobileId中是否包含user字段
+          if (depots.data[i].mobileid.includes("user")) {
+            let latlng = {}
+            latlng.lat = depots.data[i].lat
+            latlng.lng = depots.data[i].lng
+            let userStr = "user " + this.lineInfo.userLength
+            this.markers.users[this.lineInfo.userLength] = this.$maputils.map.createMarker(latlng, { icon: userIcon, title: userStr })
+            this.lineInfo.userLength += 1
+            layerGroup.userlayer = L.layerGroup(this.markers.users)
+            layerGroup.userlayer.addTo(map)
+          }
+          if (depots.data[i].mobileid.includes("depot")) {
+            let latlng = {}
+            let depotIcon = this.$maputils.map.createIcon({
+              iconUrl: require("../../../assets/icon/depot.png"),
+              iconSize: [36, 36]
+            })
+            latlng.lat = depots.data[i].lat
+            latlng.lng = depots.data[i].lng
+            let depotStr = "depot 0"
+            this.markers.users[this.lineInfo.userLength] = this.$maputils.map.createMarker(latlng, { icon: depotIcon, title: depotStr })
+            this.lineInfo.userLength += 1
+            layerGroup.userlayer = L.layerGroup(this.markers.users)
+            layerGroup.userlayer.addTo(map)
+          }
+        }
+      }
       if (this.editFtButton.vehicleNumber === null){
         this.$message.warning("必须提供无人机数量")
         return
