@@ -8,7 +8,7 @@
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
     <buttonpage :editFtButton="editFtButton" @drawLine="drawPathLine" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
-    <mission-start :lineInfo="lineInfo" @animateMarkers="animateUAV"></mission-start>
+    <!-- <mission-start :lineInfo="lineInfo" @animateMarkers="animateUAV"></mission-start> -->
     <div id="map"></div>
   </div>
 </template>
@@ -17,7 +17,7 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import {mapMutations} from "vuex";
-import MissionStart from "@/page/multiuav/homemap/missionStart";
+// import MissionStart from "@/page/multiuav/homemap/missionStart";
 import buttonpage from "@/page/multiuav/homemap/buttonpage";
 import UUID from "uuid-js"
 import qs from "qs";
@@ -34,7 +34,7 @@ let layerGroup={
 let layers = null
 export default {
   name: "leaflet",
-  components: { MissionStart ,buttonpage},
+  components: { buttonpage },
   data(){
     return{
       // map:''
