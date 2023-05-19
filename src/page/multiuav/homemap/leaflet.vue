@@ -7,7 +7,7 @@
     </el-radio-group>
 <!--    <map-component></map-component>-->
 <!--    <editandplan></editandplan>-->
-    <buttonpage :editFtButton="editFtButton" @drawLine="drawPathLine" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
+    <buttonpage :editFtButton="editFtButton" @drawLine="drawPathLine" @animateUAV="animateUAV" @planRoute="planRoute" @resetAllMarker="resetMarkers" @placeUser="addUserMarker" @placeDepot="addDepotMarker" @pushAll="uploadAll"></buttonpage>
     <!-- <mission-start :lineInfo="lineInfo" @animateMarkers="animateUAV"></mission-start> -->
     <div id="map"></div>
   </div>
@@ -106,6 +106,7 @@ export default {
         prefix:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'}).addTo(map)
         //  定位功能，可用
       this.geoLocate = L.control.locate({position:'bottomright',initialZoomLevel:15}).addTo(map);
+      map.setView([39.08607290863458, 121.80813155137004], 16)
     },
     // 定位函数，显示定位成功与否
     locateYou(){

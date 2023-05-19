@@ -16,7 +16,8 @@ import axios from "axios";
 Vue.prototype.$http=axios;
 //访问地址
 // axios.defaults.baseURL='http://49.233.56.74:8085/'
-axios.defaults.baseURL='http://localhost:8085'
+axios.defaults.baseURL='http://210.30.97.238:8085'
+// axios.defaults.baseURL='http://localhost:8085'
 
 //导入qs文件
 import qs from 'qs'
